@@ -161,7 +161,7 @@ def cmd_duel(target, attack_stack=None):
         defender = None
 
         if target == "demo_duck" or target == "呆呆的小黄鸭":
-            demo_file = MONSTER_DIR / "demo_duck.soul"
+            demo_file = SCRIPT_DIR / "demos" / "demo_duck.soul"
             defender = load_json(demo_file)
         elif target.endswith(".soul"):
             defender = load_json(Path(target))
