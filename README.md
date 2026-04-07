@@ -2,7 +2,7 @@
 
 > 🐤 Turn your GitHub repository into a digital pet and battle other developers!
 
-**Agent Monster** is a slow-paced养成 game built on the GitHub ecosystem. Your code repository is the pet's home, and code commits are the pet's food.
+**Agent Monster** is a slow-paced Cultivation game built on the GitHub ecosystem. Your code repository is the pet's home, and code commits are the pet's food.
 
 ---
 
