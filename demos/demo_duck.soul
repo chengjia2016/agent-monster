@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "name": "呆呆的小黄鸭",
+    "species": "Duck",
+    "birth_time": "2026-04-07T00:00:00.000000",
+    "owner": "demo@agent-monster",
+    "generation": 1,
+    "evolution_stage": 1,
+    "avatar": "\n  🦆\n ╭───╮\n│ ◕‿◕ │\n╰─────╯\n  🦶\n"
+  },
+  "stats": {
+    "hp": {
+      "base": 80,
+      "iv": 10,
+      "ev": 20,
+      "exp": 500
+    },
+    "attack": {
+      "base": 50,
+      "iv": 8,
+      "ev": 10,
+      "exp": 0
+    },
+    "defense": {
+      "base": 70,
+      "iv": 12,
+      "ev": 15,
+      "exp": 0
+    },
+    "speed": {
+      "base": 40,
+      "iv": 5,
+      "ev": 5,
+      "exp": 0
+    },
+    "armor": {
+      "base": 60,
+      "iv": 10,
+      "ev": 10,
+      "exp": 0
+    },
+    "quota": {
+      "base": 100,
+      "iv": 15,
+      "ev": 20,
+      "exp": 0
+    }
+  },
+  "genes": {
+    "logic": {
+      "weight": 0.2,
+      "source_commits": []
+    },
+    "creative": {
+      "weight": 0.3,
+      "source_commits": []
+    },
+    "speed": {
+      "weight": 0.1,
+      "source_commits": []
+    },
+    "lucky": {
+      "weight": 0.4,
+      "source_commits": []
+    }
+  },
+  "battle_history": [
+    {
+      "date": "2026-04-06",
+      "opponent": "TestPet",
+      "result": "win"
+    },
+    {
+      "date": "2026-04-05",
+      "opponent": "CodeWarrior",
+      "result": "lose"
+    }
+  ],
+  "signature": {
+    "algorithm": "RSA-SHA256",
+    "value": "",
+    "keyid": ""
+  }
+}

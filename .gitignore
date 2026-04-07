@@ -29,6 +29,9 @@ ENV/
 .monster/vault.json
 .monster/guard.yaml
 
+# Except demo pet for testing
+!.monster/demo_duck.soul
+
 # Logs
 *.log
 
