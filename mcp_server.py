@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).parent
-MONSTER_DIR = SCRIPT_DIR.parent / ".monster"
+MONSTER_DIR = SCRIPT_DIR / ".monster"
 CONFIG_FILE = MONSTER_DIR / "config.json"
 SOUL_FILE = MONSTER_DIR / "pet.soul"
 
@@ -66,6 +66,210 @@ def call_judge_server(endpoint, data):
             return json.loads(response.read().decode("utf-8"))
     except Exception as e:
         return {"success": False, "error": str(e), "judge": "unavailable"}
+
+
+# ========== User & Economy Integration Commands ==========
+
+def _find_user_by_login(user_manager, github_username):
+    """Helper to find user by GitHub login"""
+    users = user_manager.list_users()
+    for user in users:
+        if user.github_login == github_username:
+            return user
+    return None
+
+
+def cmd_user_register(github_username):
+    """Register a new user with GitHub username"""
+    try:
+        from onboarding_manager import OnboardingManager
+        
+        onboarding = OnboardingManager(str(MONSTER_DIR))
+        
+        # Register user and initialize (using github_username as both login and ID for demo)
+        # In production, this would come from GitHub OAuth
+        github_id = hash(github_username) % (10**9)  # Simple ID generation
+        success, user, message = onboarding.register_from_github(
+            github_login=github_username,
+            github_id=github_id
+        )
+        
+        if success:
+            return f"""✅ User Registration Complete!
+===
+Username: {user.github_login}
+GitHub ID: {user.github_id}
+Joined: {user.registered_at}
+
+🎁 Initial Rewards:
+- 100 Elemental Coins
+- 3 Poke Balls
+- 2 Grass Seeds  
+- 1 Healing Potion
+- 1 Starter Pokemon (Little Yellow Duck)
+- 1 Hatching Egg
+
+Ready to begin your adventure!
+"""
+        else:
+            return f"❌ Registration failed: {message}"
+    except Exception as e:
+        return f"❌ Registration failed: {str(e)}"
+
+
+def cmd_user_info(github_username=""):
+    """Get current user account information"""
+    try:
+        from user_manager import UserManager
+        from economy_manager import EconomyManager
+        
+        user_manager = UserManager(str(MONSTER_DIR))
+        economy_manager = EconomyManager(str(MONSTER_DIR))
+        
+        if not github_username:
+            github_username = "current_user"
+        
+        user = _find_user_by_login(user_manager, github_username)
+        if not user:
+            return f"❌ User '{github_username}' not found"
+        
+        account = economy_manager.get_account(user.github_id)
+        
+        return f"""👤 User Profile
+===
+Username: {user.github_login}
+GitHub ID: {user.github_id}
+Joined: {user.registered_at}
+Last Login: {user.last_login}
+
+💰 Account Info:
+Balance: {account.balance if account else 0} Elemental Coins
+Total Spent: {account.get_total_spent() if account else 0}
+Total Earned: {account.get_total_earned() if account else 0}
+Transactions: {len(account.transactions) if account else 0}
+"""
+    except Exception as e:
+        return f"❌ Error getting user info: {str(e)}"
+
+
+def cmd_shop_list():
+    """List all available items in the shop"""
+    try:
+        from shop_manager import Shop
+        
+        shop = Shop(str(MONSTER_DIR))
+        items = shop.list_items()
+        
+        output = "🏪 Shop Inventory\n===\n"
+        for item in items:
+            output += f"\n{item.name}\n"
+            output += f"  ID: {item.item_id}\n"
+            output += f"  Price: {item.price} Coins\n"
+            output += f"  Stock: {item.stock}\n"
+            output += f"  Desc: {item.description}\n"
+        
+        return output
+    except Exception as e:
+        return f"❌ Error listing shop: {str(e)}"
+
+
+def cmd_shop_buy(github_username, item_id, quantity=1):
+    """Buy an item from the shop"""
+    try:
+        from user_manager import UserManager
+        from economy_manager import EconomyManager
+        from shop_manager import Shop
+        
+        user_manager = UserManager(str(MONSTER_DIR))
+        economy_manager = EconomyManager(str(MONSTER_DIR))
+        shop = Shop(str(MONSTER_DIR))
+        
+        user = _find_user_by_login(user_manager, github_username)
+        if not user:
+            return f"❌ User '{github_username}' not found"
+        
+        # Try to purchase
+        result = economy_manager.purchase_item(user.github_id, item_id, quantity)
+        
+        if result.get("success"):
+            return f"""✅ Purchase Successful!
+===
+Item: {result.get('item_name')}
+Quantity: {quantity}
+Cost: {result.get('cost')} Coins
+New Balance: {result.get('new_balance')} Coins
+"""
+        else:
+            return f"❌ Purchase failed: {result.get('error', 'Unknown error')}"
+    except Exception as e:
+        return f"❌ Error purchasing item: {str(e)}"
+
+
+def cmd_inventory_view(github_username):
+    """View user's inventory"""
+    try:
+        from user_manager import UserManager
+        from shop_manager import Shop
+        
+        user_manager = UserManager(str(MONSTER_DIR))
+        shop = Shop(str(MONSTER_DIR))
+        
+        user = _find_user_by_login(user_manager, github_username)
+        if not user:
+            return f"❌ User '{github_username}' not found"
+        
+        inventory = shop.get_user_inventory(user.github_id)
+        
+        if not inventory:
+            return "📦 Your inventory is empty"
+        
+        output = f"📦 Inventory for {github_username}\n===\n"
+        total_items = 0
+        for item_id, quantity in inventory.items():
+            item = shop.get_item(item_id)
+            if item:
+                output += f"\n{item.name} x{quantity}\n"
+                output += f"  ID: {item_id}\n"
+                total_items += quantity
+        
+        output += f"\n\nTotal Items: {total_items}\n"
+        return output
+    except Exception as e:
+        return f"❌ Error viewing inventory: {str(e)}"
+
+
+def cmd_account_stats(github_username):
+    """Get detailed account statistics"""
+    try:
+        from user_manager import UserManager
+        from economy_manager import EconomyManager
+        
+        user_manager = UserManager(str(MONSTER_DIR))
+        economy_manager = EconomyManager(str(MONSTER_DIR))
+        
+        user = _find_user_by_login(user_manager, github_username)
+        if not user:
+            return f"❌ User '{github_username}' not found"
+        
+        account = economy_manager.get_account(user.github_id)
+        if not account:
+            return f"❌ No account found for {github_username}"
+        
+        stats = account.get_stats()
+        
+        output = f"📊 Account Statistics for {github_username}\n===\n"
+        output += f"\nBalance: {account.balance} Coins\n"
+        output += f"Total Income: {stats.get('total_earned', 0)} Coins\n"
+        output += f"Total Expenses: {stats.get('total_spent', 0)} Coins\n"
+        output += f"Transaction Count: {len(account.transactions)}\n"
+        
+        output += f"\n\nRecent Transactions (Last 5):\n"
+        for tx in account.transactions[-5:]:
+            output += f"\n  {tx['type']}: {tx.get('amount', 0)} coins - {tx['timestamp']}\n"
+        
+        return output
+    except Exception as e:
+        return f"❌ Error getting account stats: {str(e)}"
 
 
 def cmd_init():
@@ -900,6 +1104,72 @@ def mcp_loop():
                                 "required": []
                             },
                         },
+                        {
+                            "name": "user_register",
+                            "description": "Register a new user with GitHub username",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "GitHub username"}
+                                },
+                                "required": ["github_username"]
+                            },
+                        },
+                        {
+                            "name": "user_info",
+                            "description": "Get current user account information",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "GitHub username (optional)"}
+                                },
+                                "required": []
+                            },
+                        },
+                        {
+                            "name": "shop_list",
+                            "description": "List all available items in the shop",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {},
+                                "required": []
+                            },
+                        },
+                        {
+                            "name": "shop_buy",
+                            "description": "Buy an item from the shop",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "GitHub username"},
+                                    "item_id": {"type": "string", "description": "Item ID to purchase"},
+                                    "quantity": {"type": "integer", "description": "Quantity (default: 1)"}
+                                },
+                                "required": ["github_username", "item_id"]
+                            },
+                        },
+                        {
+                            "name": "inventory_view",
+                            "description": "View user's inventory of items",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "GitHub username"}
+                                },
+                                "required": ["github_username"]
+                            },
+                        },
+                        {
+                            "name": "account_stats",
+                            "description": "Get detailed account statistics and transaction history",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "GitHub username"}
+                                },
+                                "required": ["github_username"]
+                            },
+                        },
                     ]
                 }
 
@@ -979,6 +1249,28 @@ def mcp_loop():
                     resp["result"] = {"content": [{"type": "text", "text": out}]}
                 elif tool == "monster_replays":
                     out = cmd_replays(args.get("limit", 10))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "user_register":
+                    out = cmd_user_register(args.get("github_username", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "user_info":
+                    out = cmd_user_info(args.get("github_username", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "shop_list":
+                    out = cmd_shop_list()
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "shop_buy":
+                    out = cmd_shop_buy(
+                        args.get("github_username", ""),
+                        args.get("item_id", ""),
+                        args.get("quantity", 1)
+                    )
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "inventory_view":
+                    out = cmd_inventory_view(args.get("github_username", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "account_stats":
+                    out = cmd_account_stats(args.get("github_username", ""))
                     resp["result"] = {"content": [{"type": "text", "text": out}]}
                 else:
                     resp["error"] = {"code": -32601, "message": f"Unknown tool: {tool}"}
