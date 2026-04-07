@@ -60,6 +60,20 @@ OpenCode: Shows your pet's stats, level, and battle history
 You: /monster analyze
 OpenCode: Analyzes your commits and updates pet genes
 
+You: /monster attack https://github.com/chengjia2016/agent-monster-pet/demo_duck
+OpenCode: ⚔️ Battle vs 呆呆的小黄鸭! You won!
+```
+
+### Battle Commands
+
+| Command | Description |
+|---------|-------------|
+| `/monster attack demo_duck` | Attack the demo pet (local test) |
+| `/monster attack https://github.com/chengjia2016/agent-monster-pet/demo_duck` | Attack demo pet via GitHub URL |
+| `/monster attack https://github.com/username/repo` | Attack another player's pet |
+| `/monster duel <target>` | Same as attack (alias) |
+OpenCode: Analyzes your commits and updates pet genes
+
 You: /monster duel https://github.com/opponent/repo
 OpenCode: ⚔️ Battle simulation complete! You won!
 ```
