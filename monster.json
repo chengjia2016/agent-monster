@@ -1,0 +1,111 @@
+{
+  "name": "agent-monster",
+  "version": "0.1.0",
+  "description": "Git-Native Cybernetic Evolution - Battle & Pet System",
+  "language": "go",
+  "build": {
+    "main": "monster_cli.go",
+    "output": "monster-cli"
+  },
+  "mcp_server": {
+    "command": "./monster-cli",
+    "args": ["mcp"],
+    "env": {}
+  },
+  "tools": [
+    {
+      "name": "monster_init",
+      "description": "Initialize a new Agent Monster pet for the current repository",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "monster_status",
+      "description": "Show the current status of your Agent Monster (level, stats, evolution)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "json": {
+            "type": "boolean",
+            "description": "Output in JSON format for machine parsing"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "monster_duel",
+      "description": "Challenge another repository's monster to battle",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "Target repository URL or monster ID"
+          },
+          "attack_sequence": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Optional attack sequence (default: auto)"
+          }
+        },
+        "required": ["target"]
+      }
+    },
+    {
+      "name": "monster_auth",
+      "description": "Authenticate with GitHub for battle system",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "monster_analyze",
+      "description": "Analyze repository activity and update monster stats",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "days": {
+            "type": "integer",
+            "description": "Number of days to analyze (default: 7)"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "monster_traps",
+      "description": "Scan code for defensive traps (@monster-trap comments)",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path to scan (default: current directory)"
+          }
+        },
+        "required": []
+      }
+    }
+  ],
+  "triggers": {
+    "on_commit": "monster-analyze",
+    "on_issue_comment": "monster_duel",
+    "on_pr": "monster_verify"
+  },
+  "integration": {
+    "git_hooks": {
+      "pre_commit": "monster-analyze --quiet",
+      "post_merge": "monster-evolve"
+    },
+    "github_actions": [
+      ".github/workflows/monster-referee.yml",
+      ".github/workflows/monster-status.yml"
+    ]
+  }
+}

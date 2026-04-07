@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Monster - Pet Soul Schema (Complete)",
+  "description": "完整的数字生命数据结构 - 宝可梦风格属性系统",
+  "type": "object",
+  "required": ["monster_id", "metadata", "base_stats", "ivs", "evs", "nature", "type", "ability", "moves"],
+  "properties": {
+    "monster_id": {
+      "type": "string",
+      "pattern": "^0x[0-9a-f]{16,24}$"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["name", "birth_time", "owner", "generation", "level"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "birth_time": { "type": "string", "format": "date-time" },
+        "owner": { "type": "string", "pattern": "^[^@]+@[^@]+$" },
+        "generation": { "type": "integer", "minimum": 1 },
+        "level": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "evolution_stage": { "type": "integer", "enum": [1, 2, 3] },
+        "avatar": { "type": "string" }
+      }
+    },
+    "type": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["Low-Level", "Scripting", "Logic", "Automation", "Web", "Data", "System", "Network", "Security", "Metal", "Glass", "Hybrid"] },
+      "minItems": 1,
+      "maxItems": 2
+    },
+    "nature": {
+      "type": "string",
+      "enum": ["Adamant", "Bold", "Timid", "Calm", "Quiet", "Naive", "Hardy", "Lonely", "Brave", "Relaxed", "Timid", "Hasty", "Serious", "Jolly", "Naughty", "Lax", "Rash", "Mild", "Gentle", "Sassy"]
+    },
+    "ability": {
+      "type": "string",
+      "enum": ["Recycle", "Multithread", "OpenSource", "ExceptionCatch", "CloudSync", "VersionControl", "LazyLoad", "Memoize", "Pipeline", "HotReload"]
+    },
+    "base_stats": {
+      "type": "object",
+      "required": ["hp", "attack", "defense", "sp_atk", "sp_def", "speed"],
+      "properties": {
+        "hp": { "type": "integer", "minimum": 1, "maximum": 255 },
+        "attack": { "type": "integer", "minimum": 1, "maximum": 255 },
+        "defense": { "type": "integer", "minimum": 1, "maximum": 255 },
+        "sp_atk": { "type": "integer", "minimum": 1, "maximum": 255 },
+        "sp_def": { "type": "integer", "minimum": 1, "maximum": 255 },
+        "speed": { "type": "integer", "minimum": 1, "maximum": 255 }
+      }
+    },
+    "ivs": {
+      "type": "object",
+      "required": ["hp", "attack", "defense", "sp_atk", "sp_def", "speed"],
+      "properties": {
+        "hp": { "type": "integer", "minimum": 0, "maximum": 31 },
+        "attack": { "type": "integer", "minimum": 0, "maximum": 31 },
+        "defense": { "type": "integer", "minimum": 0, "maximum": 31 },
+        "sp_atk": { "type": "integer", "minimum": 0, "maximum": 31 },
+        "sp_def": { "type": "integer", "minimum": 0, "maximum": 31 },
+        "speed": { "type": "integer", "minimum": 0, "maximum": 31 }
+      }
+    },
+    "evs": {
+      "type": "object",
+      "required": ["hp", "attack", "defense", "sp_atk", "sp_def", "speed"],
+      "properties": {
+        "hp": { "type": "integer", "minimum": 0, "maximum": 252 },
+        "attack": { "type": "integer", "minimum": 0, "maximum": 252 },
+        "defense": { "type": "integer", "minimum": 0, "maximum": 252 },
+        "sp_atk": { "type": "integer", "minimum": 0, "maximum": 252 },
+        "sp_def": { "type": "integer", "minimum": 0, "maximum": 252 },
+        "speed": { "type": "integer", "minimum": 0, "maximum": 252 }
+      }
+    },
+    "moves": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 0,
+      "maxItems": 4
+    },
+    "battle_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time" },
+          "opponent_id": { "type": "string" },
+          "result": { "type": "string", "enum": ["win", "lose", "draw"] },
+          "exp_gained": { "type": "integer" },
+          "commit_hash": { "type": "string" }
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": { "type": "string", "enum": ["RSA-SHA256", "Ed25519"] },
+        "value": { "type": "string" },
+        "keyid": { "type": "string" }
+      }
+    }
+  }
+}

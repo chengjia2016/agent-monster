@@ -1,0 +1,100 @@
+version: "1.0"
+name: Agent Monster Guard Config
+description: 完整防守配置 - 模式选择/逻辑陷阱/精神指令
+
+defense:
+  mode: tank
+  description: "tank: 优先铁壁拖回合 | aggressive: 反击优先 | evasive: 闪避优先"
+  prioritize:
+    - defense
+    - sp_def
+  
+spirit:
+  grit:
+    enabled: true
+    threshold: 0.25
+    trigger_keyword_count: 3
+    effect: "survive_1hp"
+  valor:
+    enabled: true
+    trigger_patterns:
+      - "major"
+      - "release"
+      - "breaking"
+      - "v2."
+      - "v3."
+    effect: "damage_2x"
+  endure:
+    enabled: true
+    threshold: 0.15
+    effect: "en_reflect"
+
+traps:
+  enabled: true
+  max_count: 5
+  
+  patterns:
+    loop:
+      trigger: "// @monster-trap loop"
+      effect: "accuracy_down_50"
+      duration: 3
+      
+    dependency:
+      trigger: "// @monster-trap dependency"
+      effect: "speed_down_30"
+      duration: 2
+      
+    honeypot:
+      trigger: "// @monster-trap honeypot"
+      effect: "absorb_damage"
+      description: "诱导攻击，伤害转化为EN"
+      
+    recursion:
+      trigger: "// @monster-trap recursion"
+      effect: "confuse"
+      duration: 2
+      
+    deadlock:
+      trigger: "// @monster-trap deadlock"
+      effect: "paralyze"
+      duration: 1
+
+anti_cheat:
+  require_proof: true
+  verify_commit_chain: true
+  block_self_challenge: true
+  
+rate_limiting:
+  challenge_cooldown_hours: 24
+  max_challenges_per_day: 5
+
+en_recovery:
+  base_rate: 0.05
+  bonus_per_green_day: 0.02
+  max_bonus: 0.15
+
+exp_rules:
+  exp_per_line: 0.5
+  max_exp_per_day: 100
+  loot_on_win: 30
+  buff_on_defend: 5
+  
+  sources:
+    code:
+      multiplier: 1.0
+    test:
+      multiplier: 2.0
+    docs:
+      multiplier: 0.3
+    config:
+      multiplier: 0.5
+
+coverage_defense:
+  threshold: 80
+  bonus_per_percent: 0.5
+  cap: 100
+
+linter_accuracy:
+  threshold: 95
+  bonus_per_percent: 0.3
+  cap: 100

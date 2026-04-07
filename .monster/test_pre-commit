@@ -1,0 +1,38 @@
+#!/bin/bash
+MONSTER_DIR=".monster"
+SOUL_FILE="$MONSTER_DIR/pet.soul"
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo -e "${GREEN}🦖 Agent Monster: Analyzing your commit...${NC}"
+
+if [ ! -f "$SOUL_FILE" ]; then
+    echo -e "${YELLOW}⚠ No pet found. Run egg_incubator.py first!${NC}"
+    exit 0
+fi
+
+STATS=$(git diff --stat HEAD~1 HEAD 2>/dev/null | tail -1)
+LINES=$(echo "$STATS" | grep -oP '\d+(?= insertion)' || echo 0)
+
+EXP=$((LINES / 2))
+echo "📈 +$EXP EXP from $LINES changed lines"
+
+python3 -c "
+import json
+with open('$SOUL_FILE', 'r') as f:
+    data = json.load(f)
+    data['exp'] = data.get('exp', 0) + $EXP
+    if 'stats' in data and 'hp' in data['stats']:
+        data['stats']['hp']['exp'] += $EXP
+with open('$SOUL_FILE', 'w') as f:
+    json.dump(data, f, indent=2)
+"
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ Pet grew stronger!${NC}"
+else
+    echo -e "${RED}❌ Failed to update pet!${NC}"
+fi

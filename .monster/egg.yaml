@@ -1,0 +1,58 @@
+# 宠物蛋配置
+# 72 小时孵化机制
+
+egg:
+  # 孵化状态：incubating, ready, hatched
+  status: incubating
+
+  # 开始时间 (ISO 8601)
+  start_time: 2026-04-07T13:56:05.503962
+
+  # 孵化所需时间 (小时)
+  incubation_hours: 72
+
+  # 剩余时间 (由 Actions 每小时更新)
+  remaining_hours: 72
+
+# 基因收集
+genes:
+  # Logic 基因：代码提交
+  logic:
+    weight: 0.0
+    source_commits: []
+
+  # Creative 基因：文档/注释
+  creative:
+    weight: 0.0
+    source_files: []
+
+  # Speed 基因：配置/脚本
+  speed:
+    weight: 0.0
+    source_files: []
+
+  # Lucky 基因：零食 cookie
+  lucky:
+    weight: 0.0
+    cookies_found: 0
+
+# 孵化后的宠物属性预测
+predicted_stats:
+  hp: null
+  attack: null
+  defense: null
+  speed: null
+  sp_atk: null
+  sp_def: null
+
+# 里程碑
+milestones:
+  - hour: 24
+    reached: false
+    description: "24 小时 - 基因初步形成"
+  - hour: 48
+    reached: false
+    description: "48 小时 - 宠物轮廓显现"
+  - hour: 72
+    reached: false
+    description: "72 小时 - 孵化完成!"
