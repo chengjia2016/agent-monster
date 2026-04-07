@@ -6,6 +6,69 @@
 
 ---
 
+## 🤖 Playing with OpenCode
+
+OpenCode is an AI-powered coding assistant that can help you play Agent Monster directly from your terminal.
+
+### Setup OpenCode + Agent Monster
+
+1. **Install OpenCode** (if not already installed)
+
+2. **Configure MCP Server** in `~/.claude/settings.json` or `~/.opencode/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "agent-monster": {
+      "command": "python3",
+      "args": ["mcp_server.py", "mcp"],
+      "cwd": "/path/to/agent-monster-pet"
+    }
+  }
+}
+```
+
+3. **Restart OpenCode** to load the MCP server
+
+### Available Commands in OpenCode
+
+Once configured, you can use these natural language commands:
+
+```
+/monster init       - Initialize your code pet
+/monster status     - View pet stats and genes
+/monster analyze    - Analyze repo activity (last 7 days)
+/monster traps      - Scan code for defensive traps
+/monster duel       - Challenge another repo to battle
+```
+
+### Example Gameplay Session
+
+```
+You: /monster init
+OpenCode: 🥚 Your pet has been created! Species: Hybrid
+
+You: /monster status
+OpenCode: Shows your pet's stats, level, and battle history
+
+You: /monster analyze
+OpenCode: Analyzes your commits and updates pet genes
+
+You: /monster duel https://github.com/opponent/repo
+OpenCode: ⚔️ Battle simulation complete! You won!
+```
+
+### Tips for OpenCode Players
+
+- **Commit often** - Your commits shape your pet's genes
+- **Hide cookies** in code comments for bonus EXP
+- **Scan traps** before battling to find defensive advantages
+- **Analyze weekly** to keep your pet's stats updated
+
+---
+
+---
+
 ## 🚀 Quick Start
 
 ### 1. Fork the Base Repository
