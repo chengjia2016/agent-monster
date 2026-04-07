@@ -1,10 +1,9 @@
 {
   "mcpServers": {
     "agent-monster": {
-      "command": "python",
+      "command": "python3",
       "args": ["mcp_server.py", "mcp"],
-      "cwd": "C:/Users/Administrator/agentmonster",
-      "env": {}
+      "cwd": "/root/pet/agent-monster-pet"
     }
   }
 }

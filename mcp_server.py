@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).parent
-MONSTER_DIR = SCRIPT_DIR / ".monster"
+MONSTER_DIR = SCRIPT_DIR.parent / ".monster"
 CONFIG_FILE = MONSTER_DIR / "config.json"
 SOUL_FILE = MONSTER_DIR / "pet.soul"
 
@@ -47,7 +47,7 @@ def save_json(path, data):
 
 def cmd_init():
     result = subprocess.run(
-        ["python", "egg_incubator.py"],
+        [sys.executable, "egg_incubator.py"],
         capture_output=True,
         cwd=SCRIPT_DIR,
         env={**os.environ, "PYTHONIOENCODING": "utf-8"}
@@ -68,8 +68,15 @@ def cmd_status(json_mode=False):
     if json_mode:
         return json.dumps(soul, indent=2, ensure_ascii=False)
 
+    metadata = soul.get("metadata", {})
+    stats = soul.get("stats", {})
+    base_stats = soul.get("base_stats", {})
+
+    if not base_stats and stats:
+        base_stats = {k: v.get("base", 0) for k, v in stats.items()}
+
     lines = []
-    avatar = soul.get("avatar", "")
+    avatar = metadata.get("avatar", "") or soul.get("avatar", "")
     safe_avatar = (
         avatar.encode("ascii", "replace").decode("ascii")
         if avatar
@@ -78,22 +85,30 @@ def cmd_status(json_mode=False):
 
     lines.append(f"\n{safe_avatar}")
     lines.append("=" * 50)
-    lines.append(f"  {soul.get('name', 'Unknown')} (Lv.{soul.get('level', 1)})")
-    lines.append(f"  ID: {soul.get('monster_id', 'N/A')}")
-    lines.append(f"  Type: {'/'.join(soul.get('type', []))}")
+    name = metadata.get("name", soul.get("name", "Unknown"))
+    level = metadata.get("generation", soul.get("level", 1))
+    lines.append(f"  {name} (Gen.{level})")
+    lines.append(f"  Species: {metadata.get('species', 'N/A')}")
+    lines.append(f"  Type: {'/'.join(metadata.get('species', []))}")
     lines.append(
-        f"  Nature: {soul.get('nature', 'N/A')} | Ability: {soul.get('ability', 'N/A')}"
+        f"  Owner: {metadata.get('owner', 'N/A')}"
     )
     lines.append("=" * 50)
 
-    stats = soul.get("base_stats", {})
     lines.append("\n[STATS]")
-    for stat, val in stats.items():
+    for stat, val in base_stats.items():
         bar = "#" * (val // 20) + "-" * (12 - val // 20)
         lines.append(f"  {stat.upper():8}: {val:3} [{bar}]")
 
+    if not base_stats and stats:
+        for stat, data in stats.items():
+            val = data.get("base", 0)
+            bar = "#" * (val // 20) + "-" * (12 - val // 20)
+            lines.append(f"  {stat.upper():8}: {val:3} [{bar}]")
+
+    battle_history = soul.get("battle_history", [])
     lines.append(
-        f"\n[INFO] EXP: {soul.get('exp', 0)} | Battles: {len(soul.get('battle_history', []))}"
+        f"\n[INFO] Battles: {len(battle_history)} | Generation: {metadata.get('generation', 1)}"
     )
 
     return "\n".join(lines)
