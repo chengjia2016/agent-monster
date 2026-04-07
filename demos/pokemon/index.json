@@ -1,478 +1,1002 @@
 [
   {
-    "id": "001",
-    "name": "Bulbasaur",
+    "id": "0001",
+    "name_en": "Bulbasaur",
     "name_zh": "妙蛙种子",
+    "name_jp": "フシギダネ",
     "types": [
-      "Grass",
-      "Poison"
+      "Normal"
     ],
-    "total": 318
+    "total_stats": 318
   },
   {
-    "id": "002",
-    "name": "Ivysaur",
+    "id": "0002",
+    "name_en": "Ivysaur",
     "name_zh": "妙蛙草",
+    "name_jp": "フシギソウ",
     "types": [
-      "Grass",
-      "Poison"
+      "Normal"
     ],
-    "total": 405
+    "total_stats": 405
   },
   {
-    "id": "003",
-    "name": "Venusaur",
+    "id": "0003",
+    "name_en": "Venusaur",
     "name_zh": "妙蛙花",
+    "name_jp": "フシギバナ",
     "types": [
-      "Grass",
-      "Poison"
+      "Normal"
     ],
-    "total": 525
+    "total_stats": 525
   },
   {
-    "id": "004",
-    "name": "Charmander",
+    "id": "0004",
+    "name_en": "Charmander",
     "name_zh": "小火龙",
+    "name_jp": "ヒトカゲ",
     "types": [
-      "Fire"
+      "Normal"
     ],
-    "total": 309
+    "total_stats": 309
   },
   {
-    "id": "005",
-    "name": "Charmeleon",
+    "id": "0005",
+    "name_en": "Charmeleon",
     "name_zh": "火恐龙",
+    "name_jp": "リザード",
     "types": [
-      "Fire"
+      "Normal"
     ],
-    "total": 405
+    "total_stats": 405
   },
   {
-    "id": "006",
-    "name": "Charizard",
+    "id": "0006",
+    "name_en": "Charizard",
     "name_zh": "喷火龙",
+    "name_jp": "リザードン",
     "types": [
-      "Fire",
-      "Flying"
+      "Normal"
     ],
-    "total": 534
+    "total_stats": 534
   },
   {
-    "id": "007",
-    "name": "Squirtle",
+    "id": "0007",
+    "name_en": "Squirtle",
     "name_zh": "杰尼龟",
+    "name_jp": "ゼニガメ",
     "types": [
-      "Water"
+      "Normal"
     ],
-    "total": 314
+    "total_stats": 314
   },
   {
-    "id": "008",
-    "name": "Wartortle",
+    "id": "0008",
+    "name_en": "Wartortle",
     "name_zh": "卡咪龟",
+    "name_jp": "カメール",
     "types": [
-      "Water"
+      "Normal"
     ],
-    "total": 405
+    "total_stats": 405
   },
   {
-    "id": "009",
-    "name": "Blastoise",
+    "id": "0009",
+    "name_en": "Blastoise",
     "name_zh": "水箭龟",
+    "name_jp": "カメックス",
     "types": [
-      "Water"
+      "Normal"
     ],
-    "total": 530
+    "total_stats": 530
   },
   {
-    "id": "010",
-    "name": "Caterpie",
+    "id": "0010",
+    "name_en": "Caterpie",
     "name_zh": "绿毛虫",
+    "name_jp": "キャタピー",
     "types": [
-      "Bug"
+      "Normal"
     ],
-    "total": 195
+    "total_stats": 195
   },
   {
-    "id": "011",
-    "name": "Metapod",
+    "id": "0011",
+    "name_en": "Metapod",
     "name_zh": "铁甲蛹",
+    "name_jp": "トランセル",
     "types": [
-      "Bug"
+      "Normal"
     ],
-    "total": 205
+    "total_stats": 205
   },
   {
-    "id": "012",
-    "name": "Butterfree",
+    "id": "0012",
+    "name_en": "Butterfree",
     "name_zh": "巴大蝶",
+    "name_jp": "バタフリー",
     "types": [
-      "Bug",
-      "Flying"
+      "Normal"
     ],
-    "total": 395
+    "total_stats": 395
   },
   {
-    "id": "013",
-    "name": "Weedle",
+    "id": "0013",
+    "name_en": "Weedle",
     "name_zh": "独角虫",
+    "name_jp": "ビードル",
     "types": [
-      "Bug",
-      "Poison"
+      "Normal"
     ],
-    "total": 195
+    "total_stats": 195
   },
   {
-    "id": "014",
-    "name": "Kakuna",
+    "id": "0014",
+    "name_en": "Kakuna",
     "name_zh": "铁壳蛹",
+    "name_jp": "コクーン",
     "types": [
-      "Bug",
-      "Poison"
+      "Normal"
     ],
-    "total": 205
+    "total_stats": 205
   },
   {
-    "id": "015",
-    "name": "Beedrill",
+    "id": "0015",
+    "name_en": "Beedrill",
     "name_zh": "大针蜂",
+    "name_jp": "スピアー",
     "types": [
-      "Bug",
-      "Poison"
+      "Normal"
     ],
-    "total": 395
+    "total_stats": 395
   },
   {
-    "id": "016",
-    "name": "Pidgey",
+    "id": "0016",
+    "name_en": "Pidgey",
     "name_zh": "波波",
+    "name_jp": "ポッポ",
     "types": [
-      "Normal",
-      "Flying"
+      "Normal"
     ],
-    "total": 251
+    "total_stats": 251
   },
   {
-    "id": "017",
-    "name": "Pidgeotto",
+    "id": "0017",
+    "name_en": "Pidgeotto",
     "name_zh": "比比鸟",
+    "name_jp": "ピジョン",
     "types": [
-      "Normal",
-      "Flying"
+      "Normal"
     ],
-    "total": 349
+    "total_stats": 349
   },
   {
-    "id": "018",
-    "name": "Pidgeot",
+    "id": "0018",
+    "name_en": "Pidgeot",
     "name_zh": "大比鸟",
+    "name_jp": "ピジョット",
     "types": [
-      "Normal",
-      "Flying"
+      "Normal"
     ],
-    "total": 479
+    "total_stats": 479
   },
   {
-    "id": "019",
-    "name": "Rattata",
+    "id": "0019",
+    "name_en": "Rattata",
     "name_zh": "小拉达",
+    "name_jp": "コラッタ",
     "types": [
       "Normal"
     ],
-    "total": 253
+    "total_stats": 253
   },
   {
-    "id": "020",
-    "name": "Raticate",
+    "id": "0020",
+    "name_en": "Raticate",
     "name_zh": "拉达",
+    "name_jp": "ラッタ",
     "types": [
       "Normal"
     ],
-    "total": 413
+    "total_stats": 413
   },
   {
-    "id": "021",
-    "name": "Spearow",
+    "id": "0021",
+    "name_en": "Spearow",
     "name_zh": "烈雀",
+    "name_jp": "オニスズメ",
     "types": [
-      "Normal",
-      "Flying"
+      "Normal"
     ],
-    "total": 262
+    "total_stats": 262
   },
   {
-    "id": "022",
-    "name": "Fearow",
+    "id": "0022",
+    "name_en": "Fearow",
     "name_zh": "大嘴雀",
+    "name_jp": "オニドリル",
     "types": [
-      "Normal",
-      "Flying"
+      "Normal"
     ],
-    "total": 442
+    "total_stats": 442
   },
   {
-    "id": "023",
-    "name": "Ekans",
+    "id": "0023",
+    "name_en": "Ekans",
     "name_zh": "阿柏蛇",
+    "name_jp": "アーボ",
     "types": [
-      "Poison"
+      "Normal"
     ],
-    "total": 288
+    "total_stats": 288
   },
   {
-    "id": "024",
-    "name": "Arbok",
+    "id": "0024",
+    "name_en": "Arbok",
     "name_zh": "阿柏怪",
+    "name_jp": "アーボック",
     "types": [
-      "Poison"
+      "Normal"
     ],
-    "total": 438
+    "total_stats": 448
   },
   {
-    "id": "025",
-    "name": "Pikachu",
+    "id": "0025",
+    "name_en": "Pikachu",
     "name_zh": "皮卡丘",
+    "name_jp": "ピカチュウ",
     "types": [
-      "Electric"
+      "Normal"
     ],
-    "total": 320
+    "total_stats": 320
   },
   {
-    "id": "026",
-    "name": "Raichu",
+    "id": "0026",
+    "name_en": "Raichu",
     "name_zh": "雷丘",
+    "name_jp": "ライチュウ",
     "types": [
-      "Electric"
+      "Normal"
     ],
-    "total": 485
+    "total_stats": 485
   },
   {
-    "id": "027",
-    "name": "Sandshrew",
+    "id": "0027",
+    "name_en": "Sandshrew",
     "name_zh": "穿山鼠",
+    "name_jp": "サンド",
     "types": [
-      "Ground"
+      "Normal"
     ],
-    "total": 300
+    "total_stats": 300
   },
   {
-    "id": "028",
-    "name": "Sandslash",
+    "id": "0028",
+    "name_en": "Sandslash",
     "name_zh": "穿山王",
+    "name_jp": "サンドパン",
     "types": [
-      "Ground"
+      "Normal"
     ],
-    "total": 450
+    "total_stats": 450
   },
   {
-    "id": "029",
-    "name": "Nidoran-F",
+    "id": "0029",
+    "name_en": "Nidoran♀",
     "name_zh": "尼多兰",
+    "name_jp": "ニドラン♀",
     "types": [
-      "Poison"
+      "Normal"
     ],
-    "total": 275
+    "total_stats": 275
   },
   {
-    "id": "030",
-    "name": "Nidorina",
+    "id": "0030",
+    "name_en": "Nidorina",
     "name_zh": "尼多娜",
+    "name_jp": "ニドリーナ",
     "types": [
-      "Poison"
+      "Normal"
     ],
-    "total": 365
+    "total_stats": 365
   },
   {
-    "id": "031",
-    "name": "Nidoqueen",
+    "id": "0031",
+    "name_en": "Nidoqueen",
     "name_zh": "尼多后",
+    "name_jp": "ニドクイン",
     "types": [
-      "Poison",
-      "Ground"
+      "Normal"
     ],
-    "total": 505
+    "total_stats": 505
   },
   {
-    "id": "032",
-    "name": "Nidoran-M",
+    "id": "0032",
+    "name_en": "Nidoran♂",
     "name_zh": "尼多朗",
+    "name_jp": "ニドラン♂",
     "types": [
-      "Poison"
+      "Normal"
     ],
-    "total": 273
+    "total_stats": 273
   },
   {
-    "id": "033",
-    "name": "Nidorino",
+    "id": "0033",
+    "name_en": "Nidorino",
     "name_zh": "尼多力诺",
+    "name_jp": "ニドリーノ",
     "types": [
-      "Poison"
+      "Normal"
     ],
-    "total": 365
+    "total_stats": 365
   },
   {
-    "id": "034",
-    "name": "Nidoking",
+    "id": "0034",
+    "name_en": "Nidoking",
     "name_zh": "尼多王",
+    "name_jp": "ニドキング",
     "types": [
-      "Poison",
-      "Ground"
+      "Normal"
     ],
-    "total": 505
+    "total_stats": 505
   },
   {
-    "id": "035",
-    "name": "Clefairy",
+    "id": "0035",
+    "name_en": "Clefairy",
     "name_zh": "皮皮",
+    "name_jp": "ピッピ",
     "types": [
-      "Fairy"
+      "Normal"
     ],
-    "total": 323
+    "total_stats": 323
   },
   {
-    "id": "036",
-    "name": "Clefable",
+    "id": "0036",
+    "name_en": "Clefable",
     "name_zh": "皮可西",
+    "name_jp": "ピクシー",
     "types": [
-      "Fairy"
+      "Normal"
     ],
-    "total": 483
+    "total_stats": 483
   },
   {
-    "id": "037",
-    "name": "Vulpix",
+    "id": "0037",
+    "name_en": "Vulpix",
     "name_zh": "六尾",
+    "name_jp": "ロコン",
     "types": [
-      "Fire"
+      "Normal"
     ],
-    "total": 299
+    "total_stats": 299
   },
   {
-    "id": "038",
-    "name": "Ninetales",
+    "id": "0038",
+    "name_en": "Ninetales",
     "name_zh": "九尾",
+    "name_jp": "キュウコン",
     "types": [
-      "Fire"
+      "Normal"
     ],
-    "total": 505
+    "total_stats": 505
   },
   {
-    "id": "039",
-    "name": "Jigglypuff",
+    "id": "0039",
+    "name_en": "Jigglypuff",
     "name_zh": "胖丁",
+    "name_jp": "プリン",
     "types": [
-      "Normal",
-      "Fairy"
+      "Normal"
     ],
-    "total": 295
+    "total_stats": 270
   },
   {
-    "id": "040",
-    "name": "Wigglytuff",
+    "id": "0040",
+    "name_en": "Wigglytuff",
     "name_zh": "胖可丁",
+    "name_jp": "プクリン",
     "types": [
-      "Normal",
-      "Fairy"
+      "Normal"
     ],
-    "total": 405
+    "total_stats": 435
   },
   {
-    "id": "041",
-    "name": "Zubat",
+    "id": "0041",
+    "name_en": "Zubat",
     "name_zh": "超音蝠",
+    "name_jp": "ズバット",
     "types": [
-      "Poison",
-      "Flying"
+      "Normal"
     ],
-    "total": 245
+    "total_stats": 245
   },
   {
-    "id": "042",
-    "name": "Golbat",
+    "id": "0042",
+    "name_en": "Golbat",
     "name_zh": "大嘴蝠",
+    "name_jp": "ゴルバット",
     "types": [
-      "Poison",
-      "Flying"
+      "Normal"
     ],
-    "total": 455
+    "total_stats": 455
   },
   {
-    "id": "043",
-    "name": "Oddish",
+    "id": "0043",
+    "name_en": "Oddish",
     "name_zh": "走路草",
+    "name_jp": "ナゾノクサ",
     "types": [
-      "Grass",
-      "Poison"
+      "Normal"
     ],
-    "total": 320
+    "total_stats": 320
   },
   {
-    "id": "044",
-    "name": "Gloom",
+    "id": "0044",
+    "name_en": "Gloom",
     "name_zh": "臭臭花",
+    "name_jp": "クサイハナ",
     "types": [
-      "Grass",
-      "Poison"
+      "Normal"
     ],
-    "total": 395
+    "total_stats": 395
   },
   {
-    "id": "045",
-    "name": "Vileplume",
+    "id": "0045",
+    "name_en": "Vileplume",
     "name_zh": "霸王花",
+    "name_jp": "ラフレシア",
     "types": [
-      "Grass",
-      "Poison"
+      "Normal"
     ],
-    "total": 480
+    "total_stats": 490
   },
   {
-    "id": "046",
-    "name": "Paras",
+    "id": "0046",
+    "name_en": "Paras",
     "name_zh": "派拉斯",
+    "name_jp": "パラス",
     "types": [
-      "Bug",
-      "Grass"
+      "Normal"
     ],
-    "total": 285
+    "total_stats": 285
   },
   {
-    "id": "047",
-    "name": "Parasect",
+    "id": "0047",
+    "name_en": "Parasect",
     "name_zh": "派拉斯特",
+    "name_jp": "パラセクト",
     "types": [
-      "Bug",
-      "Grass"
+      "Normal"
     ],
-    "total": 405
+    "total_stats": 405
   },
   {
-    "id": "048",
-    "name": "Venonat",
+    "id": "0048",
+    "name_en": "Venonat",
     "name_zh": "毛球",
+    "name_jp": "コンパン",
     "types": [
-      "Bug",
-      "Poison"
+      "Normal"
     ],
-    "total": 305
+    "total_stats": 305
   },
   {
-    "id": "049",
-    "name": "Venomoth",
-    "name_zh": "末入蛾",
+    "id": "0049",
+    "name_en": "Venomoth",
+    "name_zh": "摩鲁蛾",
+    "name_jp": "モルフォン",
     "types": [
-      "Bug",
-      "Poison"
+      "Normal"
     ],
-    "total": 450
+    "total_stats": 450
   },
   {
-    "id": "050",
-    "name": "Diglett",
+    "id": "0050",
+    "name_en": "Diglett",
     "name_zh": "地鼠",
+    "name_jp": "ディグダ",
     "types": [
-      "Ground"
+      "Normal"
     ],
-    "total": 265
+    "total_stats": 265
+  },
+  {
+    "id": "0051",
+    "name_en": "Dugtrio",
+    "name_zh": "三地鼠",
+    "name_jp": "ダグトリオ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 425
+  },
+  {
+    "id": "0052",
+    "name_en": "Meowth",
+    "name_zh": "喵喵",
+    "name_jp": "ニャース",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 290
+  },
+  {
+    "id": "0053",
+    "name_en": "Persian",
+    "name_zh": "猫老大",
+    "name_jp": "ペルシアン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 440
+  },
+  {
+    "id": "0054",
+    "name_en": "Psyduck",
+    "name_zh": "可达鸭",
+    "name_jp": "コダック",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 320
+  },
+  {
+    "id": "0055",
+    "name_en": "Golduck",
+    "name_zh": "哥达鸭",
+    "name_jp": "ゴルダック",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 500
+  },
+  {
+    "id": "0056",
+    "name_en": "Mankey",
+    "name_zh": "猴怪",
+    "name_jp": "マンキー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 305
+  },
+  {
+    "id": "0057",
+    "name_en": "Primeape",
+    "name_zh": "火暴猴",
+    "name_jp": "オコリザル",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 455
+  },
+  {
+    "id": "0058",
+    "name_en": "Growlithe",
+    "name_zh": "卡蒂狗",
+    "name_jp": "ガーディ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 350
+  },
+  {
+    "id": "0059",
+    "name_en": "Arcanine",
+    "name_zh": "风速狗",
+    "name_jp": "ウインディ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 555
+  },
+  {
+    "id": "0060",
+    "name_en": "Poliwag",
+    "name_zh": "蚊香蝌蚪",
+    "name_jp": "ニョロモ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 300
+  },
+  {
+    "id": "0061",
+    "name_en": "Poliwhirl",
+    "name_zh": "蚊香君",
+    "name_jp": "ニョロゾ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 385
+  },
+  {
+    "id": "0062",
+    "name_en": "Poliwrath",
+    "name_zh": "蚊香泳士",
+    "name_jp": "ニョロボン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 510
+  },
+  {
+    "id": "0063",
+    "name_en": "Abra",
+    "name_zh": "凯西",
+    "name_jp": "ケーシィ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 310
+  },
+  {
+    "id": "0064",
+    "name_en": "Kadabra",
+    "name_zh": "勇基拉",
+    "name_jp": "ユンゲラー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 400
+  },
+  {
+    "id": "0065",
+    "name_en": "Alakazam",
+    "name_zh": "胡地",
+    "name_jp": "フーディン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 500
+  },
+  {
+    "id": "0066",
+    "name_en": "Machop",
+    "name_zh": "腕力",
+    "name_jp": "ワンリキー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 305
+  },
+  {
+    "id": "0067",
+    "name_en": "Machoke",
+    "name_zh": "豪力",
+    "name_jp": "ゴーリキー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 405
+  },
+  {
+    "id": "0068",
+    "name_en": "Machamp",
+    "name_zh": "怪力",
+    "name_jp": "カイリキー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 505
+  },
+  {
+    "id": "0069",
+    "name_en": "Bellsprout",
+    "name_zh": "喇叭芽",
+    "name_jp": "マダツボミ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 300
+  },
+  {
+    "id": "0070",
+    "name_en": "Weepinbell",
+    "name_zh": "口呆花",
+    "name_jp": "ウツドン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 390
+  },
+  {
+    "id": "0071",
+    "name_en": "Victreebel",
+    "name_zh": "大食花",
+    "name_jp": "ウツボット",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 490
+  },
+  {
+    "id": "0072",
+    "name_en": "Tentacool",
+    "name_zh": "玛瑙水母",
+    "name_jp": "メノクラゲ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 335
+  },
+  {
+    "id": "0073",
+    "name_en": "Tentacruel",
+    "name_zh": "毒刺水母",
+    "name_jp": "ドククラゲ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 515
+  },
+  {
+    "id": "0074",
+    "name_en": "Geodude",
+    "name_zh": "小拳石",
+    "name_jp": "イシツブテ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 300
+  },
+  {
+    "id": "0075",
+    "name_en": "Graveler",
+    "name_zh": "隆隆石",
+    "name_jp": "ゴローン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 390
+  },
+  {
+    "id": "0076",
+    "name_en": "Golem",
+    "name_zh": "隆隆岩",
+    "name_jp": "ゴローニャ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 495
+  },
+  {
+    "id": "0077",
+    "name_en": "Ponyta",
+    "name_zh": "小火马",
+    "name_jp": "ポニータ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 410
+  },
+  {
+    "id": "0078",
+    "name_en": "Rapidash",
+    "name_zh": "烈焰马",
+    "name_jp": "ギャロップ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 500
+  },
+  {
+    "id": "0079",
+    "name_en": "Slowpoke",
+    "name_zh": "呆呆兽",
+    "name_jp": "ヤドン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 315
+  },
+  {
+    "id": "0080",
+    "name_en": "Slowbro",
+    "name_zh": "呆壳兽",
+    "name_jp": "ヤドラン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 490
+  },
+  {
+    "id": "0081",
+    "name_en": "Magnemite",
+    "name_zh": "小磁怪",
+    "name_jp": "コイル",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 325
+  },
+  {
+    "id": "0082",
+    "name_en": "Magneton",
+    "name_zh": "三合一磁怪",
+    "name_jp": "レアコイル",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 465
+  },
+  {
+    "id": "0083",
+    "name_en": "Farfetch'd",
+    "name_zh": "大葱鸭",
+    "name_jp": "カモネギ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 377
+  },
+  {
+    "id": "0084",
+    "name_en": "Doduo",
+    "name_zh": "嘟嘟",
+    "name_jp": "ドードー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 310
+  },
+  {
+    "id": "0085",
+    "name_en": "Dodrio",
+    "name_zh": "嘟嘟利",
+    "name_jp": "ドードリオ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 470
+  },
+  {
+    "id": "0086",
+    "name_en": "Seel",
+    "name_zh": "小海狮",
+    "name_jp": "パウワウ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 325
+  },
+  {
+    "id": "0087",
+    "name_en": "Dewgong",
+    "name_zh": "白海狮",
+    "name_jp": "ジュゴン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 475
+  },
+  {
+    "id": "0088",
+    "name_en": "Grimer",
+    "name_zh": "臭泥",
+    "name_jp": "ベトベター",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 325
+  },
+  {
+    "id": "0089",
+    "name_en": "Muk",
+    "name_zh": "臭臭泥",
+    "name_jp": "ベトベトン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 500
+  },
+  {
+    "id": "0090",
+    "name_en": "Shellder",
+    "name_zh": "大舌贝",
+    "name_jp": "シェルダー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 305
+  },
+  {
+    "id": "0091",
+    "name_en": "Cloyster",
+    "name_zh": "刺甲贝",
+    "name_jp": "パルシェン",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 525
+  },
+  {
+    "id": "0092",
+    "name_en": "Gastly",
+    "name_zh": "鬼斯",
+    "name_jp": "ゴース",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 310
+  },
+  {
+    "id": "0093",
+    "name_en": "Haunter",
+    "name_zh": "鬼斯通",
+    "name_jp": "ゴースト",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 405
+  },
+  {
+    "id": "0094",
+    "name_en": "Gengar",
+    "name_zh": "耿鬼",
+    "name_jp": "ゲンガー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 500
+  },
+  {
+    "id": "0095",
+    "name_en": "Onix",
+    "name_zh": "大岩蛇",
+    "name_jp": "イワーク",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 385
+  },
+  {
+    "id": "0096",
+    "name_en": "Drowzee",
+    "name_zh": "催眠貘",
+    "name_jp": "スリープ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 328
+  },
+  {
+    "id": "0097",
+    "name_en": "Hypno",
+    "name_zh": "引梦貘人",
+    "name_jp": "スリーパー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 483
+  },
+  {
+    "id": "0098",
+    "name_en": "Krabby",
+    "name_zh": "大钳蟹",
+    "name_jp": "クラブ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 325
+  },
+  {
+    "id": "0099",
+    "name_en": "Kingler",
+    "name_zh": "巨钳蟹",
+    "name_jp": "キングラー",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 475
+  },
+  {
+    "id": "0100",
+    "name_en": "Voltorb",
+    "name_zh": "霹雳电球",
+    "name_jp": "ビリリダマ",
+    "types": [
+      "Normal"
+    ],
+    "total_stats": 330
   }
 ]

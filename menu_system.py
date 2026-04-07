@@ -136,15 +136,15 @@ class MenuManager:
         if session:
             session.current_menu = menu_type
             self._save_sessions()
-    
+     
     def render_main_menu(self, github_login: str) -> Tuple[str, List[Tuple[str, str]]]:
-         """渲染主菜单"""
-         session = self.sessions.get(github_login)
-         if not session:
-             return "❌ 会话已过期", []
-         
-         user = self._find_user_by_login(github_login)
-         account = self.economy_manager.get_account(user.user_id)
+        """渲染主菜单"""
+        session = self.sessions.get(github_login)
+        if not session:
+            return "❌ 会话已过期", []
+        
+        user = self._find_user_by_login(github_login)
+        account = self.economy_manager.get_account(user.user_id)
         
         menu_text = f"""
 ╔════════════════════════════════════════╗
@@ -173,11 +173,11 @@ class MenuManager:
             menu_text += f"  {code}. {desc}\n"
         
         return menu_text, options
-    
+     
     def render_account_menu(self, github_login: str) -> Tuple[str, List[Tuple[str, str]]]:
-         """渲染账户菜单"""
-         user = self._find_user_by_login(github_login)
-         account = self.economy_manager.get_account(user.user_id)
+        """渲染账户菜单"""
+        user = self._find_user_by_login(github_login)
+        account = self.economy_manager.get_account(user.user_id)
         stats = account.get_stats() if account else {}
         
         menu_text = f"""
@@ -244,9 +244,9 @@ GitHub ID: {user.github_id}
         return menu_text, options
     
     def render_inventory_menu(self, github_login: str) -> Tuple[str, List[Tuple[str, str]]]:
-         """渲染背包菜单"""
-         user = self._find_user_by_login(github_login)
-         inventory = self.shop.get_user_inventory(user.user_id)
+        """渲染背包菜单"""
+        user = self._find_user_by_login(github_login)
+        inventory = self.shop.get_user_inventory(user.user_id)
         
         menu_text = """
 ╔════════════════════════════════════════╗
@@ -261,11 +261,18 @@ GitHub ID: {user.github_id}
             menu_text += "  背包为空\n"
         else:
             total_items = 0
-            for item_id, quantity in inventory.items():
-                item = self.shop.get_item(item_id)
-                if item:
-                    menu_text += f"  • {item.name} x{quantity}\n"
-                    total_items += quantity
+            for item_id, item_data in inventory.items():
+                # Handle both old format (int) and new format (dict)
+                if isinstance(item_data, dict):
+                    quantity = item_data.get("quantity", 0)
+                    item_name = item_data.get("item", {}).get("name", item_id)
+                else:
+                    quantity = item_data
+                    item = self.shop.get_item(item_id)
+                    item_name = item.name if item else item_id
+                
+                menu_text += f"  • {item_name} x{quantity}\n"
+                total_items += quantity
             menu_text += f"\n总物品数: {total_items}\n"
         
         options = [

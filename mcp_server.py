@@ -314,7 +314,9 @@ def cmd_menu_action(github_username, action):
         
         return response
     except Exception as e:
-        return f"❌ 菜单操作失败: {str(e)}"
+        import traceback
+        tb_str = traceback.format_exc()
+        return f"❌ 菜单操作失败: {str(e)}\n\n{tb_str}"
 
 
 # ========== Slash Commands System ==========
@@ -1429,6 +1431,17 @@ def mcp_loop():
                             },
                         },
                         {
+                            "name": "monster_menu",
+                            "description": "Start the interactive Agent Monster menu system - the main command for /monster",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "Your GitHub username (optional - will use auto-detected if not provided)"}
+                                },
+                                "required": []
+                            },
+                        },
+                        {
                             "name": "monster_simple_start",
                             "description": "Start Agent Monster with automatic GitHub login (simplified command)",
                             "inputSchema": {
@@ -1556,6 +1569,14 @@ def mcp_loop():
                     resp["result"] = {"content": [{"type": "text", "text": out}]}
                 elif tool == "monster_slash_completions":
                     out = cmd_slash_completions(args.get("prefix", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_menu":
+                    # Main /monster command - start the menu system
+                    username = args.get("github_username", "")
+                    if not username:
+                        out = cmd_simple_start()
+                    else:
+                        out = cmd_menu_start(username)
                     resp["result"] = {"content": [{"type": "text", "text": out}]}
                 elif tool == "monster_simple_start":
                     out = cmd_simple_start()

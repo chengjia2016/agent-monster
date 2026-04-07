@@ -1,0 +1,181 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Generate Pokemon pets for Agent Monster from the 42arch/pokemon-dataset-zh dataset
+"""
+
+import json
+import os
+import urllib.request
+import urllib.error
+
+# Base URLs for the dataset
+BASE_URL = "https://raw.githubusercontent.com/42arch/pokemon-dataset-zh/main"
+SIMPLE_POKEDEX_URL = f"{BASE_URL}/data/simple_pokedex.json"
+POKEMON_DETAIL_URL = f"{BASE_URL}/data/pokemon/"
+
+def fetch_json(url):
+    """Fetch and parse JSON from a URL"""
+    try:
+        with urllib.request.urlopen(url) as response:
+            return json.loads(response.read().decode('utf-8'))
+    except Exception as e:
+        print(f"Error fetching {url}: {e}")
+        return None
+
+def get_gene_type(types):
+    """Determine gene type based on Pokemon type"""
+    if "Fire" in types:
+        return "creative"
+    elif "Grass" in types:
+        return "logic"
+    elif "Electric" in types:
+        return "speed"
+    elif "Water" in types:
+        return "logic"
+    elif "Fighting" in types:
+        return "creative"
+    elif "Bug" in types:
+        return "logic"
+    elif "Poison" in types:
+        return "lucky"
+    else:
+        return "lucky"
+
+def create_pet(pokemon_data, stats_data):
+    """Convert Pokemon data to pet format"""
+    stats = stats_data
+    gene_type = get_gene_type(pokemon_data["types"])
+    
+    # Determine avatar based on name
+    name_en = pokemon_data["name_en"]
+    name_zh = pokemon_data["name_zh"]
+    name_jp = pokemon_data["name_jp"]
+    
+    pet = {
+        "metadata": {
+            "name": name_en,
+            "species": name_en,
+            "birth_time": "2026-04-07T00:00:00.000000",
+            "owner": "pokedex@agent-monster",
+            "generation": 1,
+            "evolution_stage": 1,
+            "avatar": f"\n  {name_en}\n ╭───╮\n│ ◕‿◕ │\n╰─────╯\n  {name_zh}\n  {name_jp}\n"
+        },
+        "stats": {
+            "hp": {"base": int(stats["hp"]), "iv": 15, "ev": 0, "exp": 0},
+            "attack": {"base": int(stats["attack"]), "iv": 15, "ev": 0, "exp": 0},
+            "defense": {"base": int(stats["defense"]), "iv": 15, "ev": 0, "exp": 0},
+            "speed": {"base": int(stats["speed"]), "iv": 15, "ev": 0, "exp": 0},
+            "armor": {"base": int(stats["sp_defense"]), "iv": 15, "ev": 0, "exp": 0},
+            "quota": {"base": int(stats["sp_attack"]), "iv": 15, "ev": 0, "exp": 0}
+        },
+        "genes": {
+            gene_type: {"weight": 0.5, "source_commits": []},
+            "lucky": {"weight": 0.3, "source_commits": []},
+            "logic": {"weight": 0.1, "source_commits": []},
+            "speed": {"weight": 0.1, "source_commits": []}
+        },
+        "battle_history": [],
+        "signature": {
+            "algorithm": "RSA-SHA256",
+            "value": "",
+            "keyid": ""
+        }
+    }
+    return pet
+
+def main():
+    output_dir = "/root/pet/agent-monster-pet/demos/pokemon"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Fetch the simple pokedex to get the first 100 Pokemon
+    print("Fetching simple pokedex...")
+    simple_pokedex = fetch_json(SIMPLE_POKEDEX_URL)
+    if not simple_pokedex:
+        print("Failed to fetch simple pokedex")
+        return
+    
+    # Take first 100 Pokemon
+    pokemon_list = simple_pokedex[:100]
+    print(f"Found {len(pokemon_list)} Pokemon to process")
+    
+    all_pokemon = []
+    
+    for i, pokemon_info in enumerate(pokemon_list):
+        index = pokemon_info["index"]
+        name_zh = pokemon_info["name_zh"]
+        name_jp = pokemon_info["name_jp"]
+        name_en = pokemon_info["name_en"]
+        
+        # Fetch detailed data for this Pokemon
+        detail_url = f"{POKEMON_DETAIL_URL}{index}-{name_zh}.json"
+        print(f"[{i+1:3d}/100] Fetching {name_en} ({index})...")
+        
+        detail_data = fetch_json(detail_url)
+        if not detail_data:
+            print(f"  Warning: Could not fetch details for {name_en}, using default stats")
+            # Use default stats if we can't fetch the details
+            stats_data = {"hp": "50", "attack": "50", "defense": "50", "sp_attack": "50", "sp_defense": "50", "speed": "50"}
+            types = ["Normal"]  # Default type
+        else:
+            # Extract stats from the detailed data
+            stats_list = detail_data.get("stats", [])
+            if stats_list and len(stats_list) > 0:
+                stats_data = stats_list[0].get("data", {})
+                # Convert string values to integers, defaulting to 50 if missing or invalid
+                stats_data = {
+                    "hp": str(max(1, int(stats_data.get("hp", 50)))),
+                    "attack": str(max(1, int(stats_data.get("attack", 50)))),
+                    "defense": str(max(1, int(stats_data.get("defense", 50)))),
+                    "sp_attack": str(max(1, int(stats_data.get("sp_attack", 50)))),
+                    "sp_defense": str(max(1, int(stats_data.get("sp_defense", 50)))),
+                    "speed": str(max(1, int(stats_data.get("speed", 50))))
+                }
+            else:
+                print(f"  Warning: No stats found for {name_en}, using default stats")
+                stats_data = {"hp": "50", "attack": "50", "defense": "50", "sp_attack": "50", "sp_defense": "50", "speed": "50"}
+            
+            # Extract types from the detailed data if available, otherwise infer from stats or use default
+            # For now, we'll use a simple mapping based on the index or default to Normal
+            # In a more complete implementation, we'd extract types from the detail_data
+            types = ["Normal"]  # Default, we could enhance this later
+        
+        # Create the pet
+        pokemon_data = {
+            "name_en": name_en,
+            "name_zh": name_zh,
+            "name_jp": name_jp,
+            "types": types
+        }
+        
+        pet = create_pet(pokemon_data, stats_data)
+        
+        # Save the pet file
+        output_file = os.path.join(output_dir, f"{index}-{name_en}.soul")
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(pet, f, indent=2, ensure_ascii=False)
+        
+        # Add to our index
+        total_stats = sum(int(stats_data[key]) for key in ["hp", "attack", "defense", "sp_attack", "sp_defense", "speed"])
+        all_pokemon.append({
+            "id": index,
+            "name": name_en,
+            "name_zh": name_zh,
+            "name_jp": name_jp,
+            "types": types,
+            "total": total_stats
+        })
+        
+        print(f"  Created: {index}-{name_en} ({'/'.join(types)}) Total: {total_stats}")
+    
+    # Save the index file
+    index_file = os.path.join(output_dir, "index.json")
+    with open(index_file, "w", encoding="utf-8") as f:
+        json.dump(all_pokemon, f, indent=2, ensure_ascii=False)
+    
+    print(f"\n✅ Created {len(all_pokemon)} Pokemon pets!")
+    print(f"   Location: {output_dir}/")
+
+if __name__ == "__main__":
+    main()
