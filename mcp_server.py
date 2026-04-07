@@ -184,6 +184,11 @@ def cmd_duel(target, attack_stack=None):
         if target == "demo_duck" or target == "呆呆的小黄鸭" or "demo_duck" in target:
             demo_file = SCRIPT_DIR / "demos" / "demo_duck.soul"
             defender = load_json(demo_file)
+        elif "pokemon" in target.lower() or target.startswith("00"):
+            for f in (SCRIPT_DIR / "demos" / "pokemon").glob("*.soul"):
+                if target in f.name or target.replace("-", "-").lower() in f.name.lower():
+                    defender = load_json(f)
+                    break
         elif target.endswith(".soul"):
             defender = load_json(Path(target))
         elif target:

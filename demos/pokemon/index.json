@@ -1,0 +1,478 @@
+[
+  {
+    "id": "001",
+    "name": "Bulbasaur",
+    "name_zh": "妙蛙种子",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "total": 318
+  },
+  {
+    "id": "002",
+    "name": "Ivysaur",
+    "name_zh": "妙蛙草",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "total": 405
+  },
+  {
+    "id": "003",
+    "name": "Venusaur",
+    "name_zh": "妙蛙花",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "total": 525
+  },
+  {
+    "id": "004",
+    "name": "Charmander",
+    "name_zh": "小火龙",
+    "types": [
+      "Fire"
+    ],
+    "total": 309
+  },
+  {
+    "id": "005",
+    "name": "Charmeleon",
+    "name_zh": "火恐龙",
+    "types": [
+      "Fire"
+    ],
+    "total": 405
+  },
+  {
+    "id": "006",
+    "name": "Charizard",
+    "name_zh": "喷火龙",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "total": 534
+  },
+  {
+    "id": "007",
+    "name": "Squirtle",
+    "name_zh": "杰尼龟",
+    "types": [
+      "Water"
+    ],
+    "total": 314
+  },
+  {
+    "id": "008",
+    "name": "Wartortle",
+    "name_zh": "卡咪龟",
+    "types": [
+      "Water"
+    ],
+    "total": 405
+  },
+  {
+    "id": "009",
+    "name": "Blastoise",
+    "name_zh": "水箭龟",
+    "types": [
+      "Water"
+    ],
+    "total": 530
+  },
+  {
+    "id": "010",
+    "name": "Caterpie",
+    "name_zh": "绿毛虫",
+    "types": [
+      "Bug"
+    ],
+    "total": 195
+  },
+  {
+    "id": "011",
+    "name": "Metapod",
+    "name_zh": "铁甲蛹",
+    "types": [
+      "Bug"
+    ],
+    "total": 205
+  },
+  {
+    "id": "012",
+    "name": "Butterfree",
+    "name_zh": "巴大蝶",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "total": 395
+  },
+  {
+    "id": "013",
+    "name": "Weedle",
+    "name_zh": "独角虫",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "total": 195
+  },
+  {
+    "id": "014",
+    "name": "Kakuna",
+    "name_zh": "铁壳蛹",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "total": 205
+  },
+  {
+    "id": "015",
+    "name": "Beedrill",
+    "name_zh": "大针蜂",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "total": 395
+  },
+  {
+    "id": "016",
+    "name": "Pidgey",
+    "name_zh": "波波",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "total": 251
+  },
+  {
+    "id": "017",
+    "name": "Pidgeotto",
+    "name_zh": "比比鸟",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "total": 349
+  },
+  {
+    "id": "018",
+    "name": "Pidgeot",
+    "name_zh": "大比鸟",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "total": 479
+  },
+  {
+    "id": "019",
+    "name": "Rattata",
+    "name_zh": "小拉达",
+    "types": [
+      "Normal"
+    ],
+    "total": 253
+  },
+  {
+    "id": "020",
+    "name": "Raticate",
+    "name_zh": "拉达",
+    "types": [
+      "Normal"
+    ],
+    "total": 413
+  },
+  {
+    "id": "021",
+    "name": "Spearow",
+    "name_zh": "烈雀",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "total": 262
+  },
+  {
+    "id": "022",
+    "name": "Fearow",
+    "name_zh": "大嘴雀",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "total": 442
+  },
+  {
+    "id": "023",
+    "name": "Ekans",
+    "name_zh": "阿柏蛇",
+    "types": [
+      "Poison"
+    ],
+    "total": 288
+  },
+  {
+    "id": "024",
+    "name": "Arbok",
+    "name_zh": "阿柏怪",
+    "types": [
+      "Poison"
+    ],
+    "total": 438
+  },
+  {
+    "id": "025",
+    "name": "Pikachu",
+    "name_zh": "皮卡丘",
+    "types": [
+      "Electric"
+    ],
+    "total": 320
+  },
+  {
+    "id": "026",
+    "name": "Raichu",
+    "name_zh": "雷丘",
+    "types": [
+      "Electric"
+    ],
+    "total": 485
+  },
+  {
+    "id": "027",
+    "name": "Sandshrew",
+    "name_zh": "穿山鼠",
+    "types": [
+      "Ground"
+    ],
+    "total": 300
+  },
+  {
+    "id": "028",
+    "name": "Sandslash",
+    "name_zh": "穿山王",
+    "types": [
+      "Ground"
+    ],
+    "total": 450
+  },
+  {
+    "id": "029",
+    "name": "Nidoran-F",
+    "name_zh": "尼多兰",
+    "types": [
+      "Poison"
+    ],
+    "total": 275
+  },
+  {
+    "id": "030",
+    "name": "Nidorina",
+    "name_zh": "尼多娜",
+    "types": [
+      "Poison"
+    ],
+    "total": 365
+  },
+  {
+    "id": "031",
+    "name": "Nidoqueen",
+    "name_zh": "尼多后",
+    "types": [
+      "Poison",
+      "Ground"
+    ],
+    "total": 505
+  },
+  {
+    "id": "032",
+    "name": "Nidoran-M",
+    "name_zh": "尼多朗",
+    "types": [
+      "Poison"
+    ],
+    "total": 273
+  },
+  {
+    "id": "033",
+    "name": "Nidorino",
+    "name_zh": "尼多力诺",
+    "types": [
+      "Poison"
+    ],
+    "total": 365
+  },
+  {
+    "id": "034",
+    "name": "Nidoking",
+    "name_zh": "尼多王",
+    "types": [
+      "Poison",
+      "Ground"
+    ],
+    "total": 505
+  },
+  {
+    "id": "035",
+    "name": "Clefairy",
+    "name_zh": "皮皮",
+    "types": [
+      "Fairy"
+    ],
+    "total": 323
+  },
+  {
+    "id": "036",
+    "name": "Clefable",
+    "name_zh": "皮可西",
+    "types": [
+      "Fairy"
+    ],
+    "total": 483
+  },
+  {
+    "id": "037",
+    "name": "Vulpix",
+    "name_zh": "六尾",
+    "types": [
+      "Fire"
+    ],
+    "total": 299
+  },
+  {
+    "id": "038",
+    "name": "Ninetales",
+    "name_zh": "九尾",
+    "types": [
+      "Fire"
+    ],
+    "total": 505
+  },
+  {
+    "id": "039",
+    "name": "Jigglypuff",
+    "name_zh": "胖丁",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "total": 295
+  },
+  {
+    "id": "040",
+    "name": "Wigglytuff",
+    "name_zh": "胖可丁",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "total": 405
+  },
+  {
+    "id": "041",
+    "name": "Zubat",
+    "name_zh": "超音蝠",
+    "types": [
+      "Poison",
+      "Flying"
+    ],
+    "total": 245
+  },
+  {
+    "id": "042",
+    "name": "Golbat",
+    "name_zh": "大嘴蝠",
+    "types": [
+      "Poison",
+      "Flying"
+    ],
+    "total": 455
+  },
+  {
+    "id": "043",
+    "name": "Oddish",
+    "name_zh": "走路草",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "total": 320
+  },
+  {
+    "id": "044",
+    "name": "Gloom",
+    "name_zh": "臭臭花",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "total": 395
+  },
+  {
+    "id": "045",
+    "name": "Vileplume",
+    "name_zh": "霸王花",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "total": 480
+  },
+  {
+    "id": "046",
+    "name": "Paras",
+    "name_zh": "派拉斯",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "total": 285
+  },
+  {
+    "id": "047",
+    "name": "Parasect",
+    "name_zh": "派拉斯特",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "total": 405
+  },
+  {
+    "id": "048",
+    "name": "Venonat",
+    "name_zh": "毛球",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "total": 305
+  },
+  {
+    "id": "049",
+    "name": "Venomoth",
+    "name_zh": "末入蛾",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "total": 450
+  },
+  {
+    "id": "050",
+    "name": "Diglett",
+    "name_zh": "地鼠",
+    "types": [
+      "Ground"
+    ],
+    "total": 265
+  }
+]
