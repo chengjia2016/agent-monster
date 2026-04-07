@@ -5,6 +5,7 @@ Agent Monster Cookie Generator
 """
 
 import hashlib
+import os
 import random
 import string
 from pathlib import Path
