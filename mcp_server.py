@@ -17,6 +17,8 @@ SOUL_FILE = MONSTER_DIR / "pet.soul"
 
 JUDGE_SERVER = "http://agentmonster.openx.pro:10000"
 
+EGG_POOL = ["Bulbasaur", "Charmander", "Squirtle", "Pikachu", "Clefairy", "Vulpix", "Oddish"]
+
 
 def check_dependencies():
     """Check if required dependencies are installed"""
@@ -67,15 +69,106 @@ def call_judge_server(endpoint, data):
 
 
 def cmd_init():
-    result = subprocess.run(
-        [sys.executable, "egg_incubator.py"],
-        capture_output=True,
-        cwd=SCRIPT_DIR,
-        env={**os.environ, "PYTHONIOENCODING": "utf-8"}
-    )
-    if result.returncode != 0:
-        return f"Error: {result.stderr.decode('utf-8', errors='replace')}"
-    return result.stdout.decode('utf-8', errors='replace')
+    import time
+    egg_id = f"egg_{int(time.time())}"
+    egg_data = {
+        "id": egg_id,
+        "owner": "player",
+        "start_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "status": "incubating"
+    }
+    save_json(MONSTER_DIR / "egg.json", egg_data)
+    return f"""🥚 Egg Obtained!
+===
+Egg ID: {egg_id}
+Start Time: {egg_data['start_time']}
+
+The egg is incubating. Use /monster hatch to hatch it!
+
+Longer incubation = more energy = better Pokemon!
+"""
+
+def cmd_hatch():
+    import time
+    egg_file = MONSTER_DIR / "egg.json"
+    if not egg_file.exists():
+        return "No egg found. Use /monster init first!"
+    
+    egg_data = load_json(egg_file)
+    if egg_data.get("hatched"):
+        return "Egg already hatched!"
+    
+    hatch_result = call_judge_server("/api/egg/incubate", egg_data)
+    
+    if hatch_result.get("is_valid") and hatch_result.get("hatch_result"):
+        result = hatch_result["hatch_result"]
+        
+        egg_data["hatched"] = True
+        egg_data["hatch_result"] = result
+        save_json(MONSTER_DIR / "egg.json", egg_data)
+        
+        pet_data = {
+            "metadata": {
+                "name": result["pokemon_name"],
+                "species": result["pokemon_name"],
+                "birth_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "owner": "player",
+                "generation": 1,
+                "evolution_stage": 1,
+                "avatar": f"\n  {result['pokemon_name']}\n ╭───╮\n│ ◕‿◕ │\n╰─────╯\n"
+            },
+            "stats": {
+                "hp": {"base": 50, "iv": 10, "ev": 0, "exp": 0},
+                "attack": {"base": 50, "iv": 10, "ev": 0, "exp": 0},
+                "defense": {"base": 50, "iv": 10, "ev": 0, "exp": 0},
+                "speed": {"base": 50, "iv": 10, "ev": 0, "exp": 0},
+                "armor": {"base": 50, "iv": 10, "ev": 0, "exp": 0},
+                "quota": {"base": 50, "iv": 10, "ev": 0, "exp": 0}
+            },
+            "genes": {
+                "logic": {"weight": 0.33, "source_commits": []},
+                "creative": {"weight": 0.33, "source_commits": []},
+                "speed": {"weight": 0.34, "source_commits": []}
+            },
+            "battle_history": [],
+            "signature": {"algorithm": "RSA-SHA256", "value": "", "keyid": ""}
+        }
+        
+        save_json(SOUL_FILE, pet_data)
+        
+        return f"""🎉 Egg Hatched!
+===
+Pokemon: {result['pokemon_name']}
+Rarity: {result['rarity']}
+Energy: {result['total_energy']}
+
+Gene Changes:
+- {result['gene_modifiers'][0]['gene_type']}: {result['gene_modifiers'][0]['old_weight']:.2f} → {result['gene_modifiers'][0]['new_weight']:.2f}
+- lucky: {result['gene_modifiers'][1]['old_weight']:.2f} → {result['gene_modifiers'][1]['new_weight']:.2f}
+"""
+    
+    return "Hatch failed: " + str(hatch_result.get("errors", ["Unknown error"]))
+
+def cmd_capture(target_hp, max_hp):
+    capture_data = {
+        "id": f"capture_{int(time.time())}",
+        "capture_id": f"capture_{int(time.time())}",
+        "battle_id": f"battle_{int(time.time())}",
+        "attacker_id": "player",
+        "target_id": "wild_pokemon",
+        "target_hp": target_hp,
+        "max_hp": max_hp,
+        "throw_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    }
+    
+    result = call_judge_server("/api/capture/validate", capture_data)
+    
+    if result.get("success"):
+        return f"🎯 Capture Successful! Wild Pokemon caught!"
+    elif result.get("errors"):
+        return f"❌ Capture Failed: {result['errors'][0]}"
+    else:
+        return f"❌ Capture Failed (rate: {result.get('capture_rate', 0):.1%})"
 
 
 def cmd_status(json_mode=False):
@@ -336,6 +429,27 @@ def mcp_loop():
                                 "required": []
                             },
                         },
+                        {
+                            "name": "monster_hatch",
+                            "description": "Hatch your egg to get a Pokemon",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {},
+                                "required": []
+                            },
+                        },
+                        {
+                            "name": "monster_capture",
+                            "description": "Throw a capture ball to catch wild Pokemon (requires low HP)",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "target_hp": {"type": "number", "description": "Target Pokemon's current HP"},
+                                    "max_hp": {"type": "number", "description": "Target Pokemon's max HP"}
+                                },
+                                "required": ["target_hp", "max_hp"]
+                            },
+                        },
                     ]
                 }
 
@@ -365,6 +479,12 @@ def mcp_loop():
                 elif tool == "monster_traps":
                     result = cmd_traps(args.get("path", "."))
                     resp["result"] = {"content": [{"type": "text", "text": json.dumps(result, indent=2, ensure_ascii=False)}]}
+                elif tool == "monster_hatch":
+                    out = cmd_hatch()
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_capture":
+                    out = cmd_capture(args.get("target_hp", 0), args.get("max_hp", 100))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
                 else:
                     resp["error"] = {"code": -32601, "message": f"Unknown tool: {tool}"}
 
