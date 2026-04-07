@@ -772,8 +772,8 @@ def cmd_farm(action="view"):
             # Create a new farm
             farm = manager.create_farm(
                 owner="player",
-                repository="agent-monster-pet",
-                url="https://github.com/player/agent-monster-pet"
+                repository="agent-monster",
+                url="https://github.com/player/agent-monster"
             )
             manager.add_food_to_farm(farm, "cookie", 3)
             manager.add_food_to_farm(farm, "apple", 5)

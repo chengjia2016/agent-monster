@@ -116,12 +116,12 @@ HP% > 30% 时的表现 (80% HP):
 
 ## 5. 测试脚本位置
 ```
-/root/pet/agent-monster-pet/test_egg_capture.py
+/root/pet/agent-monster/test_egg_capture.py
 ```
 
 运行方式：
 ```bash
-cd /root/pet/agent-monster-pet
+cd /root/pet/agent-monster
 python3 test_egg_capture.py
 ```
 

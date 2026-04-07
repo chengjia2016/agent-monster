@@ -237,7 +237,7 @@ UnifiedGameSystemsManager
 {
   "farm": {
     "owner": "alice",
-    "repository": "agent-monster-pet",
+    "repository": "agent-monster",
     "foods": [
       {
         "id": "cookie_alice_...",

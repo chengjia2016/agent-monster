@@ -144,7 +144,7 @@ account_transactions
 ## 📚 文档结构
 
 ```
-/root/pet/agent-monster-pet/
+/root/pet/agent-monster/
 ├── JUDGE_SERVER_STATUS.md          # 详细的 API 和 schema 文档
 ├── DEPLOYMENT_COMPLETE.md          # 部署完成总结
 ├── TEST_REPORT_JUDGE_SERVER.md     # 完整的测试报告

@@ -2,7 +2,7 @@
 
 **Test Date:** 2026-04-07  
 **Test Email:** seekvideo@gmail.com  
-**GitHub Repository:** https://github.com/chengjia2016/agent-monster-pet.git
+**GitHub Repository:** https://github.com/chengjia2016/agent-monster.git
 
 ---
 
@@ -146,7 +146,7 @@ git push -u origin main
 
 **Repository URL:**
 ```
-https://github.com/chengjia2016/agent-monster-pet.git
+https://github.com/chengjia2016/agent-monster.git
 ```
 
 **Result:** ✅ Code pushed to GitHub
@@ -173,7 +173,7 @@ https://github.com/chengjia2016/agent-monster-pet.git
 
 ### 1. Enable GitHub Actions
 
-Visit repository: https://github.com/chengjia2016/agent-monster-pet/actions
+Visit repository: https://github.com/chengjia2016/agent-monster/actions
 
 Enable the following workflows:
 - hourly-settlement.yml

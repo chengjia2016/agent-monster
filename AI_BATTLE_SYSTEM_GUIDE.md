@@ -371,7 +371,7 @@ if opponent.has_effect("frozen"):
 ## 📁 文件结构
 
 ```
-/root/pet/agent-monster-pet/
+/root/pet/agent-monster/
 ├── ai_battle_strategy.py           (550+ 行) ✓
 │   ├── BattleStateAnalyzer
 │   ├── SkillEvaluator

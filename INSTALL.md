@@ -3,7 +3,7 @@
 ## Step 1: Install Python Dependencies
 
 ```bash
-cd /path/to/agent-monster-pet
+cd /path/to/agent-monster
 pip install -r requirements.txt
 ```
 

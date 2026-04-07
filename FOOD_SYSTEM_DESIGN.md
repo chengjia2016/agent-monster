@@ -137,7 +137,7 @@ POST /api/food/eat
   "eater_id": "player_eater",
   "eater_pet_id": "pikachu_001",
   "farm_owner": "player_farmer",
-  "farm_repo": "agent-monster-pet",
+  "farm_repo": "agent-monster",
   "food_id": "cookie_001",
   "eat_time": "2026-04-07T12:00:00Z",
   "signature": "..." // 验证签名
@@ -448,8 +448,8 @@ Alice 的 Pikachu 获得 3 个 Cookie 供其他玩家食用。
   },
   "farm": {
     "owner": "alice",
-    "repo": "alice/agent-monster-pet",
-    "repo_url": "https://github.com/alice/agent-monster-pet"
+    "repo": "alice/agent-monster",
+    "repo_url": "https://github.com/alice/agent-monster"
   },
   "food": {
     "food_id": "cookie_alice_001",

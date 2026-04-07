@@ -60,17 +60,17 @@
 
 ### 配置文件
 ```
-/root/pet/agent-monster-pet/judge-server/.config/config.yaml
+/root/pet/agent-monster/judge-server/.config/config.yaml
 ```
 
 ### 二进制文件
 ```
-/root/pet/agent-monster-pet/judge-server/judge-server
+/root/pet/agent-monster/judge-server/judge-server
 ```
 
 ### 工作目录
 ```
-/root/pet/agent-monster-pet/judge-server/
+/root/pet/agent-monster/judge-server/
 ```
 
 ## 📝 服务管理命令

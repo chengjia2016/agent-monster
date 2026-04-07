@@ -394,12 +394,12 @@ def create_example_farm() -> Farm:
     manager = FoodManager()
 
     # 创建农场
-    farm = manager.create_farm("alice", "agent-monster-pet", "https://github.com/alice/agent-monster-pet")
+    farm = manager.create_farm("alice", "agent-monster", "https://github.com/alice/agent-monster")
 
     # 添加食物
-    manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.COOKIE, quantity=3)
-    manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.GENE, quantity=1)
-    manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.APPLE, quantity=5)
+    manager.add_food_to_farm("alice", "agent-monster", FoodType.COOKIE, quantity=3)
+    manager.add_food_to_farm("alice", "agent-monster", FoodType.GENE, quantity=1)
+    manager.add_food_to_farm("alice", "agent-monster", FoodType.APPLE, quantity=5)
 
     return farm
 
@@ -414,13 +414,13 @@ if __name__ == "__main__":
     # 创建 Alice 的农场
     print("1. Alice 创建农场并种植食物")
     print("-" * 60)
-    alice_farm = manager.create_farm("alice", "agent-monster-pet", "https://github.com/alice/agent-monster-pet")
+    alice_farm = manager.create_farm("alice", "agent-monster", "https://github.com/alice/agent-monster")
     print(f"✓ 农场已创建: {alice_farm.owner}/{alice_farm.repository}")
 
     # 添加食物
-    cookie = manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.COOKIE, quantity=3)
-    gene = manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.GENE, quantity=1)
-    apple = manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.APPLE, quantity=5)
+    cookie = manager.add_food_to_farm("alice", "agent-monster", FoodType.COOKIE, quantity=3)
+    gene = manager.add_food_to_farm("alice", "agent-monster", FoodType.GENE, quantity=1)
+    apple = manager.add_food_to_farm("alice", "agent-monster", FoodType.APPLE, quantity=5)
 
     print(f"✓ 添加 Cookie: {cookie.id} (数量: {cookie.quantity})")
     print(f"✓ 添加 Gene: {gene.id} (数量: {gene.quantity})")
@@ -429,13 +429,13 @@ if __name__ == "__main__":
     # 获取统计
     print("\n2. 查看农场统计")
     print("-" * 60)
-    stats = manager.get_farm_stats("alice", "agent-monster-pet")
+    stats = manager.get_farm_stats("alice", "agent-monster")
     print(json.dumps(stats, indent=2, ensure_ascii=False))
 
     # Bob 进食
     print("\n3. Bob 访问 Alice 的农场并进食")
     print("-" * 60)
-    success, response = manager.consume_food("alice", "agent-monster-pet", cookie.id, "bob", "pikachu_bob_001")
+    success, response = manager.consume_food("alice", "agent-monster", cookie.id, "bob", "pikachu_bob_001")
     print(f"✓ 进食结果: {'成功' if success else '失败'}")
     print(f"  营养值: {response.get('nutrition')}")
     print(f"  剩余数量: {response.get('remaining_quantity')}/{response.get('max_quantity')}")
@@ -444,7 +444,7 @@ if __name__ == "__main__":
     # 再次进食
     print("\n4. Bob 再次进食")
     print("-" * 60)
-    success, response = manager.consume_food("alice", "agent-monster-pet", cookie.id, "bob", "pikachu_bob_001")
+    success, response = manager.consume_food("alice", "agent-monster", cookie.id, "bob", "pikachu_bob_001")
     print(f"✓ 进食结果: {'成功' if success else '失败'}")
     print(f"  营养值: {response.get('nutrition')}")
     print(f"  剩余数量: {response.get('remaining_quantity')}/{response.get('max_quantity')}")
@@ -452,7 +452,7 @@ if __name__ == "__main__":
     # 第三次进食
     print("\n5. Bob 第三次进食")
     print("-" * 60)
-    success, response = manager.consume_food("alice", "agent-monster-pet", cookie.id, "bob", "pikachu_bob_001")
+    success, response = manager.consume_food("alice", "agent-monster", cookie.id, "bob", "pikachu_bob_001")
     print(f"✓ 进食结果: {'成功' if success else '失败'}")
     print(f"  营养值: {response.get('nutrition')}")
     print(f"  剩余数量: {response.get('remaining_quantity')}/{response.get('max_quantity')}")
@@ -460,7 +460,7 @@ if __name__ == "__main__":
     # 尝试进食已用尽的食物
     print("\n6. Bob 尝试进食已用尽的食物")
     print("-" * 60)
-    success, response = manager.consume_food("alice", "agent-monster-pet", cookie.id, "bob", "pikachu_bob_001")
+    success, response = manager.consume_food("alice", "agent-monster", cookie.id, "bob", "pikachu_bob_001")
     print(f"✓ 进食结果: {'成功' if success else '失败'}")
     if not success:
         print(f"  错误: {response.get('error')}")
@@ -469,13 +469,13 @@ if __name__ == "__main__":
     # 保存农场
     print("\n7. 保存农场到文件")
     print("-" * 60)
-    success = manager.save_farm_to_file("alice", "agent-monster-pet", "/tmp/farm.yaml")
+    success = manager.save_farm_to_file("alice", "agent-monster", "/tmp/farm.yaml")
     print(f"✓ 保存结果: {'成功' if success else '失败'}")
 
     # 显示最后的统计
     print("\n8. 最终农场统计")
     print("-" * 60)
-    final_stats = manager.get_farm_stats("alice", "agent-monster-pet")
+    final_stats = manager.get_farm_stats("alice", "agent-monster")
     print(json.dumps(final_stats, indent=2, ensure_ascii=False))
 
     print("\n" + "=" * 60)

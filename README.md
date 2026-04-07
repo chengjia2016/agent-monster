@@ -12,7 +12,7 @@ OpenCode is an AI-powered coding assistant that can help you play Agent Monster 
 
 ### Easiest Way to Get Started
 
-> **Just tell your AI agent:** *"Go to https://github.com/chengjia2016/agent-monster-pet and set up Agent Monster for me"*
+> **Just tell your AI agent:** *"Go to https://github.com/chengjia2016/agent-monster and set up Agent Monster for me"*
 >
 > Your agent will automatically clone the repository, install dependencies, and configure the MCP server.
 
@@ -28,7 +28,7 @@ OpenCode is an AI-powered coding assistant that can help you play Agent Monster 
     "agent-monster": {
       "command": "python3",
       "args": ["mcp_server.py", "mcp"],
-      "cwd": "/path/to/agent-monster-pet"
+      "cwd": "/path/to/agent-monster"
     }
   }
 }
@@ -62,7 +62,7 @@ OpenCode: Shows your pet's stats, level, and battle history
 You: /monster analyze
 OpenCode: Analyzes your commits and updates pet genes
 
-You: /monster attack https://github.com/chengjia2016/agent-monster-pet/demo_duck
+You: /monster attack https://github.com/chengjia2016/agent-monster/demo_duck
 OpenCode: ⚔️ Battle vs 呆呆的小黄鸭! You won!
 ```
 
@@ -71,7 +71,7 @@ OpenCode: ⚔️ Battle vs 呆呆的小黄鸭! You won!
 | Command | Description |
 |---------|-------------|
 | `/monster attack demo_duck` | Attack the demo pet (local test) |
-| `/monster attack https://github.com/chengjia2016/agent-monster-pet/demo_duck` | Attack demo pet via GitHub URL |
+| `/monster attack https://github.com/chengjia2016/agent-monster/demo_duck` | Attack demo pet via GitHub URL |
 | `/monster attack https://github.com/username/repo` | Attack another player's pet |
 | `/monster duel <target>` | Same as attack (alias) |
 
@@ -110,7 +110,7 @@ OpenCode: ⚔️ Battle simulation complete! You won!
 
 ```bash
 # Using GitHub CLI
-gh repo fork agent-monster/agent-monster-pet
+gh repo fork agent-monster/agent-monster
 
 # Or fork manually on GitHub
 ```
@@ -118,8 +118,8 @@ gh repo fork agent-monster/agent-monster-pet
 ### 2. Clone to Your Local Machine
 
 ```bash
-git clone https://github.com/chengjia2016/agent-monster-pet
-cd agent-monster-pet
+git clone https://github.com/chengjia2016/agent-monster
+cd agent-monster
 ```
 
 ### 3. Install and Claim Your Pet
@@ -347,7 +347,7 @@ The central repository aggregates all players' `leaderboard.json` files.
 ## 📁 File Structure
 
 ```
-agent-monster-pet/
+agent-monster/
 ├── .monster/
 │   ├── pet.soul            # Pet data
 │   ├── egg.yaml            # Pet egg (72h)
@@ -450,7 +450,7 @@ Visit another player's farm and feed your pet:
 
 Example:
 ```
-/monster feed alice agent-monster-pet apple_alice_001
+/monster feed alice agent-monster apple_alice_001
 ```
 
 ### Managing Favorites
@@ -486,8 +486,8 @@ Encourage exploration! The system automatically:
 ```yaml
 farm:
   owner: "alice"
-  repository: "agent-monster-pet"
-  url: "https://github.com/alice/agent-monster-pet"
+  repository: "agent-monster"
+  url: "https://github.com/alice/agent-monster"
   planted_at: "2026-04-07T00:00:00Z"
   foods:
     - id: "cookie_alice_001"

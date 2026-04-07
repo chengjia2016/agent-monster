@@ -38,7 +38,7 @@ class PersistentFoodManager(FoodManager):
     数据存储架构：
     .monster/farms/
     ├── alice/
-    │   └── agent-monster-pet.json       # Alice 的农场数据
+    │   └── agent-monster.json       # Alice 的农场数据
     ├── bob/
     │   └── some-repo.json               # Bob 的农场数据
     └── ...
@@ -454,8 +454,8 @@ if __name__ == "__main__":
     print("-" * 70)
     alice_farm = manager.create_farm(
         "alice",
-        "agent-monster-pet",
-        "https://github.com/alice/agent-monster-pet"
+        "agent-monster",
+        "https://github.com/alice/agent-monster"
     )
     print(f"✓ 农场已创建并保存: {alice_farm.owner}/{alice_farm.repository}")
     print()
@@ -463,17 +463,17 @@ if __name__ == "__main__":
     # 演示 2: 添加食物
     print("2️⃣  向农场添加食物")
     print("-" * 70)
-    cookie = manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.COOKIE, 3)
+    cookie = manager.add_food_to_farm("alice", "agent-monster", FoodType.COOKIE, 3)
     print(f"✓ 添加 Cookie: {cookie.id}")
     
-    gene = manager.add_food_to_farm("alice", "agent-monster-pet", FoodType.GENE, 1)
+    gene = manager.add_food_to_farm("alice", "agent-monster", FoodType.GENE, 1)
     print(f"✓ 添加 Gene: {gene.id}")
     print()
     
     # 演示 3: 检查存储
     print("3️⃣  检查本地存储")
     print("-" * 70)
-    farm_file = manager._get_farm_file("alice", "agent-monster-pet")
+    farm_file = manager._get_farm_file("alice", "agent-monster")
     print(f"✓ 农场文件: {farm_file}")
     if farm_file.exists():
         print(f"✓ 文件大小: {farm_file.stat().st_size} 字节")
@@ -486,7 +486,7 @@ if __name__ == "__main__":
     print("4️⃣  消费食物")
     print("-" * 70)
     success, response = manager.consume_food(
-        "alice", "agent-monster-pet", cookie.id, "bob", "pikachu_bob_001"
+        "alice", "agent-monster", cookie.id, "bob", "pikachu_bob_001"
     )
     print(f"✓ 消费结果: {'成功' if success else '失败'}")
     print(f"  营养值: {response.get('nutrition')}")
@@ -506,7 +506,7 @@ if __name__ == "__main__":
     # 创建新实例（模拟重启）
     manager2 = PersistentFoodManager(cache_dir=Path(".monster"), auto_load=True)
     print(f"✓ 新实例加载了 {len(manager2.farms)} 个农场")
-    alice_farm_loaded = manager2.get_farm("alice", "agent-monster-pet")
+    alice_farm_loaded = manager2.get_farm("alice", "agent-monster")
     if alice_farm_loaded:
         print(f"✓ Alice 的农场包含 {len(alice_farm_loaded.foods)} 件食物")
         print(f"✓ Cookie 剩余数量: {alice_farm_loaded.foods[0].quantity}/3")

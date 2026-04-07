@@ -12,7 +12,7 @@
 
 ```bash
 # 1. Fork/Clone 基地仓库
-git clone https://github.com/your-name/agent-monster-pet.git
+git clone https://github.com/your-name/agent-monster.git
 
 # 2. 安装 CLI 工具
 pip install -r requirements.txt
@@ -215,7 +215,7 @@ jobs:
 ## 文件结构
 
 ```
-agent-monster-pet/          # 玩家仓库
+agent-monster/          # 玩家仓库
 ├── .monster/
 │   ├── pet.soul            # 宠物数据
 │   ├── egg.yaml            # 宠物蛋 (72h)
@@ -239,11 +239,11 @@ agent-monster-pet/          # 玩家仓库
 
 ```bash
 # 1. Fork 基地仓库
-gh repo fork agent-monster/agent-monster-pet
+gh repo fork agent-monster/agent-monster
 
 # 2. Clone 到本地
-git clone https://github.com/your-name/agent-monster-pet.git
-cd agent-monster-pet
+git clone https://github.com/your-name/agent-monster.git
+cd agent-monster
 
 # 3. 安装依赖
 pip install -r requirements.txt

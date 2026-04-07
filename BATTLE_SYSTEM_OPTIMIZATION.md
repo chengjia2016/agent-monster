@@ -254,7 +254,7 @@ print(f"{poison.get_emoji()} {poison.get_color()}")
 ## 📁 文件结构
 
 ```
-/root/pet/agent-monster-pet/
+/root/pet/agent-monster/
 ├── battle_tui.py                    # 高级 TUI 界面 (400+ 行)
 ├── enhanced_battle.py               # 增强战斗系统 (600+ 行)
 ├── battle_replay.py                 # 对战回放系统 (450+ 行)

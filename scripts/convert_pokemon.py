@@ -171,7 +171,7 @@ def convert_to_pet(data):
     return pet, type_en, total, description
 
 def main():
-    output_dir = "/root/pet/agent-monster-pet/demos/pokemon"
+    output_dir = "/root/pet/agent-monster/demos/pokemon"
     os.makedirs(output_dir, exist_ok=True)
     
     pokemon_list = [

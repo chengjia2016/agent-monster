@@ -4,8 +4,8 @@
 
 ```bash
 # Fork and Clone the repository
-git clone https://github.com/your-name/agent-monster-pet.git
-cd agent-monster-pet
+git clone https://github.com/your-name/agent-monster.git
+cd agent-monster
 
 # Windows
 install.bat

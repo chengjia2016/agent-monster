@@ -207,7 +207,7 @@ def create_pet(pokemon_data, stats_data, types):
     return pet
 
 def main():
-    output_dir = "/root/pet/agent-monster-pet/demos/pokemon"
+    output_dir = "/root/pet/agent-monster/demos/pokemon"
     os.makedirs(output_dir, exist_ok=True)
     
     # Fetch the simple pokedex to get the first 100 Pokemon

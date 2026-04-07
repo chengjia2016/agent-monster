@@ -92,7 +92,7 @@ gh auth login
   "mcpServers": {
     "agent-monster": {
       "command": "python3",
-      "args": ["/root/pet/agent-monster-pet/mcp_server.py", "mcp"]
+      "args": ["/root/pet/agent-monster/mcp_server.py", "mcp"]
     }
   }
 }
@@ -104,7 +104,7 @@ gh auth login
   "mcpServers": {
     "agent-monster": {
       "command": "python",
-      "args": ["C:/path/to/agent-monster-pet/mcp_server.py", "mcp"]
+      "args": ["C:/path/to/agent-monster/mcp_server.py", "mcp"]
     }
   }
 }

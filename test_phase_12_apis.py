@@ -5,7 +5,7 @@ Tests farm, cookie, egg, and shop endpoints
 """
 
 import sys
-sys.path.insert(0, '/root/pet/agent-monster-pet')
+sys.path.insert(0, '/root/pet/agent-monster')
 
 from judge_server_client import JudgeServerClient, get_judge_server_client
 

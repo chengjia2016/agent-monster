@@ -22,9 +22,9 @@ This audit identifies all data models and features in the Agent Monster codebase
   - `registered_at`, `last_login`
 - **Implementation**: User manager handles local storage; hybrid manager handles sync
 - **Files**:
-  - `/root/pet/agent-monster-pet/user_manager.py` (local storage)
-  - `/root/pet/agent-monster-pet/judge_server_user_manager.py` (server interface)
-  - `/root/pet/agent-monster-pet/hybrid_user_data_manager.py` (fallback mechanism)
+  - `/root/pet/agent-monster/user_manager.py` (local storage)
+  - `/root/pet/agent-monster/judge_server_user_manager.py` (server interface)
+  - `/root/pet/agent-monster/hybrid_user_data_manager.py` (fallback mechanism)
 
 ### User Inventory (Items)
 - **Status**: ✅ READY FOR MIGRATION
@@ -39,7 +39,7 @@ This audit identifies all data models and features in the Agent Monster codebase
   - `added_at`: Acquisition timestamp
 - **Implementation**: Shop manager handles CRUD; can be synced via hybrid manager
 - **Files**:
-  - `/root/pet/agent-monster-pet/shop_manager.py` (inventory management)
+  - `/root/pet/agent-monster/shop_manager.py` (inventory management)
   - `GET/POST /api/user/inventory/*` endpoints on Judge Server
 
 ### Pets/Pokemon
@@ -71,8 +71,8 @@ This audit identifies all data models and features in the Agent Monster codebase
   - `owner_github_id`
 - **Implementation**: Egg files exist locally; migration needed
 - **Files**:
-  - `/root/pet/agent-monster-pet/egg_incubator.py` (egg creation)
-  - `/root/pet/agent-monster-pet/.monster/*_egg.json` (local storage)
+  - `/root/pet/agent-monster/egg_incubator.py` (egg creation)
+  - `/root/pet/agent-monster/.monster/*_egg.json` (local storage)
   - **TODO**: Create `Egg` model in `judge_server_schema.py`
 
 ### Shop Items & Global Inventory
@@ -86,7 +86,7 @@ This audit identifies all data models and features in the Agent Monster codebase
   - `price`, `stock`, `max_stock`
 - **Implementation**: Shop manager maintains catalog locally
 - **Files**:
-  - `/root/pet/agent-monster-pet/shop_manager.py`
+  - `/root/pet/agent-monster/shop_manager.py`
   - **TODO**: Create `/api/shop/*` endpoints on Judge Server for global catalog
 
 ### Battle History
@@ -101,8 +101,8 @@ This audit identifies all data models and features in the Agent Monster codebase
   - `timestamp`, `duration_seconds`
 - **Implementation**: Battle records stored locally; schema ready for server
 - **Files**:
-  - `/root/pet/agent-monster-pet/battle_logic.py` (battle system)
-  - `/root/pet/agent-monster-pet/judge_server_schema.py` (BattleRecord model)
+  - `/root/pet/agent-monster/battle_logic.py` (battle system)
+  - `/root/pet/agent-monster/judge_server_schema.py` (BattleRecord model)
   - **TODO**: Create `/api/battles/*` endpoints on Judge Server
 
 ### Food/Farm System
@@ -124,8 +124,8 @@ This audit identifies all data models and features in the Agent Monster codebase
   - `foods` (list), `planted_at`
 - **Implementation**: FoodManager operates in-memory; data loss on restart
 - **Files**:
-  - `/root/pet/agent-monster-pet/food_system.py` (core system)
-  - `/root/pet/agent-monster-pet/food_explorer.py` (discovery via GitHub)
+  - `/root/pet/agent-monster/food_system.py` (core system)
+  - `/root/pet/agent-monster/food_explorer.py` (discovery via GitHub)
   - **CRITICAL TODO**: Implement persistent storage on Judge Server
   - **CRITICAL TODO**: Implement cross-farm query endpoints
 
@@ -148,7 +148,7 @@ This audit identifies all data models and features in the Agent Monster codebase
   - Scanning works: `cookie.py scan`
   - Persistence NOT IMPLEMENTED
 - **Files**:
-  - `/root/pet/agent-monster-pet/cookie.py`
+  - `/root/pet/agent-monster/cookie.py`
   - **CRITICAL TODO**: Implement cookie fragment persistence
   - **CRITICAL TODO**: Implement claiming mechanism
   - **CRITICAL TODO**: Link to food bank system
@@ -166,8 +166,8 @@ This audit identifies all data models and features in the Agent Monster codebase
   - Save/load farm data
 - **Implementation**: In-memory `FoodManager` with optional YAML export
 - **Files**:
-  - `/root/pet/agent-monster-pet/food_system.py`
-  - `/root/pet/agent-monster-pet/food_explorer.py` (GitHub discovery)
+  - `/root/pet/agent-monster/food_system.py`
+  - `/root/pet/agent-monster/food_explorer.py` (GitHub discovery)
   - **CRITICAL TODO**: Move to persistent Judge Server storage
   - **CRITICAL TODO**: Implement GitHub event integration for farm updates
 
@@ -187,8 +187,8 @@ This audit identifies all data models and features in the Agent Monster codebase
   - `balance_before`, `balance_after`
 - **Implementation**: Economy manager tracks all transactions
 - **Files**:
-  - `/root/pet/agent-monster-pet/economy_manager.py`
-  - `/root/pet/agent-monster-pet/judge_server_schema.py`
+  - `/root/pet/agent-monster/economy_manager.py`
+  - `/root/pet/agent-monster/judge_server_schema.py`
   - `GET /api/user/transactions/get?github_id={id}` endpoint available
 
 ---

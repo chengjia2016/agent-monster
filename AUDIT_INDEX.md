@@ -164,7 +164,7 @@
 
 All audit documents are in the repository root:
 ```
-/root/pet/agent-monster-pet/
+/root/pet/agent-monster/
 ├── CODEBASE_AUDIT_REPORT.md          (Main detailed report)
 ├── AUDIT_QUICK_REFERENCE.md          (Executive summary)
 ├── MIGRATION_DATA_FLOW_DIAGRAM.md    (Architecture visuals)
