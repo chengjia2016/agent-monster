@@ -472,6 +472,216 @@ def cmd_favorite(action="list", farm_url=""):
         return f"Error: {str(e)}"
 
 
+def cmd_battle(target, mode="INTERACTIVE", ai_personality="BALANCED", show_reasoning=True):
+    """Start an AI-enhanced battle"""
+    try:
+        # Load player's pet
+        soul_file = MONSTER_DIR / "pet.soul"
+        if not soul_file.exists():
+            return json.dumps({
+                "success": False,
+                "error": "No pet found. Initialize with /monster init first!"
+            }, indent=2)
+        
+        player_data = load_json(soul_file)
+        if not player_data:
+            return json.dumps({
+                "success": False,
+                "error": "No pet found. Initialize with /monster init first!"
+            }, indent=2)
+        
+        # For now, return a message about the battle
+        result = {
+            "success": True,
+            "message": f"Battle initialized: {player_data.get('name', 'Your Monster')} vs {target}",
+            "config": {
+                "mode": mode,
+                "ai_personality": ai_personality,
+                "show_reasoning": show_reasoning
+            },
+            "note": "Full AI battle simulation will be executed when integrated with AIEnhancedBattle system"
+        }
+        
+        return json.dumps(result, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e)
+        }, indent=2)
+
+
+def cmd_battle_config(mode="INTERACTIVE", ai_personality="BALANCED"):
+    """Configure battle settings"""
+    try:
+        valid_modes = ["INTERACTIVE", "PVP_AI", "PVE", "AI_VS_AI"]
+        valid_personalities = ["AGGRESSIVE", "DEFENSIVE", "BALANCED", "TACTICAL", "EVOLVING"]
+        
+        if mode not in valid_modes:
+            return json.dumps({
+                "success": False,
+                "error": f"Invalid mode. Valid modes: {', '.join(valid_modes)}"
+            }, indent=2)
+        
+        if ai_personality not in valid_personalities:
+            return json.dumps({
+                "success": False,
+                "error": f"Invalid personality. Valid personalities: {', '.join(valid_personalities)}"
+            }, indent=2)
+        
+        config_data = {
+            "mode": mode,
+            "ai_personality": ai_personality,
+            "timestamp": __import__('time').strftime("%Y-%m-%d %H:%M:%SZ", __import__('time').gmtime())
+        }
+        
+        save_json(MONSTER_DIR / "battle_config.json", config_data)
+        
+        return json.dumps({
+            "success": True,
+            "message": f"Battle config updated: mode={mode}, personality={ai_personality}",
+            "config": config_data
+        }, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e)
+        }, indent=2)
+
+
+def cmd_predict(opponent_name="", opponent_level=1):
+    """Predict battle outcome and get strategy recommendations"""
+    try:
+        # Load player's soul/pet data
+        soul_file = MONSTER_DIR / "pet.soul"
+        if not soul_file.exists():
+            return json.dumps({
+                "success": False,
+                "error": "No pet found. Initialize with /monster init first!"
+            }, indent=2)
+        
+        player_data = load_json(soul_file)
+        if not player_data:
+            return json.dumps({
+                "success": False,
+                "error": "No pet found. Initialize with /monster init first!"
+            }, indent=2)
+        
+        # Simple prediction based on level and stats
+        player_level = player_data.get("level", 1)
+        opponent_level = opponent_level or player_level
+        
+        # Win probability based on level difference
+        win_probability = 0.5 + (player_level - opponent_level) * 0.05
+        win_probability = max(0.1, min(0.9, win_probability))  # Clamp between 0.1 and 0.9
+        
+        # Recommend strategy
+        if win_probability > 0.7:
+            recommended_strategy = "AGGRESSIVE"
+            recommendation = "You have a strong advantage! Use aggressive tactics to win quickly."
+        elif win_probability > 0.5:
+            recommended_strategy = "BALANCED"
+            recommendation = "You have a slight advantage. Use balanced tactics to maintain control."
+        elif win_probability > 0.3:
+            recommended_strategy = "DEFENSIVE"
+            recommendation = "You're at a disadvantage. Play defensively and wait for openings."
+        else:
+            recommended_strategy = "TACTICAL"
+            recommendation = "You're significantly outmatched. Focus on exploiting status effects and weaker defenses."
+        
+        result = {
+            "success": True,
+            "matchup": {
+                "player": f"{player_data.get('name', 'Your Monster')} (Lv.{player_level})",
+                "opponent": f"{opponent_name} (Lv.{opponent_level})"
+            },
+            "prediction": {
+                "win_probability": f"{win_probability * 100:.1f}%",
+                "recommended_strategy": recommended_strategy,
+                "recommendation": recommendation
+            }
+        }
+        
+        return json.dumps(result, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e)
+        }, indent=2)
+
+
+def cmd_replay(replay_id=""):
+    """View a specific battle replay"""
+    try:
+        from battle_replay import BattleReplayManager
+        
+        manager = BattleReplayManager()
+        
+        if not replay_id:
+            return json.dumps({
+                "success": False,
+                "error": "replay_id is required"
+            }, indent=2)
+        
+        replay = manager.get_replay(replay_id)
+        if not replay:
+            return json.dumps({
+                "success": False,
+                "error": f"Replay not found: {replay_id}"
+            }, indent=2)
+        
+        result = {
+            "success": True,
+            "replay": {
+                "id": replay.id,
+                "timestamp": replay.timestamp,
+                "attacker": replay.attacker_name,
+                "winner": replay.winner,
+                "turns": len(replay.turns) if isinstance(replay.turns, list) else replay.turns,
+                "result": replay.result,
+                "log": replay.log[:5] if replay.log else []  # Show first 5 entries
+            }
+        }
+        
+        return json.dumps(result, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e)
+        }, indent=2)
+
+
+def cmd_replays(limit=10):
+    """List recent battle replays"""
+    try:
+        from battle_replay import BattleReplayManager
+        
+        manager = BattleReplayManager()
+        replays = manager.get_recent_replays(count=limit)
+        
+        result = {
+            "success": True,
+            "total": len(replays),
+            "replays": [
+                {
+                    "id": r.id,
+                    "timestamp": r.timestamp,
+                    "attacker": r.attacker_name,
+                    "winner": r.winner,
+                    "turns": len(r.turns) if isinstance(r.turns, list) else r.turns,
+                    "result": r.result
+                }
+                for r in replays
+            ]
+        }
+        
+        return json.dumps(result, indent=2, ensure_ascii=False)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e)
+        }, indent=2)
+
+
 def mcp_loop():
     """Main MCP server loop - reads JSON-RPC from stdin"""
     while True:
@@ -630,6 +840,66 @@ def mcp_loop():
                                 "required": ["action"]
                             },
                         },
+                        {
+                            "name": "monster_battle",
+                            "description": "Start an AI-enhanced battle with AI assistance and reasoning",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "target": {"type": "string", "description": "Target opponent name"},
+                                    "mode": {"type": "string", "enum": ["INTERACTIVE", "PVP_AI", "PVE", "AI_VS_AI"], "description": "Battle mode (default: INTERACTIVE)"},
+                                    "ai_personality": {"type": "string", "enum": ["AGGRESSIVE", "DEFENSIVE", "BALANCED", "TACTICAL", "EVOLVING"], "description": "AI opponent personality"},
+                                    "show_reasoning": {"type": "boolean", "description": "Show AI decision reasoning"}
+                                },
+                                "required": ["target"]
+                            },
+                        },
+                        {
+                            "name": "monster_battle_config",
+                            "description": "Configure battle settings (mode and AI personality)",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "mode": {"type": "string", "enum": ["INTERACTIVE", "PVP_AI", "PVE", "AI_VS_AI"], "description": "Battle mode"},
+                                    "ai_personality": {"type": "string", "enum": ["AGGRESSIVE", "DEFENSIVE", "BALANCED", "TACTICAL", "EVOLVING"], "description": "AI personality"}
+                                },
+                                "required": []
+                            },
+                        },
+                        {
+                            "name": "monster_predict",
+                            "description": "Predict battle outcome and get strategy recommendations",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "opponent_name": {"type": "string", "description": "Opponent name"},
+                                    "opponent_level": {"type": "integer", "description": "Opponent level"}
+                                },
+                                "required": []
+                            },
+                        },
+                        {
+                            "name": "monster_replay",
+                            "description": "View a specific battle replay",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "replay_id": {"type": "string", "description": "Battle replay ID"}
+                                },
+                                "required": ["replay_id"]
+                            },
+                        },
+                        {
+                            "name": "monster_replays",
+                            "description": "List recent battle replays",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "limit": {"type": "integer", "description": "Number of replays to show (default: 10)"}
+                                },
+                                "required": []
+                            },
+                        },
                     ]
                 }
 
@@ -683,6 +953,32 @@ def mcp_loop():
                         args.get("action", "list"),
                         args.get("farm_url", "")
                     )
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_battle":
+                    out = cmd_battle(
+                        args.get("target", ""),
+                        args.get("mode", "INTERACTIVE"),
+                        args.get("ai_personality", "BALANCED"),
+                        args.get("show_reasoning", True)
+                    )
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_battle_config":
+                    out = cmd_battle_config(
+                        args.get("mode", "INTERACTIVE"),
+                        args.get("ai_personality", "BALANCED")
+                    )
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_predict":
+                    out = cmd_predict(
+                        args.get("opponent_name", ""),
+                        args.get("opponent_level", 1)
+                    )
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_replay":
+                    out = cmd_replay(args.get("replay_id", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_replays":
+                    out = cmd_replays(args.get("limit", 10))
                     resp["result"] = {"content": [{"type": "text", "text": out}]}
                 else:
                     resp["error"] = {"code": -32601, "message": f"Unknown tool: {tool}"}
