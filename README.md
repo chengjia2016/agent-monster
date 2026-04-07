@@ -1,30 +1,30 @@
 # Agent Monster
 
-> 🐤 将你的 GitHub 仓库变成一个数字宠物，与其他开发者 Battle！
+> 🐤 Turn your GitHub repository into a digital pet and battle other developers!
 
-**Agent Monster** 是一个基于 GitHub 生态的慢节奏养成游戏。你的代码仓库就是宠物的家，代码提交就是宠物的食物。
+**Agent Monster** is a slow-paced养成 game built on the GitHub ecosystem. Your code repository is the pet's home, and code commits are the pet's food.
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. Fork 基地仓库
+### 1. Fork the Base Repository
 
 ```bash
-# 使用 GitHub CLI
+# Using GitHub CLI
 gh repo fork agent-monster/agent-monster-pet
 
-# 或者手动在 GitHub 上 Fork
+# Or fork manually on GitHub
 ```
 
-### 2. Clone 到本地
+### 2. Clone to Your Local Machine
 
 ```bash
 git clone https://github.com/your-name/agent-monster-pet.git
 cd agent-monster-pet
 ```
 
-### 3. 安装并领取宠物
+### 3. Install and Claim Your Pet
 
 ```bash
 # Windows
@@ -34,17 +34,17 @@ install.bat
 ./install.sh
 ```
 
-**初始奖励:**
-- 🐤 **小黄鸭** (初始宠物)
-- 🥚 **宠物蛋** x1 (72 小时后孵化)
+**Initial Rewards:**
+- 🐤 **Little Yellow Duck** (Starter Pet)
+- 🥚 **Pet Egg** x1 (Hatches after 72 hours)
 
 ---
 
-## 🎮 游戏玩法
+## 🎮 Gameplay
 
-### 零食系统 (Cookie)
+### Food System (Cookie)
 
-在任何代码文件的注释中埋入零食：
+Hide food items in code comments across any repository:
 
 ```python
 # 🍪 agent_monster cookie 0x67678328732673287
@@ -61,45 +61,45 @@ const x = 1;
 <!-- 🍎 agent_monster cookie 0x1234567890abcdef -->
 ```
 
-**零食类型:**
-| 零食 | 效果 |
-|------|------|
+**Food Types:**
+| Food | Effect |
+|------|--------|
 | 🍪 Cookie | +10 EXP |
 | 🍩 Donut | +50 EN |
-| 🍎 Apple | +5 全属性 |
-| 🧬 Gene | 基因突变 (孵化时) |
+| 🍎 Apple | +5 All Stats |
+| 🧬 Gene | Gene Mutation (during hatching) |
 
-### 宠物蛋孵化
+### Egg Incubation
 
-宠物蛋需要 **72 小时** 收集行为基因：
+The pet egg requires **72 hours** to collect behavioral genes:
 
-| 行为 | 基因影响 |
-|------|----------|
-| 写代码 (commits) | Logic 基因 |
-| 写文档 (md 文件) | Creative 基因 |
-| 写配置 (yaml/json) | Speed 基因 |
-| 埋零食 (cookie) | Lucky 基因 |
+| Behavior | Gene Impact |
+|----------|-------------|
+| Writing Code (commits) | Logic Gene |
+| Writing Docs (md files) | Creative Gene |
+| Writing Configs (yaml/json) | Speed Gene |
+| Hiding Cookies | Lucky Gene |
 
-### 战斗系统
+### Battle System
 
 ```bash
-# 在 Claude Code 中
+# In Claude Code
 /monster duel opponent/repo
 ```
 
 ---
 
-## 📡 GitHub Actions 游戏服务器
+## 📡 GitHub Actions Game Server
 
-本项目使用 GitHub Actions 作为游戏服务器：
+This project uses GitHub Actions as the game server:
 
-| Workflows | 频率 | 功能 |
-|-----------|------|------|
-| `hourly-settlement.yml` | 每小时 | 结算零食、恢复能量 |
-| `daily-rank.yml` | 每天 | 更新排行榜 |
-| `battle-arena.yml` | 手动/触发 | 战斗模拟 |
+| Workflow | Frequency | Purpose |
+|----------|-----------|---------|
+| `hourly-settlement.yml` | Hourly | Settle cookies, restore energy |
+| `daily-rank.yml` | Daily | Update leaderboards |
+| `battle-arena.yml` | Manual/Trigger | Battle simulation |
 
-### 启用 Actions
+### Enable Actions
 
 ```bash
 gh workflow enable hourly-settlement.yml
@@ -109,40 +109,40 @@ gh workflow enable battle-arena.yml
 
 ---
 
-## 🎯 命令参考
+## 🎯 Command Reference
 
-### Claude Code MCP 命令
+### Claude Code MCP Commands
 
 ```
-/monster init       - 领取初始宠物
-/monster status     - 查看宠物状态
-/monster analyze    - 分析仓库活动
-/monster traps      - 扫描代码陷阱
-/monster duel       - 发起对战挑战
+/monster init       - Claim starter pet
+/monster status     - View pet status
+/monster analyze    - Analyze repository activity
+/monster traps      - Scan code traps
+/monster duel       - Start a battle challenge
 ```
 
-### CLI 命令
+### CLI Commands
 
 ```bash
-python monster.py status     # 查看状态
-python monster.py analyze    # 分析仓库
-python monster.py traps      # 扫描陷阱
-python cookie.py generate    # 生成零食
-python cookie.py scan        # 扫描零食
+python monster.py status     # View status
+python monster.py analyze    # Analyze repository
+python monster.py traps      # Scan traps
+python cookie.py generate    # Generate food
+python cookie.py scan        # Scan food items
 ```
 
 ---
 
-## 📊 排行榜
+## 📊 Leaderboards
 
-### 个人排行
+### Personal Leaderboard
 
-每个仓库的 `leaderboard.json`:
+Each repository's `leaderboard.json`:
 
 ```json
 {
   "player": "your-name",
-  "pet_name": "小黄鸭",
+  "pet_name": "Little Yellow Duck",
   "level": 25,
   "battles": {
     "win": 15,
@@ -151,40 +151,40 @@ python cookie.py scan        # 扫描零食
 }
 ```
 
-### 总排行
+### Global Leaderboard
 
-中央仓库汇总所有玩家的 `leaderboard.json`。
+The central repository aggregates all players' `leaderboard.json` files.
 
 ---
 
-## 📁 文件结构
+## 📁 File Structure
 
 ```
 agent-monster-pet/
 ├── .monster/
-│   ├── pet.soul            # 宠物数据
-│   ├── egg.yaml            # 宠物蛋 (72h)
-│   ├── food-bank.json      # 零食银行
-│   └── guard.yaml          # 防守配置
+│   ├── pet.soul            # Pet data
+│   ├── egg.yaml            # Pet egg (72h)
+│   ├── food-bank.json      # Food bank
+│   └── guard.yaml          # Defense config
 ├── .github/
 │   └── workflows/
 │       ├── hourly-settlement.yml
 │       ├── daily-rank.yml
 │       └── battle-arena.yml
-├── battle-reports/         # 战斗记录
-├── cookies/                # 零食工厂
-├── leaderboard.json        # 个人排行
-├── monster.py              # 主 CLI
-├── cookie.py               # 零食生成器
-├── claim_pet.py            # 领取宠物
-└── README.md               # 宠物展示页
+├── battle-reports/         # Battle records
+├── cookies/                # Food factory
+├── leaderboard.json        # Personal leaderboard
+├── monster.py              # Main CLI
+├── cookie.py               # Food generator
+├── claim_pet.py            # Claim pet
+└── README.md               # Pet showcase page
 ```
 
 ---
 
-## 🔧 配置 MCP 服务器
+## 🔧 Configure MCP Server
 
-在 `~/.claude/settings.json` 中添加:
+Add to `~/.claude/settings.json`:
 
 ```json
 {
@@ -200,31 +200,32 @@ agent-monster-pet/
 
 ---
 
-## 🏆 游戏目标
+## 🏆 Game Objectives
 
-1. **孵化最强宠物** - 通过 72 小时基因收集
-2. **成为排行榜第一** - 每日/每周/赛季排行
-3. **战斗胜利** - 击败其他玩家的宠物
-4. **收集零食** - 在代码中埋入最多 cookie
-
----
-
-## 📖 文档
-
-- [游戏设计文档](GAME%20DESIGN.md)
-- [安装指南](INSTALL.md)
-- [插件说明](PLUGIN%20README.md)
-- [MCP 配置](CLAUDE.md)
+1. **Hatch the Strongest Pet** - Collect genes over 72 hours
+2. **Top the Leaderboard** - Daily/Weekly/Season rankings
+3. **Win Battles** - Defeat other players' pets
+4. **Collect Food** - Hide the most cookies in code
 
 ---
 
-## 🤝 参与贡献
+## 📖 Documentation
 
-1. Fork 本仓库
-2. 创建你的特性分支
-3. 提交你的改动
-4. 推送到分支
-5. 创建一个新的 Pull Request
+- [Game Design](GAME%20DESIGN.md)
+- [Installation Guide](INSTALL.md)
+- [Plugin README](PLUGIN%20README.md)
+- [MCP Configuration](CLAUDE.md)
+- [Quick Start](QUICKSTART.md)
+
+---
+
+## 🤝 Contributing
+
+1. Fork this repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
 
 ---
 
@@ -234,4 +235,4 @@ MIT License
 
 ---
 
-**开始战斗吧！** ⚔️🐤
+**Start Battling!** ⚔️🐤

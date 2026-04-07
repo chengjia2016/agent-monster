@@ -1,23 +1,23 @@
-# Agent Monster 安装指南
+# Agent Monster Installation Guide
 
-## 步骤 1: 安装 Python 依赖
+## Step 1: Install Python Dependencies
 
 ```bash
-cd C:/Users/Administrator/agentmonster
+cd /path/to/agent-monster-pet
 pip install -r requirements.txt
 ```
 
-## 步骤 2: 配置 MCP 服务器
+## Step 2: Configure MCP Server
 
-### 方法 A: 使用项目的 .mcp.json（推荐）
+### Method A: Use Project's .mcp.json (Recommended)
 
-项目已包含 `.mcp.json` 文件，Claude Code 会自动检测。
+The project includes a `.mcp.json` file that Claude Code will automatically detect.
 
-启动 Claude Code 时，会提示是否启用 MCP 服务器，输入 `y` 确认。
+When you start Claude Code, it will prompt whether to enable the MCP server. Enter `y` to confirm.
 
-### 方法 B: 手动配置 settings.json
+### Method B: Manually Configure settings.json
 
-在 `~/.claude/settings.json` 中添加：
+Add to `~/.claude/settings.json`:
 
 **Windows:**
 ```json
@@ -45,17 +45,17 @@ pip install -r requirements.txt
 }
 ```
 
-## 步骤 3: 启用 MCP 服务器权限
+## Step 3: Enable MCP Server Permissions
 
-在 Claude Code 中运行：
+Run in Claude Code:
 
 ```
 /mcp
 ```
 
-然后找到 `agent-monster` 并启用它。
+Then find `agent-monster` and enable it.
 
-或者直接在设置中授权：
+Or authorize directly:
 
 ```
 /permission mcp__agent-monster__monster_init
@@ -65,46 +65,46 @@ pip install -r requirements.txt
 /permission mcp__agent-monster__monster_duel
 ```
 
-## 步骤 4: 测试安装
+## Step 4: Test Installation
 
-在 Claude Code 中输入：
+Enter in Claude Code:
 
 ```
 /monster status
 ```
 
-如果看到宠物状态信息，说明安装成功！
+If you see pet status information, the installation was successful!
 
-## 故障排除
+## Troubleshooting
 
-### MCP 服务器未加载
+### MCP Server Not Loading
 
-检查日志：
+Check logs:
 ```bash
 python mcp_server.py mcp < /dev/null 2>&1 | head -20
 ```
 
-### 缺少依赖
+### Missing Dependencies
 
 ```bash
 pip install pyyaml
 ```
 
-### 权限不足
+### Insufficient Permissions
 
-在 Claude Code 中输入：
+Enter in Claude Code:
 ```
 /permission mcp__agent-monster
 ```
 
-## 使用方法
+## Usage
 
-安装完成后，使用以下命令玩游戏：
+After installation, use the following commands to play:
 
-| 命令 | 功能 |
-|------|------|
-| `/monster init` | 孵化你的代码宠物 |
-| `/monster status` | 查看宠物状态 |
-| `/monster analyze` | 分析仓库更新属性 |
-| `/monster traps` | 扫描代码陷阱 |
-| `/monster duel` | 发起对战挑战 |
+| Command | Function |
+|---------|----------|
+| `/monster init` | Claim your starter pet |
+| `/monster status` | View pet status |
+| `/monster analyze` | Analyze repository |
+| `/monster traps` | Scan code traps |
+| `/monster duel` | Start a battle challenge |

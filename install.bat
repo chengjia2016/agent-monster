@@ -1,53 +1,53 @@
 @echo off
-REM Agent Monster 快速安装脚本 (Windows)
+REM Agent Monster Quick Install Script (Windows)
 
-echo 🐤 Agent Monster - 快速安装
+echo Agent Monster - Quick Install
 echo ================================
 
-REM 检查 Python
+REM Check Python
 where python >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ 需要安装 Python 3
+    echo Python 3 is required
     exit /b 1
 )
 
-echo ✅ Python 已安装
+echo Python is installed
 
-REM 检查 Git
+REM Check Git
 where git >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ 需要安装 Git
+    echo Git is required
     exit /b 1
 )
 
-echo ✅ Git 已安装
+echo Git is installed
 
-REM 安装依赖
+REM Install dependencies
 echo.
-echo 📦 安装依赖...
+echo Installing dependencies...
 pip install -r requirements.txt
 
-REM 初始化宠物
+REM Claim starter pet
 echo.
-echo 🥚 领取初始宠物...
+echo Claiming your starter pet...
 python claim_pet.py
 
 echo.
 echo ================================
-echo ✅ 安装完成!
+echo Installation complete!
 echo.
-echo 📖 使用说明:
-echo    /monster init       - 重新初始化
-echo    /monster status     - 查看宠物状态
-echo    /monster analyze    - 分析仓库
-echo    /monster traps      - 扫描陷阱
-echo    /monster duel       - 发起对战
+echo Usage:
+echo    /monster init       - Re-initialize
+echo    /monster status     - View pet status
+echo    /monster analyze    - Analyze repository
+echo    /monster traps      - Scan traps
+echo    /monster duel       - Start battle
 echo.
-echo 🍪 埋零食:
-echo    在代码中添加：# 🍪 agent_monster cookie 0x...
+echo Hide food cookies:
+echo    Add in code: # agent_monster cookie 0x...
 echo.
-echo 🥚 宠物蛋孵化:
-echo    等待 72 小时后自动孵化
+echo Pet egg incubation:
+echo    Wait 72 hours for automatic hatching
 echo.
 
 pause

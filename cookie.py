@@ -162,12 +162,12 @@ if __name__ == "__main__":
     import sys
     import io
 
-    # Windows 控制台 Unicode 兼容
+    # Windows console Unicode compatibility
     if sys.platform == "win32":
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
     if len(sys.argv) > 1 and sys.argv[1] == "generate":
-        # 生成零食
+        # Generate food cookie
         file_ext = sys.argv[2] if len(sys.argv) > 2 else ".py"
         cookie_type = sys.argv[3] if len(sys.argv) > 3 else "cookie"
         player_id = sys.argv[4] if len(sys.argv) > 4 else None
@@ -176,7 +176,7 @@ if __name__ == "__main__":
         print(cookie)
 
     elif len(sys.argv) > 1 and sys.argv[1] == "scan":
-        # 扫描零食
+        # Scan for food cookies
         directory = sys.argv[2] if len(sys.argv) > 2 else "."
         player_id = sys.argv[3] if len(sys.argv) > 3 else "unknown"
 

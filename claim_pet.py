@@ -181,64 +181,64 @@ def create_food_bank():
 
 
 def main():
-    """主函数"""
-    # Windows 控制台 Unicode 兼容
+    """Main function - Claim starter pet"""
+    # Windows console Unicode compatibility
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
-    print("Agent Monster - 初始宠物领取")
+    print("Agent Monster - Claim Your Pet")
     print("=" * 50)
 
-    # 确保 .monster 目录存在
+    # Ensure .monster directory exists
     MONSTER_DIR.mkdir(exist_ok=True)
 
-    # 检查是否已经有宠物
+    # Check if pet already exists
     if PET_SOUL_FILE.exists():
-        print("你已经有宠物了!")
+        print("You already have a pet!")
         with open(PET_SOUL_FILE, encoding="utf-8") as f:
             pet = json.load(f)
-        print(f"   宠物名：{pet.get('name', 'Unknown')}")
-        print(f"   等级：{pet.get('level', 1)}")
+        print(f"   Pet Name: {pet.get('name', 'Unknown')}")
+        print(f"   Level: {pet.get('level', 1)}")
         return 1
 
-    # 创建初始宠物
+    # Create starter pet
     pet = create_initial_pet()
     with open(PET_SOUL_FILE, "w", encoding="utf-8") as f:
         json.dump(pet, f, indent=2, ensure_ascii=False)
 
-    print(f"领取成功!")
-    print(f"   宠物名：{pet['name']}")
-    print(f"   物种：{pet['species']}")
-    print(f"   等级：{pet['level']}")
-    print(f"   属性：{pet['type']}")
+    print("Claim Successful!")
+    print(f"   Pet Name: {pet['name']}")
+    print(f"   Species: {pet['species']}")
+    print(f"   Level: {pet['level']}")
+    print(f"   Type: {pet['type']}")
 
-    # 创建宠物蛋
+    # Create pet egg
     egg_yaml = create_egg()
     with open(EGG_FILE, "w", encoding="utf-8") as f:
         f.write(egg_yaml)
 
-    print(f"\n宠物蛋已领取!")
-    print(f"   孵化时间：72 小时")
-    print(f"   开始时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"   预计孵化：{(datetime.now() + timedelta(hours=72)).strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"\nPet Egg Claimed!")
+    print(f"   Incubation Time: 72 hours")
+    print(f"   Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"   Expected Hatch: {(datetime.now() + timedelta(hours=72)).strftime('%Y-%m-%d %H:%M:%S')}")
 
-    # 创建零食银行
+    # Create food bank
     food_bank = create_food_bank()
     with open(FOOD_BANK_FILE, "w", encoding="utf-8") as f:
         json.dump(food_bank, f, indent=2, ensure_ascii=False)
 
-    print(f"\n零食银行已创建!")
-    print(f"   在代码中埋入零食 cookie 来给宠物增加能量")
-    print(f"   格式：# agent_monster cookie 0x...")
+    print(f"\nFood Bank Created!")
+    print(f"   Hide cookies in code to give your pet energy")
+    print(f"   Format: # agent_monster cookie 0x...")
 
-    # 显示宠物
+    # Display pet
     print("\n" + pet["avatar"])
 
-    print("\n下一步:")
-    print("   1. 在代码中埋入零食 cookie")
-    print("   2. 等待 72 小时让宠物蛋孵化")
-    print("   3. 使用 /monster status 查看状态")
-    print("   4. 参与战斗和排行")
+    print("\nNext Steps:")
+    print("   1. Hide food cookies in your code")
+    print("   2. Wait 72 hours for the egg to hatch")
+    print("   3. Use /monster status to check status")
+    print("   4. Join battles and leaderboards")
 
     return 0
 
