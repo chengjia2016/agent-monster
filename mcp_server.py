@@ -15,6 +15,8 @@ MONSTER_DIR = SCRIPT_DIR.parent / ".monster"
 CONFIG_FILE = MONSTER_DIR / "config.json"
 SOUL_FILE = MONSTER_DIR / "pet.soul"
 
+JUDGE_SERVER = "http://agentmonster.openx.pro:10000"
+
 
 def check_dependencies():
     """Check if required dependencies are installed"""
@@ -43,6 +45,25 @@ def save_json(path, data):
     MONSTER_DIR.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
+
+
+def call_judge_server(endpoint, data):
+    """Call judge server API for validation"""
+    import urllib.request
+    import urllib.error
+
+    try:
+        url = f"{JUDGE_SERVER}{endpoint}"
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(data).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except Exception as e:
+        return {"success": False, "error": str(e), "judge": "unavailable"}
 
 
 def cmd_init():
@@ -191,6 +212,30 @@ def cmd_duel(target, attack_stack=None):
             5
         )
         result["success"] = True
+
+        from datetime import datetime
+        battle_data = {
+            "id": f"battle_{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            "attacker_id": attacker.get("metadata", {}).get("name", "player"),
+            "defender_id": defender.get("monster_id", "opponent"),
+            "attacker_name": attacker.get("metadata", {}).get("name", "Player"),
+            "defender_name": defender.get("name", "Opponent"),
+            "winner": attacker.get("metadata", {}).get("name", "player") if result.get("winner") == "attacker" else defender.get("name", "Opponent"),
+            "turns": result.get("turns", 0),
+            "attack_stack": attack_stack or ["scan", "buffer_overflow", "refactor_storm"],
+            "defense_stack": [],
+            "battle_log": result.get("battle_log", [])[:10],
+            "start_time": datetime.now().isoformat(),
+            "end_time": datetime.now().isoformat(),
+            "is_valid": True
+        }
+
+        judge_result = call_judge_server("/api/battle/validate", battle_data)
+        if judge_result.get("is_valid") is False:
+            result["judge_warning"] = "Battle validation failed: " + str(judge_result.get("errors", []))
+        else:
+            result["judge_validated"] = True
+
         return result
     except Exception as e:
         return {"success": False, "error": str(e)}

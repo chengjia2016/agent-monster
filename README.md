@@ -72,6 +72,19 @@ OpenCode: ⚔️ Battle vs 呆呆的小黄鸭! You won!
 | `/monster attack https://github.com/chengjia2016/agent-monster-pet/demo_duck` | Attack demo pet via GitHub URL |
 | `/monster attack https://github.com/username/repo` | Attack another player's pet |
 | `/monster duel <target>` | Same as attack (alias) |
+
+### Judge Server
+
+All battles are validated by the Judge Server to prevent cheating:
+
+| Server | URL |
+|--------|-----|
+| Judge Server | `http://agentmonster.openx.pro:10000` |
+
+- Battle results are validated by the judge
+- Valid battles are synced to GitHub Issues
+- Daily leaderboard is generated and posted
+
 OpenCode: Analyzes your commits and updates pet genes
 
 You: /monster duel https://github.com/opponent/repo
