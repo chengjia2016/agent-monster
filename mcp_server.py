@@ -272,6 +272,143 @@ def cmd_account_stats(github_username):
         return f"❌ Error getting account stats: {str(e)}"
 
 
+# ========== Interactive Menu System Commands ==========
+
+def cmd_menu_start(github_username):
+    """启动交互式菜单系统"""
+    try:
+        from menu_system import MenuManager
+        
+        menu_manager = MenuManager(str(MONSTER_DIR))
+        session = menu_manager.start_session(github_username)
+        
+        if not session:
+            return f"❌ 无法创建会话"
+        
+        # 获取主菜单
+        menu_text, options = menu_manager.get_menu_display(github_username)
+        
+        return menu_text
+    except Exception as e:
+        return f"❌ 启动菜单失败: {str(e)}"
+
+
+def cmd_menu_action(github_username, action):
+    """在菜单中执行操作"""
+    try:
+        from menu_system import MenuManager
+        
+        menu_manager = MenuManager(str(MONSTER_DIR))
+        session = menu_manager.get_session(github_username)
+        
+        if not session:
+            return f"❌ 会话不存在,请先调用 menu_start"
+        
+        # 处理动作
+        continue_menu, message = menu_manager.handle_action(github_username, action)
+        
+        # 获取新菜单显示
+        menu_text, options = menu_manager.get_menu_display(github_username)
+        
+        response = f"{message}\n\n{menu_text}"
+        
+        return response
+    except Exception as e:
+        return f"❌ 菜单操作失败: {str(e)}"
+
+
+# ========== Slash Commands System ==========
+
+def cmd_slash_help(command_name=""):
+    """显示斜杠命令帮助"""
+    try:
+        from slash_commands import SlashCommandRegistry, format_command_help, format_commands_list
+        
+        registry = SlashCommandRegistry()
+        
+        if command_name:
+            # 显示特定命令的帮助
+            cmd = registry.get_command(command_name)
+            if cmd:
+                return format_command_help(cmd)
+            else:
+                # 搜索相似命令
+                results = registry.search_commands(command_name)
+                if results:
+                    output = f"❌ 命令 '{command_name}' 不存在\n\n💡 你是想要以下命令吗？\n"
+                    for cmd in results:
+                        output += f"  • /monster {cmd.name} - {cmd.description}\n"
+                    return output
+                else:
+                    return f"❌ 命令 '{command_name}' 不存在"
+        else:
+            # 显示所有命令列表
+            return format_commands_list()
+    except Exception as e:
+        return f"❌ 获取帮助失败: {str(e)}"
+
+
+def cmd_slash_list():
+    """列出所有可用的斜杠命令"""
+    try:
+        from slash_commands import SlashCommandRegistry
+        
+        registry = SlashCommandRegistry()
+        commands = registry.get_all_commands()
+        
+        output = """
+╔════════════════════════════════════════════╗
+║  📋 可用的 /monster 斜杠命令
+╚════════════════════════════════════════════╝
+
+"""
+        
+        for i, cmd in enumerate(commands, 1):
+            output += f"{i:2}. /{cmd.name:<25} - {cmd.description}\n"
+        
+        output += f"""
+💡 提示:
+  • 输入 /monster help [命令名] 查看详细帮助
+  • 在 OpenCode 中输入 /monster 会自动显示命令提示
+  • 使用 [Tab] 键可以自动补全命令
+
+例如:
+  /monster menu username:alice      (启动菜单)
+  /monster shop list                (查看商店)
+  /monster balance username:alice   (查看余额)
+"""
+        
+        return output
+    except Exception as e:
+        return f"❌ 获取命令列表失败: {str(e)}"
+
+
+def cmd_slash_completions(prefix=""):
+    """获取命令自动完成建议"""
+    try:
+        from slash_commands import SlashCommandRegistry
+        
+        registry = SlashCommandRegistry()
+        completions = registry.get_command_completions(prefix)
+        
+        if not completions:
+            return f"❌ 没有找到以 '{prefix}' 开头的命令"
+        
+        output = f"""
+╔════════════════════════════════════════════╗
+║  🔍 '/monster {prefix}' 的自动完成建议
+╚════════════════════════════════════════════╝
+
+"""
+        
+        for comp in completions:
+            output += f"• /monster {comp['label']:<20} - {comp['detail']}\n"
+        
+        return output
+    except Exception as e:
+        return f"❌ 获取自动完成失败: {str(e)}"
+
+
 def cmd_init():
     import time
     egg_id = f"egg_{int(time.time())}"
@@ -1170,6 +1307,60 @@ def mcp_loop():
                                 "required": ["github_username"]
                             },
                         },
+                        {
+                            "name": "menu_start",
+                            "description": "启动交互式游戏菜单系统",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "GitHub用户名"}
+                                },
+                                "required": ["github_username"]
+                            },
+                        },
+                        {
+                            "name": "menu_action",
+                            "description": "在菜单中执行操作 (输入选择编号)",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "github_username": {"type": "string", "description": "GitHub用户名"},
+                                    "action": {"type": "string", "description": "用户选择的动作 (0-9)"}
+                                },
+                                "required": ["github_username", "action"]
+                            },
+                        },
+                        {
+                            "name": "monster_slash_help",
+                            "description": "Get detailed help for slash commands",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "command_name": {"type": "string", "description": "Command name (optional)"}
+                                },
+                                "required": []
+                            },
+                        },
+                        {
+                            "name": "monster_slash_list",
+                            "description": "List all available slash commands",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {},
+                                "required": []
+                            },
+                        },
+                        {
+                            "name": "monster_slash_completions",
+                            "description": "Get command completions and suggestions",
+                            "inputSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "prefix": {"type": "string", "description": "Command prefix for auto-completion"}
+                                },
+                                "required": []
+                            },
+                        },
                     ]
                 }
 
@@ -1271,6 +1462,24 @@ def mcp_loop():
                     resp["result"] = {"content": [{"type": "text", "text": out}]}
                 elif tool == "account_stats":
                     out = cmd_account_stats(args.get("github_username", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "menu_start":
+                    out = cmd_menu_start(args.get("github_username", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "menu_action":
+                    out = cmd_menu_action(
+                        args.get("github_username", ""),
+                        args.get("action", "")
+                    )
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_slash_help":
+                    out = cmd_slash_help(args.get("command_name", ""))
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_slash_list":
+                    out = cmd_slash_list()
+                    resp["result"] = {"content": [{"type": "text", "text": out}]}
+                elif tool == "monster_slash_completions":
+                    out = cmd_slash_completions(args.get("prefix", ""))
                     resp["result"] = {"content": [{"type": "text", "text": out}]}
                 else:
                     resp["error"] = {"code": -32601, "message": f"Unknown tool: {tool}"}
