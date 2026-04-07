@@ -81,8 +81,8 @@ def main():
     print("-" * 70)
     test_user_id = random.randint(100000, 999999)
     success, _ = test_endpoint("POST", "/api/users/create",
-                 {"github_username": f"testuser{random.randint(1000, 9999)}", "github_id": test_user_id},
-                 "Create User Account (with int github_id)", 200)
+                 {"github_id": test_user_id, "github_login": f"testuser{random.randint(1000, 9999)}"},
+                 "Create User Account (returns 201)", 201)
     print()
     
     # 3. Farm Management
@@ -97,19 +97,22 @@ def main():
     # 4. Cookie Management
     print("4. Cookie Management APIs")
     print("-" * 70)
+    # Generate unique cookie_id
+    cookie_id = f"0xcookie_{random.randint(1000000, 9999999):08x}"
     test_endpoint("POST", "/api/cookies/register",
-                 {"github_username": "testuser"},
+                 {"cookie_id": cookie_id, "cookie_type": "test", "emoji": "🍪"},
                  "Register Cookie", 200)
     test_endpoint("GET", "/api/cookies/statistics", name="Cookie Statistics", expected_status=200)
-    test_endpoint("GET", "/api/cookies/scan", name="Scan Cookies", expected_status=200)
+    test_endpoint("GET", "/api/cookies/scan?player_id=testuser", name="Scan Cookies (with player_id)", expected_status=200)
     print()
     
     # 5. Egg Management
     print("5. Egg Management APIs")
     print("-" * 70)
-    # Use unique identifier to avoid duplicate key errors
+    # Generate unique egg_id
+    egg_id = f"egg_test_{random.randint(1000000, 9999999)}"
     test_endpoint("POST", "/api/eggs/create",
-                 {"github_username": f"testuser_{random.randint(1000000, 9999999)}", "pet_species": "Pikachu"},
+                 {"egg_id": egg_id, "owner_id": f"testuser_{random.randint(1000, 9999)}", "incubation_hours": 72},
                  "Create Egg", 200)
     test_endpoint("GET", "/api/eggs/statistics", name="Egg Statistics", expected_status=200)
     print()
