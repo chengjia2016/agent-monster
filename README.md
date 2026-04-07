@@ -10,9 +10,15 @@
 
 OpenCode is an AI-powered coding assistant that can help you play Agent Monster directly from your terminal.
 
-### Setup OpenCode + Agent Monster
+### Easiest Way to Get Started
 
-1. **Install OpenCode** (if not already installed)
+> **Just tell your AI agent:** *"Go to https://github.com/chengjia2016/agent-monster-pet and set up Agent Monster for me"*
+>
+> Your agent will automatically clone the repository, install dependencies, and configure the MCP server.
+
+### Manual Setup (Optional)
+
+1. **Install OpenCode/Claude Code** (if not already installed)
 
 2. **Configure MCP Server** in `~/.claude/settings.json` or `~/.opencode/settings.json`:
 
