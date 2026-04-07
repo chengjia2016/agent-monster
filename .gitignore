@@ -47,3 +47,40 @@ Thumbs.db
 
 # Judge Server (contains sensitive config and credentials)
 judge-server/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.env
+config.local.*
+secrets/
+credentials/
+
+# Database and temporary files
+*.db
+*.sqlite
+*.sqlite3
+*.sock
+
+# Backup and temp files
+*.bak
+*.tmp
+*.temp
+*~
+
+# IDE config that might contain secrets
+.vscode/settings.json
+.idea/runConfigurations/
+
+# OS temp files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+
+# Build outputs
+/bin/
+/dist/
+/build/
