@@ -41,7 +41,8 @@ class JudgeServerClient:
             with urllib.request.urlopen(request, timeout=10) as response:
                 return json.loads(response.read().decode('utf-8'))
         except urllib.error.HTTPError as e:
-            print(f"HTTP Error {e.code}: {e.reason}")
+            error_body = e.read().decode('utf-8')
+            print(f"HTTP Error {e.code}: {e.reason} - {error_body}")
             return None
         except Exception as e:
             print(f"Request error: {e}")
