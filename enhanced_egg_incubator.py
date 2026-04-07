@@ -262,6 +262,10 @@ def generate_enhanced_soul(
 ):
     """
     生成增强的 pet.soul 文件，结合提交历史和 GitHub 声誉
+    
+    权重分配：
+    - 50% 来自最近 72 小时的 Git 提交历史（语言分布分析）
+    - 50% 来自当前项目的 GitHub 声誉指标（Stars、Forks 等）
     """
     
     total_commits = len(commits)

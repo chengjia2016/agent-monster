@@ -309,7 +309,17 @@ class ReputationGeneCalculator:
 
 
 class HybridGeneCalculator:
-    """混合基因计算器：结合提交历史和 GitHub 声誉"""
+    """
+    混合基因计算器：结合提交历史和 GitHub 声誉
+    
+    权重配置：
+    - 50% 来自最近 72 小时的提交历史分析
+    - 50% 来自当前项目的 GitHub 声誉指标
+    """
+    
+    # 可配置的权重参数
+    COMMIT_HISTORY_WEIGHT = 0.5  # 提交历史权重 50%
+    GITHUB_REPUTATION_WEIGHT = 0.5  # GitHub 声誉权重 50%
     
     def __init__(self):
         self.reputation_calc = ReputationGeneCalculator()
@@ -317,20 +327,26 @@ class HybridGeneCalculator:
     def calculate_hybrid_genes(self, commit_genes: Dict[str, float], 
                               github_metrics: GitHubMetrics) -> Dict[str, float]:
         """
-        结合提交历史基因和 GitHub 声誉计算混合基因
+        结合提交历史基因和 GitHub 声誉计算混合基因 (50/50 权重)
         
         参数：
-        - commit_genes: 从提交历史计算的基因权重
+        - commit_genes: 从提交历史计算的基因权重 (最近 72 小时)
         - github_metrics: GitHub 项目指标
         
         返回：
-        - 混合基因权重
+        - 混合基因权重 (50% 提交 + 50% 声誉)
+        
+        示例：
+            Commit Genes:   Logic 40% + Creative 30% + Speed 30%
+            GitHub Genes:   Logic 24% + Creative 6% + Speed 7%
+            Hybrid Result:  Logic 32% + Creative 18% + Speed 18.5%
+                           (40%*0.5 + 24%*0.5 = 32%, etc.)
         """
         repo_bonuses, _ = self.reputation_calc.calculate_gene_bonus(github_metrics)
         
-        # 加权混合
-        commit_weight = 0.6  # 提交历史权重 60%
-        reputation_weight = 0.4  # GitHub 声誉权重 40%
+        # 使用 50/50 权重混合
+        commit_weight = self.COMMIT_HISTORY_WEIGHT  # 50% - 最近 72 小时的提交
+        reputation_weight = self.GITHUB_REPUTATION_WEIGHT  # 50% - 当前项目评价
         
         hybrid_genes = {}
         for gene_type in ["logic", "creative", "speed"]:
@@ -339,10 +355,13 @@ class HybridGeneCalculator:
             hybrid_genes[gene_type] = (commit_val * commit_weight + 
                                        repo_val * reputation_weight)
         
-        # 正规化
+        # 正规化确保总和为 1.0
         total = sum(hybrid_genes.values())
         if total > 0:
             hybrid_genes = {k: v / total for k, v in hybrid_genes.items()}
+        else:
+            # 默认均衡分布
+            hybrid_genes = {"logic": 0.34, "creative": 0.33, "speed": 0.33}
         
         return hybrid_genes
 

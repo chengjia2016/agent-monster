@@ -154,24 +154,26 @@ def test_gene_improvements():
 
 
 def test_hybrid_calculator():
-    """测试混合基因计算器"""
+    """测试混合基因计算器 (50% 提交历史 + 50% GitHub 声誉)"""
     print("\n" + "=" * 70)
-    print("TEST 3: Hybrid Gene Calculator (Commit + Reputation)")
+    print("TEST 3: Hybrid Gene Calculator (50/50 Split)")
     print("=" * 70)
+    print("权重: 50% 最近72小时提交历史 + 50% 当前项目GitHub声誉")
+    print("-" * 70)
     
-    # Simulated commit genes
+    # Simulated commit genes from last 72 hours
     commit_genes = {
         "logic": 0.4,
         "creative": 0.3,
         "speed": 0.3,
     }
     
-    print(f"\n📝 Commit History Genes (60% weight):")
+    print(f"\n📝 Commit History Genes (最近 72 小时) [50% 权重]:")
     for gene_type, weight in commit_genes.items():
         bar = "█" * int(weight * 40)
         print(f"   {gene_type:10}: {weight:6.2%} {bar}")
     
-    # GitHub metrics
+    # GitHub metrics - current project reputation
     github_metrics = GitHubMetrics(
         stars=5000,
         forks=800,
@@ -187,17 +189,22 @@ def test_hybrid_calculator():
     hybrid_calc = HybridGeneCalculator()
     hybrid_genes = hybrid_calc.calculate_hybrid_genes(commit_genes, github_metrics)
     
-    print(f"\n🌟 GitHub Reputation Genes (40% weight):")
+    print(f"\n🌟 GitHub Reputation Genes (当前项目评价) [50% 权重]:")
     rep_calc = ReputationGeneCalculator()
     rep_bonuses, _ = rep_calc.calculate_gene_bonus(github_metrics)
     for gene_type, weight in rep_bonuses.items():
         bar = "█" * int(weight * 40)
         print(f"   {gene_type:10}: {weight:6.2%} {bar}")
     
-    print(f"\n🧬 Final Hybrid Genes (combined):")
+    print(f"\n🧬 Final Hybrid Genes (50/50 混合结果):")
+    print("公式: (Commit × 0.5) + (GitHub × 0.5)")
     for gene_type, weight in hybrid_genes.items():
         bar = "█" * int(weight * 40)
+        # 计算详细信息
+        commit_val = commit_genes.get(gene_type, 0) * 0.5
+        github_val = rep_bonuses.get(gene_type, 0) * 0.5
         print(f"   {gene_type:10}: {weight:6.2%} {bar}")
+        print(f"               = ({commit_genes.get(gene_type, 0):.1%}×0.5 + {rep_bonuses.get(gene_type, 0):.1%}×0.5)")
 
 
 def test_star_tiers():
