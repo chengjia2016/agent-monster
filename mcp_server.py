@@ -342,6 +342,8 @@ def cmd_menu_action(github_username, action):
     """在菜单中执行操作"""
     try:
         from menu_system import MenuManager
+        import json
+        from pathlib import Path
         
         menu_manager = MenuManager(str(MONSTER_DIR))
         session = menu_manager.get_session(github_username)
