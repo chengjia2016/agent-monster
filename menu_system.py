@@ -395,7 +395,7 @@ GitHub ID: {user.github_id}
                     if 1 <= choice <= len(items):
                         item = items[choice - 1]
                         # Process purchase
-                        user = self.user_manager.get_user_by_github_login(github_login)
+                        user = self._find_user_by_login(github_login)
                         if user:
                             account = self.economy_manager.get_account(user.user_id)
                             if account and account.has_sufficient_balance(item.price):

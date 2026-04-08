@@ -352,6 +352,9 @@ def cmd_menu_action(github_username, action):
         # 处理动作
         continue_menu, message = menu_manager.handle_action(github_username, action)
         
+        # 保存会话状态
+        menu_manager._save_sessions()
+        
         # 获取新菜单显示
         menu_text, options = menu_manager.get_menu_display(github_username)
         
