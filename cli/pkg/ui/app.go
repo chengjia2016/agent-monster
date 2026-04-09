@@ -116,6 +116,30 @@ func (a *App) Init() tea.Cmd {
 // Update 处理事件更新
 func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case OnboardingOperationMsg:
+		// Handle onboarding operation result
+		a.OnboardingState.Loading = false
+
+		if !msg.Success {
+			a.OnboardingState.Error = msg.Error
+			return a, nil
+		}
+
+		// Handle successful operations
+		switch msg.Operation {
+		case "fork":
+			a.OnboardingState.RepoForked = true
+			a.OnboardingState.Message = "✅ Fork 成功！"
+			a.OnboardingState.CurrentStep = int(OnboardingBaseScreen)
+		case "createbase":
+			a.OnboardingState.BaseCreated = true
+			a.OnboardingState.Message = "✅ 基地创建成功！"
+			a.OnboardingState.CurrentStep = int(OnboardingTemplateScreen)
+		case "generatemap":
+			a.OnboardingState.CurrentStep = int(OnboardingCompleteScreen)
+		}
+		return a, nil
+
 	case SwitchAccountMsg:
 		// Handle account switch result
 		a.AccountSelectState.Loading = false

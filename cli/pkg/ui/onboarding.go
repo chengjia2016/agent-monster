@@ -7,6 +7,14 @@ import (
 	"strings"
 )
 
+// OnboardingOperationMsg is sent when an onboarding operation completes
+type OnboardingOperationMsg struct {
+	Operation string // "fork", "createbase", "generatemap", "complete"
+	Success   bool
+	Error     string
+	Data      interface{}
+}
+
 // OnboardingState tracks onboarding progress
 type OnboardingState struct {
 	CurrentStep        int          // 0-5
@@ -311,16 +319,7 @@ func (a *App) HandleOnboardingInput(msg tea.KeyMsg, currentStep OnboardingStep) 
 		case "enter":
 			if !a.OnboardingState.RepoForked {
 				a.OnboardingState.Loading = true
-				go func() {
-					if err := a.ForkRepository(); err != nil {
-						a.OnboardingState.Error = fmt.Sprintf("Fork 失败: %v", err)
-					} else {
-						a.OnboardingState.RepoForked = true
-						a.OnboardingState.Message = "✅ Fork 成功！"
-						a.OnboardingState.CurrentStep = int(OnboardingBaseScreen)
-					}
-					a.OnboardingState.Loading = false
-				}()
+				return a, forkRepositoryCmd(a)
 			} else {
 				a.OnboardingState.CurrentStep = int(OnboardingBaseScreen)
 			}
@@ -334,16 +333,7 @@ func (a *App) HandleOnboardingInput(msg tea.KeyMsg, currentStep OnboardingStep) 
 		case "enter":
 			if !a.OnboardingState.BaseCreated {
 				a.OnboardingState.Loading = true
-				go func() {
-					if err := a.CreateBase(); err != nil {
-						a.OnboardingState.Error = fmt.Sprintf("创建基地失败: %v", err)
-					} else {
-						a.OnboardingState.BaseCreated = true
-						a.OnboardingState.Message = "✅ 基地创建成功！"
-						a.OnboardingState.CurrentStep = int(OnboardingTemplateScreen)
-					}
-					a.OnboardingState.Loading = false
-				}()
+				return a, createBaseCmd(a)
 			} else {
 				a.OnboardingState.CurrentStep = int(OnboardingTemplateScreen)
 			}
@@ -412,14 +402,7 @@ func (a *App) HandleOnboardingInput(msg tea.KeyMsg, currentStep OnboardingStep) 
 		switch msg.String() {
 		case "enter":
 			a.OnboardingState.Loading = true
-			go func() {
-				if err := a.GenerateOnboardingMap(); err != nil {
-					a.OnboardingState.Error = fmt.Sprintf("生成地图失败: %v", err)
-				} else {
-					a.OnboardingState.CurrentStep = int(OnboardingCompleteScreen)
-				}
-				a.OnboardingState.Loading = false
-			}()
+			return a, generateMapCmd(a)
 		case "esc":
 			a.CurrentScreen = MainMenuScreen
 		}
@@ -500,9 +483,71 @@ func (a *App) renderOnboarding() string {
 	}
 }
 
-// handleOnboarding handles input during onboarding
+// handleOnboarding handles input during onboarding and returns proper Bubble Tea command
 func (a *App) handleOnboarding(msg tea.KeyMsg) (*App, tea.Cmd) {
 	step := OnboardingStep(a.OnboardingState.CurrentStep)
-	_, _ = a.HandleOnboardingInput(msg, step)
+
+	var cmd tea.Cmd
+	a, cmd = a.HandleOnboardingInput(msg, step)
+
+	// If cmd is not nil, it's a Bubble Tea command we should execute
+	if cmd != nil {
+		return a, cmd
+	}
+
 	return a, nil
+}
+
+// forkRepositoryCmd creates a Bubble Tea command for forking repository
+func forkRepositoryCmd(a *App) tea.Cmd {
+	return func() tea.Msg {
+		if err := a.ForkRepository(); err != nil {
+			return OnboardingOperationMsg{
+				Operation: "fork",
+				Success:   false,
+				Error:     fmt.Sprintf("Fork 失败: %v", err),
+			}
+		}
+		return OnboardingOperationMsg{
+			Operation: "fork",
+			Success:   true,
+			Error:     "",
+		}
+	}
+}
+
+// createBaseCmd creates a Bubble Tea command for creating base
+func createBaseCmd(a *App) tea.Cmd {
+	return func() tea.Msg {
+		if err := a.CreateBase(); err != nil {
+			return OnboardingOperationMsg{
+				Operation: "createbase",
+				Success:   false,
+				Error:     fmt.Sprintf("创建基地失败: %v", err),
+			}
+		}
+		return OnboardingOperationMsg{
+			Operation: "createbase",
+			Success:   true,
+			Error:     "",
+		}
+	}
+}
+
+// generateMapCmd creates a Bubble Tea command for generating map
+func generateMapCmd(a *App) tea.Cmd {
+	return func() tea.Msg {
+		if err := a.GenerateOnboardingMap(); err != nil {
+			return OnboardingOperationMsg{
+				Operation: "generatemap",
+				Success:   false,
+				Error:     fmt.Sprintf("生成地图失败: %v", err),
+			}
+		}
+		return OnboardingOperationMsg{
+			Operation: "generatemap",
+			Success:   true,
+			Error:     "",
+		}
+	}
 }
