@@ -302,8 +302,8 @@ func (c *Client) GetUserPokemons(githubID int) ([]Pokemon, error) {
 // CreateOrGetUserAccount 创建或获取用户账户
 func (c *Client) CreateOrGetUserAccount(githubID int, githubUsername string) (map[string]interface{}, error) {
 	payload := map[string]interface{}{
-		"github_id":       githubID,
-		"github_username": githubUsername,
+		"github_id":    githubID,
+		"github_login": githubUsername,
 	}
 
 	data, err := c.Request("POST", "/api/users/create", payload)
