@@ -83,7 +83,13 @@ func (a *App) handleAccountSelect(msg tea.KeyMsg) (*App, tea.Cmd) {
 
 							// Sync with server
 							if user.ID > 0 {
-								a.Client.CreateOrGetUserAccount(user.ID, user.Login)
+								_, err := a.Client.CreateOrGetUserAccount(user.ID, user.Login)
+								// Handle duplicate account error gracefully
+								if err != nil && !strings.Contains(err.Error(), "duplicate key") && !strings.Contains(err.Error(), "already exists") {
+									a.AccountSelectState.Error = fmt.Sprintf("同步账户失败: %v", err)
+									a.AccountSelectState.Loading = false
+									return
+								}
 							}
 
 							// Update profile

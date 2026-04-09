@@ -297,8 +297,15 @@ func (a *App) handleMenuSelect() (*App, tea.Cmd) {
 			if a.CurrentUser.ID > 0 {
 				_, err := a.Client.CreateOrGetUserAccount(a.CurrentUser.ID, a.CurrentUser.Login)
 				if err != nil {
-					a.Error = fmt.Sprintf("同步用户账户失败: %v", err)
-					return a, nil
+					// Check if error is due to duplicate account (account already exists)
+					if strings.Contains(err.Error(), "duplicate key") || strings.Contains(err.Error(), "already exists") {
+						// Account already exists, continue (this is not an error)
+						a.Message = fmt.Sprintf("欢迎回来, %s!", a.CurrentUser.Login)
+					} else {
+						// Different error occurred
+						a.Error = fmt.Sprintf("同步用户账户失败: %v", err)
+						return a, nil
+					}
 				}
 			}
 
@@ -315,7 +322,9 @@ func (a *App) handleMenuSelect() (*App, tea.Cmd) {
 			a.Error = fmt.Sprintf("获取用户信息失败: %v", err)
 			return a, nil
 		}
-		a.Message = fmt.Sprintf("欢迎, %s!", currentUser.Login)
+		if a.Message == "" {
+			a.Message = fmt.Sprintf("欢迎, %s!", currentUser.Login)
+		}
 		a.CurrentScreen = MainMenuScreen
 		a.SelectedIndex = 0
 
