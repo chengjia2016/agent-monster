@@ -2,6 +2,7 @@ package ui
 
 import (
 	"agent-monster-cli/pkg/api"
+	"context"
 	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
 	"strings"
@@ -609,20 +610,40 @@ func createBaseCmd(a *App) tea.Cmd {
 // generateMapCmd creates a Bubble Tea command for generating map and claiming starter pokemons
 func generateMapCmd(a *App) tea.Cmd {
 	return func() tea.Msg {
-		if err := a.GenerateOnboardingMap(); err != nil {
+		// Create a context with timeout to prevent hanging
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+
+		// Create a channel for the result
+		done := make(chan error, 1)
+		go func() {
+			done <- a.GenerateOnboardingMap()
+		}()
+
+		// Wait for either the result or timeout
+		select {
+		case err := <-done:
+			if err != nil {
+				return OnboardingOperationMsg{
+					Operation: "generatemap",
+					Success:   false,
+					Error:     fmt.Sprintf("生成地图失败: %v", err),
+				}
+			}
+
+			// After generating map successfully, move to claiming screen
+			// The actual claiming will happen in claimStarterPokemonsCmd
+			return OnboardingOperationMsg{
+				Operation: "generatemap",
+				Success:   true,
+				Error:     "",
+			}
+		case <-ctx.Done():
 			return OnboardingOperationMsg{
 				Operation: "generatemap",
 				Success:   false,
-				Error:     fmt.Sprintf("生成地图失败: %v", err),
+				Error:     "生成地图超时 (30秒)，请检查网络连接",
 			}
-		}
-
-		// After generating map successfully, move to claiming screen
-		// The actual claiming will happen in claimStarterPokemonsCmd
-		return OnboardingOperationMsg{
-			Operation: "generatemap",
-			Success:   true,
-			Error:     "",
 		}
 	}
 }
@@ -633,10 +654,25 @@ func claimStarterPokemonsCmd(a *App) tea.Cmd {
 		// Show claiming screen for 2 seconds
 		time.Sleep(2 * time.Second)
 
-		// Then actually claim the pokemons
-		if err := a.ClaimStarterPokemons(); err != nil {
-			// Log the error but don't fail the onboarding completion
-			fmt.Printf("Warning: Failed to claim starter pokemons: %v\n", err)
+		// Create a context with timeout for claiming operation
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+
+		// Create a channel for the result
+		done := make(chan error, 1)
+		go func() {
+			done <- a.ClaimStarterPokemons()
+		}()
+
+		// Wait for either the result or timeout
+		select {
+		case err := <-done:
+			if err != nil {
+				// Log the error but don't fail the onboarding completion
+				fmt.Printf("Warning: Failed to claim starter pokemons: %v\n", err)
+			}
+		case <-ctx.Done():
+			fmt.Printf("Warning: Claiming pokemons timed out\n")
 		}
 
 		// Return message to trigger Update() to handle state transition
