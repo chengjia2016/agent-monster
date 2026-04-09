@@ -159,10 +159,8 @@ func GetAuthAccounts() ([]AuthAccount, error) {
 
 // SwitchAccount switches to a different GitHub account
 func SwitchAccount(hostname, username string) error {
-	// Note: gh CLI doesn't have a direct "switch" command
-	// Instead, we would need to manage credentials through the CLI
-	// This sets the active account in the gh config
-	cmd := exec.Command("gh", "auth", "switch", "-h", hostname)
+	// Use gh auth switch with -h for hostname and -u for username
+	cmd := exec.Command("gh", "auth", "switch", "-h", hostname, "-u", username)
 	return cmd.Run()
 }
 
