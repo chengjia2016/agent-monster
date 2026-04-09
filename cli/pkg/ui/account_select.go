@@ -7,6 +7,13 @@ import (
 	"strings"
 )
 
+// SwitchAccountMsg is sent when account switch is complete
+type SwitchAccountMsg struct {
+	Account github.AuthAccount
+	Error   string
+	User    *github.User
+}
+
 // renderAccountSelectScreen renders the GitHub account selection screen
 func (a *App) renderAccountSelectScreen() string {
 	title := StyleTitle.
@@ -60,52 +67,13 @@ func (a *App) handleAccountSelect(msg tea.KeyMsg) (*App, tea.Cmd) {
 		}
 
 	case "enter":
-		// Switch to selected account
+		// Switch to selected account using Bubble Tea command
 		if a.AccountSelectState.SelectedIndex < len(a.AccountSelectState.Accounts) {
 			selected := a.AccountSelectState.Accounts[a.AccountSelectState.SelectedIndex]
 			a.AccountSelectState.Loading = true
 
-			// Try to switch account (this is async in real implementation)
-			go func() {
-				err := github.SwitchAccount(selected.Hostname, selected.Username)
-				if err != nil {
-					a.AccountSelectState.Error = fmt.Sprintf("切换账户失败: %v", err)
-				} else {
-					// Reinitialize GitHub client with new account
-					ghClient, err := github.NewGitHubClient()
-					if err == nil {
-						a.GitHub = ghClient
-						// Get the new user info
-						user, err := ghClient.GetCurrentUser()
-						if err == nil {
-							a.CurrentUser = user
-							a.AccountSelectState.Message = fmt.Sprintf("已切换到账户: %s", user.Login)
-
-							// Sync with server
-							if user.ID > 0 {
-								_, err := a.Client.CreateOrGetUserAccount(user.ID, user.Login)
-								// Handle duplicate account error gracefully
-								if err != nil && !strings.Contains(err.Error(), "duplicate key") && !strings.Contains(err.Error(), "already exists") {
-									a.AccountSelectState.Error = fmt.Sprintf("同步账户失败: %v", err)
-									a.AccountSelectState.Loading = false
-									return
-								}
-							}
-
-							// Update profile
-							if a.UserManager != nil {
-								a.UserManager.GetOrCreateProfile(user.Login, 0)
-								a.UserProfile, _ = a.UserManager.GetProfile(user.Login)
-							}
-
-							// Move to main menu
-							a.CurrentScreen = MainMenuScreen
-							a.SelectedIndex = 0
-						}
-					}
-				}
-				a.AccountSelectState.Loading = false
-			}()
+			// Return a command that will handle the account switch
+			return a, switchAccountCmd(selected, a.Client, a.UserManager)
 		}
 
 	case "esc":
@@ -116,4 +84,42 @@ func (a *App) handleAccountSelect(msg tea.KeyMsg) (*App, tea.Cmd) {
 	}
 
 	return a, nil
+}
+
+// switchAccountCmd returns a Bubble Tea command that switches accounts
+func switchAccountCmd(account github.AuthAccount, client interface{}, userMgr interface{}) tea.Cmd {
+	return func() tea.Msg {
+		// Switch to the selected account
+		err := github.SwitchAccount(account.Hostname, account.Username)
+		if err != nil {
+			return SwitchAccountMsg{
+				Account: account,
+				Error:   fmt.Sprintf("切换账户失败: %v", err),
+			}
+		}
+
+		// Reinitialize GitHub client with new account
+		ghClient, err := github.NewGitHubClient()
+		if err != nil {
+			return SwitchAccountMsg{
+				Account: account,
+				Error:   fmt.Sprintf("初始化GitHub客户端失败: %v", err),
+			}
+		}
+
+		// Get the new user info
+		user, err := ghClient.GetCurrentUser()
+		if err != nil {
+			return SwitchAccountMsg{
+				Account: account,
+				Error:   fmt.Sprintf("获取用户信息失败: %v", err),
+			}
+		}
+
+		return SwitchAccountMsg{
+			Account: account,
+			User:    user,
+			Error:   "",
+		}
+	}
 }

@@ -116,6 +116,41 @@ func (a *App) Init() tea.Cmd {
 // Update 处理事件更新
 func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case SwitchAccountMsg:
+		// Handle account switch result
+		a.AccountSelectState.Loading = false
+
+		if msg.Error != "" {
+			a.AccountSelectState.Error = msg.Error
+			return a, nil
+		}
+
+		if msg.User != nil {
+			a.CurrentUser = msg.User
+			a.AccountSelectState.Message = fmt.Sprintf("已切换到账户: %s", msg.User.Login)
+
+			// Sync with server
+			if msg.User.ID > 0 {
+				_, err := a.Client.CreateOrGetUserAccount(msg.User.ID, msg.User.Login)
+				// Handle duplicate account error gracefully
+				if err != nil && !strings.Contains(err.Error(), "duplicate key") && !strings.Contains(err.Error(), "already exists") {
+					a.AccountSelectState.Error = fmt.Sprintf("同步账户失败: %v", err)
+					return a, nil
+				}
+			}
+
+			// Update profile
+			if a.UserManager != nil {
+				a.UserManager.GetOrCreateProfile(msg.User.Login, 0)
+				a.UserProfile, _ = a.UserManager.GetProfile(msg.User.Login)
+			}
+
+			// Move to main menu
+			a.CurrentScreen = MainMenuScreen
+			a.SelectedIndex = 0
+		}
+		return a, nil
+
 	case tea.KeyMsg:
 		// Handle account select screen separately
 		if a.CurrentScreen == AccountSelectScreen {
