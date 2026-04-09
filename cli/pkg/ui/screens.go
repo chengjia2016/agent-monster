@@ -16,7 +16,7 @@ func (a *App) RenderPokemonList() string {
 	// Check if user is authenticated
 	if a.CurrentUser == nil || a.CurrentUser.ID == 0 {
 		errorMsg := StyleError.Render("❌ 错误：未登录或获取用户信息失败")
-		controls := StyleDim.Render("H 返回主菜单")
+		controls := StyleDim.Render("BackSpace/H 返回主菜单")
 		return title + "\n\n" + errorMsg + "\n\n" + controls
 	}
 
@@ -24,14 +24,14 @@ func (a *App) RenderPokemonList() string {
 	pokemons, err := a.Client.GetUserPokemons(a.CurrentUser.ID)
 	if err != nil {
 		errorMsg := StyleError.Render(fmt.Sprintf("❌ 获取宠物失败: %v", err))
-		controls := StyleDim.Render("H 返回主菜单")
+		controls := StyleDim.Render("BackSpace/H 返回主菜单")
 		return title + "\n\n" + errorMsg + "\n\n" + controls
 	}
 
 	// 如果没有宠物，显示空状态
 	if len(pokemons) == 0 {
 		emptyMsg := StyleMenuItem.Render("  暂无宠物，前往【野生宠物捕捉】捕捉你的第一个宠物！")
-		controls := StyleDim.Render("H 返回主菜单")
+		controls := StyleDim.Render("BackSpace/H 返回主菜单")
 		return title + "\n\n" + emptyMsg + "\n\n" + controls
 	}
 
@@ -129,14 +129,14 @@ func (a *App) RenderWildPokemonScreen() string {
 	wildPokemons, err := a.Client.ListWildPokemon()
 	if err != nil {
 		errorMsg := StyleError.Render(fmt.Sprintf("❌ 获取野生精灵失败: %v", err))
-		controls := StyleDim.Render("H 返回主菜单")
+		controls := StyleDim.Render("BackSpace/H 返回主菜单")
 		return title + "\n\n" + errorMsg + "\n\n" + controls
 	}
 
 	// 如果没有野生精灵，显示空状态
 	if len(wildPokemons) == 0 {
 		emptyMsg := StyleMenuItem.Render("  暂无可捕获的野生精灵")
-		controls := StyleDim.Render("H 返回主菜单")
+		controls := StyleDim.Render("BackSpace/H 返回主菜单")
 		return title + "\n\n" + emptyMsg + "\n\n" + controls
 	}
 
@@ -459,7 +459,7 @@ func (a *App) renderProfileScreen() string {
 			fmt.Sprintf("  创建时间: %s\n", a.UserProfile.CreatedAt.Format("2006-01-02 15:04")),
 	)
 
-	controls := StyleDim.Render("H 返回主菜单")
+	controls := StyleDim.Render("BackSpace/H 返回主菜单")
 
 	return title + "\n\n" + info + "\n" + controls
 }

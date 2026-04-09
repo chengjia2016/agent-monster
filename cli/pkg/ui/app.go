@@ -192,21 +192,29 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return a, tea.Quit
 
 		case "up", "k":
+			maxIndex := a.getMaxMenuIndex()
 			if a.SelectedIndex > 0 {
 				a.SelectedIndex--
+			} else {
+				// Wrap to last item
+				a.SelectedIndex = maxIndex
 			}
 
 		case "down", "j":
 			maxIndex := a.getMaxMenuIndex()
 			if a.SelectedIndex < maxIndex {
 				a.SelectedIndex++
+			} else {
+				// Wrap to first item
+				a.SelectedIndex = 0
 			}
 
 		case "enter", "l":
 			return a.handleMenuSelect()
 
-		case "esc", "h":
-			if a.CurrentScreen != MainMenuScreen {
+		case "esc", "h", "backspace":
+			// BackSpace key to go back to main menu
+			if a.CurrentScreen != MainMenuScreen && a.CurrentScreen != LoginScreen {
 				a.CurrentScreen = MainMenuScreen
 				a.SelectedIndex = 0
 			}
@@ -600,7 +608,7 @@ func (a *App) mainMenuView() string {
 
 	title := StyleTitle.
 		Foreground(ColorWarning).
-		Render("╔═════════════════════════════════════╗\n║   Agent Monster - 怪兽对战系统   ║\n╚═════════════════════════════════════╝")
+		Render("╔══════════════════════════════════════╗\n║  Agent Monster - 怪兽对战系统  ║\n╚══════════════════════════════════════╝")
 
 	var menu string
 	for i, item := range menuItems {
@@ -611,7 +619,7 @@ func (a *App) mainMenuView() string {
 		}
 	}
 
-	footer := StyleDim.Render("\n⬆️ ⬇️  K/J 上下  Enter 选择  Ctrl+C 退出")
+	footer := StyleDim.Render("\n⬆️ ⬇️  K/J 上下  Enter 选择  BackSpace 返回  Ctrl+C 退出")
 
 	return title + "\n\n" + menu + footer
 }
