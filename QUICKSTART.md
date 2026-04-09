@@ -1,137 +1,131 @@
-# Agent Monster Quick Start Guide
+# Agent Monster CLI - 快速开始指南
 
-## 1. Installation (30 seconds)
-
-```bash
-# Fork and Clone the repository
-git clone https://github.com/your-name/agent-monster.git
-cd agent-monster
-
-# Windows
-install.bat
-
-# Linux/macOS
-./install.sh
-```
-
-**You Will Get:**
-- 🐤 Little Yellow Duck (Starter Pet)
-- 🥚 Pet Egg x1 (Hatches after 72 hours)
-
----
-
-## 2. Hide Food (Anytime)
-
-Add food cookies in code comments:
-
-```python
-# 🍪 agent_monster cookie 0x67678328732673287
-def my_function():
-    pass
-```
-
-```javascript
-// 🍩 agent_monster cookie 0xabcdef1234567890
-const x = 1;
-```
-
-**Food Types:**
-- 🍪 Cookie - +10 EXP
-- 🍩 Donut - +50 EN
-- 🍎 Apple - +5 All Stats
-- 🧬 Gene - Gene Mutation
-
----
-
-## 3. View Status
+## 🚀 启动应用
 
 ```bash
-# In Claude Code
-/monster status
-
-# Or CLI
-python monster.py status
+cd /root/pet/agent-monster/cli
+./agent-monster
 ```
 
----
+## ⌨️ 控制说明
 
-## 4. Wait for Incubation (72 hours)
+### 登录屏幕
+- **Enter** 或 **L** - 登录并进入主菜单
 
-The pet egg hatches based on your behavioral genes:
+### 主菜单
+- **⬆️ 上箭头** 或 **K** - 向上移动
+- **⬇️ 下箭头** 或 **J** - 向下移动
+- **Enter** 或 **L** - 选择菜单项
+- **H** 或 **Esc** - 返回上一层
+- **Q** 或 **Ctrl+C** - 退出应用
 
-| Behavior | Gene Type |
-|----------|-----------|
-| Writing Code | Logic |
-| Writing Docs | Creative |
-| Writing Configs | Speed |
-| Hiding Cookies | Lucky |
+## 📋 菜单选项
 
----
+### 1. 🐾 我的宠物
+查看和管理你的宠物集合
 
-## 5. Battle
+### 2. ⚔️ 发起战斗
+与其他玩家对战
 
+### 3. 🏰 防守基地
+设置防守策略
+
+### 4. 🌍 捕获精灵
+在野外捕获新的精灵
+
+### 5. 💻 GitHub 集成
+- 查看我的仓库
+- 查看 Issues
+- 查看 Pull Requests
+
+### 6. 👤 个人资料
+查看你的个人信息和游戏统计
+
+### 7. ❌ 退出游戏
+关闭应用
+
+## 🎮 游戏流程
+
+```
+启动
+  ↓
+登录 GitHub (按 Enter)
+  ↓
+选择菜单选项
+  ↓
+浏览功能
+  ↓
+按 H 返回菜单
+  ↓
+按 Q 退出
+```
+
+## 🔧 故障排除
+
+### 问题: "GitHub token 获取失败"
+**解决方案:**
 ```bash
-# In Claude Code
-/monster duel opponent/repo
+gh auth login
+gh auth status
 ```
 
----
-
-## GitHub Actions Automation
-
-The repository includes 3 Actions:
-
-| Workflow | Frequency | Purpose |
-|----------|-----------|---------|
-| `hourly-settlement.yml` | Hourly | Settle cookies, restore energy |
-| `daily-rank.yml` | Daily | Update leaderboards |
-| `battle-arena.yml` | Manual | Battle simulation |
-
-### Enable Actions
-
+### 问题: "CLI 无法启动"
+**解决方案:**
 ```bash
-gh workflow enable hourly-settlement.yml
-gh workflow enable daily-rank.yml
-gh workflow enable battle-arena.yml
+# 重建二进制文件
+cd /root/pet/agent-monster/cli
+go build -o agent-monster ./cmd/main.go
+
+# 然后运行
+./agent-monster
 ```
+
+### 问题: "屏幕显示乱码"
+**解决方案:**
+- 确保终端支持 UTF-8
+- 使用更新的终端软件（如 iTerm2, Windows Terminal）
+- 设置环境变量: `export LANG=en_US.UTF-8`
+
+## 📊 系统要求
+
+- Go 1.21+
+- GitHub CLI 2.0+
+- 支持 UTF-8 的终端
+- 网络连接
+
+## 📁 文件位置
+
+- **可执行文件**: `/root/pet/agent-monster/cli/agent-monster`
+- **用户数据**: `~/.agent-monster/data/`
+- **配置文件**: `~/.agent-monster/`
+
+## ✨ 功能特点
+
+✅ GitHub 集成  
+✅ 12 个交互式屏幕  
+✅ 彩色 Pokemon 精灵  
+✅ 用户资料管理  
+✅ 对战系统  
+✅ 精灵捕获  
+✅ 键盘快捷键  
+✅ 实时加载状态  
+
+## 🎯 下一步
+
+1. 运行应用并登录
+2. 浏览所有菜单选项
+3. 查看你的 GitHub 仓库集成
+4. 探索个人资料功能
+5. 准备参加对战！
+
+## 📞 获取帮助
+
+- **bug 报告**: 检查终端输出的错误信息
+- **功能请求**: 查看应用内的消息
+- **使用建议**: 参考本指南
 
 ---
 
-## File Structure
+**祝你游戏愉快！** 🎮✨
 
-```
-.monster/
-├── pet.soul           # Pet data
-├── egg.yaml           # Pet egg (72h)
-├── food-bank.json     # Food bank
-└── guard.yaml         # Defense config
-
-.github/workflows/
-├── hourly-settlement.yml
-├── daily-rank.yml
-└── battle-arena.yml
-
-monster.py             # Main CLI
-cookie.py              # Food generator/scanner
-claim_pet.py           # Claim pet
-```
-
----
-
-## FAQ
-
-### Q: How long does the egg take to hatch?
-A: 72 hours, starting from when you claim it.
-
-### Q: Can others see the cookies I hide?
-A: Yes, cookies in code comments are public.
-
-### Q: How do I battle?
-A: Use `/monster duel <opponent/repo>` to start a challenge.
-
-### Q: Where is the leaderboard?
-A: Each repository has a `leaderboard.json`, and there's a central aggregation repository.
-
----
-
-**Have fun!** 🎮
+希望你喜欢 Agent Monster CLI！

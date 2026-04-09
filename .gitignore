@@ -45,8 +45,15 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Judge Server (contains sensitive config and credentials)
-judge-server/
+# Judge Server - ignore only build artifacts and sensitive files
+judge-server/judge-server
+judge-server/main
+judge-server/judge-server.log
+judge-server/.config/config.yaml
+judge-server/.config/
+judge-server/cron-settlement
+judge-server/daily-settlement.sh
+judge-server/**/*.env*
 
 # Environment variables and secrets
 .env

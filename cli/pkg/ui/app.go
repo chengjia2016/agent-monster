@@ -1,0 +1,461 @@
+package ui
+
+import (
+	"agent-monster-cli/pkg/api"
+	"agent-monster-cli/pkg/github"
+	"agent-monster-cli/pkg/user"
+	"fmt"
+	tea "github.com/charmbracelet/bubbletea"
+	"strings"
+)
+
+type Screen int
+
+const (
+	LoginScreen Screen = iota
+	MainMenuScreen
+	PokemonListScreen
+	BattleScreen
+	DefenseScreen
+	WildPokemonScreen
+	DetailScreen
+	GitHubScreen
+	ProfileScreen
+	GitHubReposScreen
+	GitHubIssuesScreen
+	GitHubPullRequestsScreen
+)
+
+// GitHubScreenState tracks GitHub screen state
+type GitHubScreenState struct {
+	Repositories []github.Repository
+	Issues       []github.Issue
+	PullRequests []github.PullRequest
+	CurrentRepo  string
+	IssueState   string // "open" or "closed"
+	PRState      string // "open" or "closed"
+}
+
+// App 是主应用模型
+type App struct {
+	Client         *api.Client
+	GitHub         *github.GitHubClient
+	UserManager    *user.Manager
+	CurrentScreen  Screen
+	Width          int
+	Height         int
+	SelectedIndex  int
+	Loading        bool
+	Error          string
+	Message        string
+	CurrentUser    *github.User
+	UserProfile    *user.UserProfile
+	GitHubState    *GitHubScreenState
+	PreviousScreen Screen
+}
+
+// NewApp 创建新应用实例
+func NewApp(client *api.Client, userDir string) *App {
+	return &App{
+		Client:        client,
+		UserManager:   user.NewManager(userDir),
+		CurrentScreen: LoginScreen,
+		SelectedIndex: 0,
+		Loading:       false,
+		GitHubState:   &GitHubScreenState{},
+	}
+}
+
+// Init 初始化应用
+func (a *App) Init() tea.Cmd {
+	return nil
+}
+
+// Update 处理事件更新
+func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "ctrl+c", "q":
+			return a, tea.Quit
+
+		case "up", "k":
+			if a.SelectedIndex > 0 {
+				a.SelectedIndex--
+			}
+
+		case "down", "j":
+			maxIndex := a.getMaxMenuIndex()
+			if a.SelectedIndex < maxIndex {
+				a.SelectedIndex++
+			}
+
+		case "enter", "l":
+			return a.handleMenuSelect()
+
+		case "esc", "h":
+			if a.CurrentScreen != MainMenuScreen {
+				a.CurrentScreen = MainMenuScreen
+				a.SelectedIndex = 0
+			}
+		}
+
+	case tea.WindowSizeMsg:
+		a.Width = msg.Width
+		a.Height = msg.Height
+	}
+	return a, nil
+}
+
+// View 渲染UI
+func (a *App) View() string {
+	content := ""
+
+	switch a.CurrentScreen {
+	case LoginScreen:
+		content = a.renderLoginScreen()
+	case MainMenuScreen:
+		content = a.mainMenuView()
+	case PokemonListScreen:
+		content = a.RenderPokemonList()
+	case BattleScreen:
+		content = a.RenderBattleScreen()
+	case DefenseScreen:
+		content = a.RenderDefenseScreen()
+	case WildPokemonScreen:
+		content = a.RenderWildPokemonScreen()
+	case DetailScreen:
+		content = a.RenderDetailScreen()
+	case GitHubScreen:
+		content = a.renderGitHubScreen()
+	case ProfileScreen:
+		content = a.renderProfileScreen()
+	case GitHubReposScreen:
+		content = a.renderGitHubReposScreen()
+	case GitHubIssuesScreen:
+		content = a.renderGitHubIssuesScreen()
+	case GitHubPullRequestsScreen:
+		content = a.renderGitHubPullRequestsScreen()
+	}
+
+	// 添加加载状态
+	if a.Loading {
+		content += "\n" + StyleDim.Render("⏳ 加载中...")
+	}
+
+	// 添加错误或消息显示
+	if a.Error != "" {
+		content += "\n" + StyleError.Render("❌ 错误: "+a.Error)
+	}
+	if a.Message != "" {
+		content += "\n" + StyleSuccess.Render("✅ "+a.Message)
+	}
+
+	return content
+}
+
+func (a *App) getMaxMenuIndex() int {
+	switch a.CurrentScreen {
+	case MainMenuScreen:
+		return 6 // 7个菜单项 (0-6)
+	case BattleScreen:
+		return 3 // 4个选项
+	case DefenseScreen:
+		return 4 // 5个选项
+	case WildPokemonScreen:
+		return 3 // 4个精灵
+	case PokemonListScreen:
+		return 2 // 3只宠物
+	case GitHubScreen:
+		return 3 // 4个选项
+	case GitHubReposScreen:
+		if len(a.GitHubState.Repositories) > 0 {
+			return len(a.GitHubState.Repositories) - 1
+		}
+		return 0
+	case GitHubIssuesScreen:
+		if len(a.GitHubState.Issues) > 0 {
+			return len(a.GitHubState.Issues) - 1
+		}
+		return 0
+	case GitHubPullRequestsScreen:
+		if len(a.GitHubState.PullRequests) > 0 {
+			return len(a.GitHubState.PullRequests) - 1
+		}
+		return 0
+	default:
+		return 0
+	}
+}
+
+func (a *App) handleMenuSelect() (*App, tea.Cmd) {
+	switch a.CurrentScreen {
+	case LoginScreen:
+		// Clear any previous errors
+		a.Error = ""
+		a.Message = ""
+
+		// When Enter is pressed on login screen, move to main menu
+		if a.GitHub == nil {
+			ghClient, err := github.NewGitHubClient()
+			if err != nil {
+				a.Error = fmt.Sprintf("GitHub 客户端初始化失败: %v", err)
+				return a, nil
+			}
+			a.GitHub = ghClient
+		}
+		// Get current user info
+		currentUser, err := a.GitHub.GetCurrentUser()
+		if err == nil {
+			a.CurrentUser = currentUser
+
+			// Create or sync user account with judge-server
+			if a.CurrentUser.ID > 0 {
+				_, err := a.Client.CreateOrGetUserAccount(a.CurrentUser.ID, a.CurrentUser.Login)
+				if err != nil {
+					a.Error = fmt.Sprintf("同步用户账户失败: %v", err)
+					return a, nil
+				}
+			}
+
+			// Save or create user profile
+			if a.UserManager != nil {
+				_, err := a.UserManager.GetOrCreateProfile(currentUser.Login, 0)
+				if err != nil {
+					a.Error = fmt.Sprintf("保存用户资料失败: %v", err)
+					return a, nil
+				}
+				a.UserProfile, _ = a.UserManager.GetProfile(currentUser.Login)
+			}
+		} else {
+			a.Error = fmt.Sprintf("获取用户信息失败: %v", err)
+			return a, nil
+		}
+		a.Message = fmt.Sprintf("欢迎, %s!", currentUser.Login)
+		a.CurrentScreen = MainMenuScreen
+		a.SelectedIndex = 0
+
+	case MainMenuScreen:
+		switch a.SelectedIndex {
+		case 0:
+			a.CurrentScreen = PokemonListScreen
+		case 1:
+			a.CurrentScreen = BattleScreen
+		case 2:
+			a.CurrentScreen = DefenseScreen
+		case 3:
+			a.CurrentScreen = WildPokemonScreen
+		case 4:
+			a.CurrentScreen = GitHubScreen
+		case 5:
+			a.CurrentScreen = ProfileScreen
+		case 6:
+			return a, tea.Quit
+		}
+
+	case PokemonListScreen:
+		a.CurrentScreen = DetailScreen
+
+	case BattleScreen:
+		switch a.SelectedIndex {
+		case 0:
+			// 选择对手进行PvP战斗
+			a.Message = "选择对手功能将在下一版本实现"
+		case 1:
+			// 查看战斗记录
+			a.Message = "战斗记录功能将在下一版本实现"
+		case 2:
+			// 战斗统计
+			a.Message = "战斗统计功能将在下一版本实现"
+		case 3:
+			// 返回主菜单
+			a.CurrentScreen = MainMenuScreen
+		}
+
+	case DefenseScreen:
+		if a.SelectedIndex == 4 {
+			a.CurrentScreen = MainMenuScreen
+		} else {
+			a.Message = fmt.Sprintf("防守操作: %d", a.SelectedIndex)
+		}
+
+	case WildPokemonScreen:
+		a.Message = fmt.Sprintf("尝试捕获精灵 %d", a.SelectedIndex)
+		// In a full implementation, this would call the API to attempt capture
+
+	case DetailScreen:
+		a.CurrentScreen = PokemonListScreen
+
+	case GitHubScreen:
+		switch a.SelectedIndex {
+		case 0:
+			// 查看仓库 - 加载数据
+			a.PreviousScreen = GitHubScreen
+			a.CurrentScreen = GitHubReposScreen
+			a.SelectedIndex = 0
+			a.Loading = true
+			// Load repositories in background
+			go func() {
+				if err := a.LoadGitHubRepositories(); err != nil {
+					a.Error = fmt.Sprintf("加载仓库失败: %v", err)
+				}
+				a.Loading = false
+			}()
+		case 1:
+			// 查看Issues - 加载数据
+			a.PreviousScreen = GitHubScreen
+			a.CurrentScreen = GitHubIssuesScreen
+			a.SelectedIndex = 0
+			a.Loading = true
+			// Load issues in background
+			go func() {
+				if err := a.LoadGitHubRepositories(); err == nil {
+					if err := a.LoadGitHubIssues(); err != nil {
+						a.Error = fmt.Sprintf("加载Issues失败: %v", err)
+					}
+				} else {
+					a.Error = fmt.Sprintf("加载仓库失败: %v", err)
+				}
+				a.Loading = false
+			}()
+		case 2:
+			// 查看Pull Requests - 加载数据
+			a.PreviousScreen = GitHubScreen
+			a.CurrentScreen = GitHubPullRequestsScreen
+			a.SelectedIndex = 0
+			a.Loading = true
+			// Load PRs in background
+			go func() {
+				if err := a.LoadGitHubRepositories(); err == nil {
+					if err := a.LoadGitHubPullRequests(); err != nil {
+						a.Error = fmt.Sprintf("加载PRs失败: %v", err)
+					}
+				} else {
+					a.Error = fmt.Sprintf("加载仓库失败: %v", err)
+				}
+				a.Loading = false
+			}()
+		case 3:
+			// 返回主菜单
+			a.CurrentScreen = MainMenuScreen
+		}
+
+	case ProfileScreen:
+		a.CurrentScreen = MainMenuScreen
+
+	case GitHubReposScreen:
+		// 返回GitHub菜单
+		a.CurrentScreen = GitHubScreen
+		a.SelectedIndex = 0
+
+	case GitHubIssuesScreen:
+		// 返回GitHub菜单
+		a.CurrentScreen = GitHubScreen
+		a.SelectedIndex = 0
+
+	case GitHubPullRequestsScreen:
+		// 返回GitHub菜单
+		a.CurrentScreen = GitHubScreen
+		a.SelectedIndex = 0
+	}
+
+	// Reset selected index for menu
+	a.SelectedIndex = 0
+	return a, nil
+}
+
+// LoadGitHubRepositories loads GitHub repositories asynchronously
+func (a *App) LoadGitHubRepositories() error {
+	if a.GitHub == nil {
+		return fmt.Errorf("GitHub client not initialized")
+	}
+
+	repos, err := a.GitHub.ListUserRepositories()
+	if err != nil {
+		return err
+	}
+
+	a.GitHubState.Repositories = repos
+	return nil
+}
+
+// LoadGitHubIssues loads GitHub issues asynchronously
+func (a *App) LoadGitHubIssues() error {
+	if a.GitHub == nil {
+		return fmt.Errorf("GitHub client not initialized")
+	}
+
+	if len(a.GitHubState.Repositories) == 0 {
+		return fmt.Errorf("no repositories loaded")
+	}
+
+	// Get issues from the first repository
+	repo := a.GitHubState.Repositories[0]
+	parts := strings.Split(repo.FullName, "/")
+	if len(parts) < 2 {
+		return fmt.Errorf("invalid repository name")
+	}
+
+	issues, err := a.GitHub.ListIssues(parts[0], parts[1], "open")
+	if err != nil {
+		return err
+	}
+
+	a.GitHubState.Issues = issues
+	return nil
+}
+
+// LoadGitHubPullRequests loads GitHub pull requests asynchronously
+func (a *App) LoadGitHubPullRequests() error {
+	if a.GitHub == nil {
+		return fmt.Errorf("GitHub client not initialized")
+	}
+
+	if len(a.GitHubState.Repositories) == 0 {
+		return fmt.Errorf("no repositories loaded")
+	}
+
+	// Get PRs from the first repository
+	repo := a.GitHubState.Repositories[0]
+	parts := strings.Split(repo.FullName, "/")
+	if len(parts) < 2 {
+		return fmt.Errorf("invalid repository name")
+	}
+
+	prs, err := a.GitHub.ListPullRequests(parts[0], parts[1], "open")
+	if err != nil {
+		return err
+	}
+
+	a.GitHubState.PullRequests = prs
+	return nil
+}
+
+func (a *App) mainMenuView() string {
+	menuItems := []string{
+		"🐾 我的宠物",
+		"⚔️  发起战斗",
+		"🏰 防守基地",
+		"🌍 捕获精灵",
+		"💻 GitHub 集成",
+		"👤 个人资料",
+		"❌ 退出游戏",
+	}
+
+	title := StyleTitle.
+		Foreground(ColorWarning).
+		Render("╔═════════════════════════════════════╗\n║   Agent Monster - 怪兽对战系统   ║\n╚═════════════════════════════════════╝")
+
+	var menu string
+	for i, item := range menuItems {
+		if i == a.SelectedIndex {
+			menu += StyleMenuItemSelected.Render(fmt.Sprintf("  ▶ %s", item)) + "\n"
+		} else {
+			menu += StyleMenuItem.Render(fmt.Sprintf("    %s", item)) + "\n"
+		}
+	}
+
+	footer := StyleDim.Render("\n⬆️ ⬇️  K/J 上下  Enter 选择  Ctrl+C 退出")
+
+	return title + "\n\n" + menu + footer
+}
