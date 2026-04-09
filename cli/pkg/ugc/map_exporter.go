@@ -40,12 +40,12 @@ type MapExportPackage struct {
 // MapExporter 负责导出map到用户repo
 type MapExporter struct {
 	outputDir string
-	github    *GitHubHelper
+	github    GitHubHelper
 	logger    Logger
 }
 
 // NewMapExporter 创建新的map导出器
-func NewMapExporter(outputDir string, github *GitHubHelper, logger Logger) *MapExporter {
+func NewMapExporter(outputDir string, github GitHubHelper, logger Logger) *MapExporter {
 	return &MapExporter{
 		outputDir: outputDir,
 		github:    github,
@@ -203,7 +203,6 @@ func (me *MapExporter) generateReadmeContent(metadata MapMetadata) string {
 
 ## 特性
 
-- 大小: %dx%d
 - 难度级别: %s
 - 标签: %s
 
@@ -223,11 +222,9 @@ func (me *MapExporter) generateReadmeContent(metadata MapMetadata) string {
 		metadata.Difficulty,
 		metadata.CreatedAt.Format("2006-01-02 15:04:05"),
 		metadata.Description,
-		metadata.SourceRepo,
-		metadata.SourceRepo,
 		metadata.Difficulty,
 		fmt.Sprintf("%v", metadata.Tags),
-		metadata.OwnerName,
+		metadata.SourceRepo,
 		metadata.SourceURL,
 		metadata.Version,
 	)
