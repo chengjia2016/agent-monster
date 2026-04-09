@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -123,35 +124,29 @@ func GetAuthAccounts() ([]AuthAccount, error) {
 	lines := strings.Split(string(output), "\n")
 	var accounts []AuthAccount
 
+	// Use regex to extract accounts from output format:
+	// "✓ Logged in to github.com account username (/path/to/config)"
+	pattern := regexp.MustCompile(`Logged in to (\S+) account (\S+)`)
+
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
 		if line == "" {
 			continue
 		}
 
-		// Parse lines like:
-		// "Logged in to github.com as username (keyring)"
-		// or just check for presence
-		if strings.Contains(line, "Logged in to") {
-			// Try to extract hostname and username
-			if strings.Contains(line, "as") {
-				parts := strings.Split(line, "as")
-				if len(parts) >= 2 {
-					hostPart := strings.TrimSpace(strings.TrimPrefix(parts[0], "Logged in to"))
-					userPart := strings.TrimSpace(parts[1])
-					// Remove parentheses and other text
-					userPart = strings.Split(userPart, "(")[0]
-					userPart = strings.TrimSpace(userPart)
+		// Try to match the pattern
+		matches := pattern.FindStringSubmatch(line)
+		if len(matches) >= 3 {
+			hostname := matches[1]
+			username := matches[2]
 
-					if hostPart != "" && userPart != "" {
-						accounts = append(accounts, AuthAccount{
-							Hostname: hostPart,
-							Username: userPart,
-							Active:   true,
-						})
-					}
-				}
-			}
+			// Determine if this account is active based on subsequent lines
+			// For now, mark all as active (the CLI will use the current one)
+			accounts = append(accounts, AuthAccount{
+				Hostname: hostname,
+				Username: username,
+				Active:   true,
+			})
 		}
 	}
 
