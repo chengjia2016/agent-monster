@@ -4,23 +4,24 @@ import "time"
 
 // Pokemon represents a user's Pokemon
 type Pokemon struct {
-	ID         string    `json:"id"`
-	UserID     string    `json:"user_id"`
-	Name       string    `json:"name"`
-	Species    string    `json:"species"`
-	Level      int       `json:"level"`
-	Experience int       `json:"experience"`
-	MaxHP      int       `json:"max_hp"`
-	CurrentHP  int       `json:"current_hp"`
-	Attack     int       `json:"attack"`
-	Defense    int       `json:"defense"`
-	SpAttack   int       `json:"sp_attack"`
-	SpDefense  int       `json:"sp_defense"`
-	Speed      int       `json:"speed"`
-	Skills     []string  `json:"skills"`
-	Ability    string    `json:"ability"`
-	Type       string    `json:"type"`
-	CapturedAt time.Time `json:"captured_at"`
+	ID         int      `json:"id"`
+	GitHubID   int      `json:"github_id"`
+	PetID      string   `json:"pet_id"`
+	Name       string   `json:"pet_name"` // Changed from "name" to "pet_name" to match API
+	Species    string   `json:"species"`
+	Level      int      `json:"level"`
+	Experience int      `json:"experience"`
+	MaxHP      int      `json:"max_hp"`
+	CurrentHP  int      `json:"current_hp"`
+	Attack     int      `json:"attack"`
+	Defense    int      `json:"defense"`
+	SpAttack   int      `json:"sp_attack"`
+	SpDefense  int      `json:"sp_defense"`
+	Speed      int      `json:"speed"`
+	Skills     []string `json:"skills"`
+	Ability    string   `json:"ability"`
+	Type       string   `json:"type"`
+	CapturedAt string   `json:"created_at"` // Changed from time.Time with "captured_at" to string with "created_at"
 }
 
 // WildPokemon represents a wild Pokemon available for capture

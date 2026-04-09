@@ -312,6 +312,23 @@ func (c *Client) GetUserPokemons(githubID int) ([]Pokemon, error) {
 	if pokemonsRaw, ok := response["pokemons"]; ok && pokemonsRaw != nil {
 		jsonData, _ := json.Marshal(pokemonsRaw)
 		json.Unmarshal(jsonData, &pokemons)
+
+		// Set default HP values for pokemons that don't have them
+		for i := range pokemons {
+			if pokemons[i].MaxHP == 0 {
+				// Default HP based on species or level
+				if pokemons[i].Species == "Egg" {
+					pokemons[i].MaxHP = 10
+					pokemons[i].CurrentHP = 10
+				} else {
+					// Default HP calculation: 20 + (Level * 5)
+					pokemons[i].MaxHP = 20 + (pokemons[i].Level * 5)
+					pokemons[i].CurrentHP = pokemons[i].MaxHP
+				}
+			} else if pokemons[i].CurrentHP == 0 {
+				pokemons[i].CurrentHP = pokemons[i].MaxHP
+			}
+		}
 	}
 
 	return pokemons, nil
