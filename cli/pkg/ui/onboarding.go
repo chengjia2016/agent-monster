@@ -169,13 +169,13 @@ func (a *App) RenderOnboardingTemplate() string {
 	content.WriteString("选择你的地图风格 (使用 ⬆️⬇️ 上下切换，Enter 确认):\n\n")
 
 	for i, template := range templates {
-		prefix := "  "
+		line := fmt.Sprintf("%s %s - %s [%s]\n",
+			template.Emoji, template.Name, template.Description, template.Difficulty)
+
 		if i == a.OnboardingState.SelectedTemplate {
-			content.WriteString(StyleMenuItemSelected.Render(fmt.Sprintf("▶ %s %s - %s [%s]\n",
-				template.Emoji, template.Name, template.Description, template.Difficulty)))
+			content.WriteString(StyleMenuItemSelected.Render("▶ " + line))
 		} else {
-			content.WriteString(StyleMenuItem.Render(fmt.Sprintf("%s %s %s - %s [%s]\n",
-				prefix, template.Emoji, template.Name, template.Description, template.Difficulty)))
+			content.WriteString("  " + line)
 		}
 	}
 
@@ -189,7 +189,7 @@ func (a *App) RenderOnboardingNPC() string {
 
 	title := StyleTitle.
 		Foreground(ColorWarning).
-		Render(fmt.Sprintf("╔════════════════════════════════════════╗\n║        第 4 步: 选择 NPC 伙伴           ║\n║        地图: %s                  ║\n╚════════════════════════════════════════╝", selectedTemplate.Name))
+		Render(fmt.Sprintf("╔════════════════════════════════════════╗\n║        第 4 步: 选择 NPC 伙伴           ║\n║        地图: %-21s ║\n╚════════════════════════════════════════╝", selectedTemplate.Name))
 
 	var content strings.Builder
 
@@ -206,10 +206,9 @@ func (a *App) RenderOnboardingNPC() string {
 			checked = "☑"
 		}
 
-		content.WriteString(StyleMenuItem.Render(fmt.Sprintf(
-			"  %s %s %-15s | %s | \"%s\"\n",
-			checked, npc.Emoji, npc.Name, npc.Type, npc.Dialogue,
-		)))
+		line := fmt.Sprintf("  %s %s %-15s | %s | \"%s\"\n",
+			checked, npc.Emoji, npc.Name, npc.Type, npc.Dialogue)
+		content.WriteString(line)
 	}
 
 	content.WriteString("\n" + StyleDim.Render("💡 提示: 至少选择 1 个 NPC\n"))
@@ -228,27 +227,26 @@ func (a *App) RenderOnboardingPreview() string {
 
 	var content strings.Builder
 
-	content.WriteString(StyleMenuItem.Render("\n📋 确认信息:\n\n"))
-	content.WriteString(StyleMenuItemSelected.Render(fmt.Sprintf("  🗺️  地图主题: %s\n", selectedTemplate.Name)))
-	content.WriteString(StyleMenuItemSelected.Render(fmt.Sprintf("  📊 难度级别: %s\n", selectedTemplate.Difficulty)))
+	content.WriteString("\n📋 确认信息:\n\n")
+	content.WriteString(fmt.Sprintf("  🗺️  地图主题: %s\n", selectedTemplate.Name))
+	content.WriteString(fmt.Sprintf("  📊 难度级别: %s\n", selectedTemplate.Difficulty))
 
 	content.WriteString("\n  🤖 邀请的 NPC:\n")
 	for i, npc := range selectedTemplate.NPCs {
 		if i < len(a.OnboardingState.SelectedNPCs) && a.OnboardingState.SelectedNPCs[i] {
-			content.WriteString(StyleMenuItemSelected.Render(fmt.Sprintf(
-				"      • %s %s (%s)\n", npc.Emoji, npc.Name, npc.Type)))
+			content.WriteString(fmt.Sprintf("      • %s %s (%s)\n", npc.Emoji, npc.Name, npc.Type))
 		}
 	}
 
-	content.WriteString("\n" + StyleMenuItemSelected.Render(fmt.Sprintf("  🌍 地形分布:\n")))
+	content.WriteString("\n  🌍 地形分布:\n")
 	for terrain, percent := range selectedTemplate.TerrainType {
 		bar := strings.Repeat("█", percent/10)
-		content.WriteString(StyleDim.Render(fmt.Sprintf("      %-10s: %s %d%%\n", terrain, bar, percent)))
+		content.WriteString(fmt.Sprintf("      %-10s: %s %d%%\n", terrain, bar, percent))
 	}
 
-	content.WriteString("\n" + StyleMenuItem.Render("功能特性:\n"))
+	content.WriteString("\n功能特性:\n")
 	for _, feature := range selectedTemplate.Features {
-		content.WriteString(StyleDim.Render(fmt.Sprintf("  ✨ %s\n", feature)))
+		content.WriteString(fmt.Sprintf("  ✨ %s\n", feature))
 	}
 
 	confirm := StyleSuccess.Render("\n✅ 按 Enter 生成你的地图")
@@ -432,9 +430,13 @@ func (a *App) ForkRepository() error {
 		return fmt.Errorf("GitHub client not initialized")
 	}
 
-	// This would call GitHub CLI or API to fork the repository
-	// For now, we'll simulate it
-	return nil
+	if a.CurrentUser == nil {
+		return fmt.Errorf("user not authenticated")
+	}
+
+	// Fork the agent-monster repository
+	// Assuming the repository is "anomalyco/agent-monster"
+	return a.GitHub.ForkRepository("anomalyco", "agent-monster")
 }
 
 // CreateBase creates the user's defense base

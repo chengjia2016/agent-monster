@@ -288,3 +288,16 @@ func (c *GitHubClient) makeRequest(method, path string, body interface{}) ([]byt
 
 	return result, nil
 }
+
+// ForkRepository forks a GitHub repository using GitHub CLI
+func (c *GitHubClient) ForkRepository(owner, repo string) error {
+	// Use GitHub CLI to fork the repository
+	cmd := exec.Command("gh", "repo", "fork", fmt.Sprintf("%s/%s", owner, repo), "--clone=false")
+
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("failed to fork repository: %s\n%s", err, string(output))
+	}
+
+	return nil
+}
