@@ -318,3 +318,132 @@ func (c *Client) CreateOrGetUserAccount(githubID int, githubUsername string) (ma
 
 	return response, nil
 }
+
+// GetMapByID 获取指定ID的地图
+func (c *Client) GetMapByID(mapID string) (*MapData, error) {
+	data, err := c.Request("GET", "/api/maps/"+mapID, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	if err := json.Unmarshal(data, &response); err != nil {
+		return nil, err
+	}
+
+	var mapData *MapData
+	if dataRaw, ok := response["data"]; ok {
+		jsonData, _ := json.Marshal(dataRaw)
+		json.Unmarshal(jsonData, &mapData)
+	}
+
+	return mapData, nil
+}
+
+// ListMaps 获取地图列表
+func (c *Client) ListMaps(page, limit int) ([]MapData, error) {
+	query := map[string]string{
+		"page":  fmt.Sprintf("%d", page),
+		"limit": fmt.Sprintf("%d", limit),
+	}
+
+	data, err := c.RequestWithQuery("GET", "/api/maps", query, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	if err := json.Unmarshal(data, &response); err != nil {
+		return nil, err
+	}
+
+	var maps []MapData
+	if dataRaw, ok := response["data"]; ok {
+		jsonData, _ := json.Marshal(dataRaw)
+		json.Unmarshal(jsonData, &maps)
+	}
+
+	return maps, nil
+}
+
+// SearchMaps 搜索地图
+func (c *Client) SearchMaps(query string, page, limit int) ([]MapData, error) {
+	params := map[string]string{
+		"query": query,
+		"page":  fmt.Sprintf("%d", page),
+		"limit": fmt.Sprintf("%d", limit),
+	}
+
+	data, err := c.RequestWithQuery("GET", "/api/maps/search", params, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	if err := json.Unmarshal(data, &response); err != nil {
+		return nil, err
+	}
+
+	var maps []MapData
+	if dataRaw, ok := response["data"]; ok {
+		jsonData, _ := json.Marshal(dataRaw)
+		json.Unmarshal(jsonData, &maps)
+	}
+
+	return maps, nil
+}
+
+// GenerateMap 生成新地图
+func (c *Client) GenerateMap(ownerID int, ownerName, mapID string, width, height int) (*MapData, error) {
+	payload := map[string]interface{}{
+		"owner_id":   ownerID,
+		"owner_name": ownerName,
+		"map_id":     mapID,
+		"width":      width,
+		"height":     height,
+	}
+
+	data, err := c.Request("POST", "/api/maps/generate", payload)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	if err := json.Unmarshal(data, &response); err != nil {
+		return nil, err
+	}
+
+	var mapData *MapData
+	if dataRaw, ok := response["data"]; ok {
+		jsonData, _ := json.Marshal(dataRaw)
+		json.Unmarshal(jsonData, &mapData)
+	}
+
+	return mapData, nil
+}
+
+// TraverseMap 遍历到相邻地图
+func (c *Client) TraverseMap(currentMapID, direction string) (*MapData, error) {
+	payload := map[string]string{
+		"current_map_id": currentMapID,
+		"direction":      direction,
+	}
+
+	data, err := c.Request("POST", "/api/maps/traverse", payload)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	if err := json.Unmarshal(data, &response); err != nil {
+		return nil, err
+	}
+
+	var mapData *MapData
+	if dataRaw, ok := response["data"]; ok {
+		jsonData, _ := json.Marshal(dataRaw)
+		json.Unmarshal(jsonData, &mapData)
+	}
+
+	return mapData, nil
+}

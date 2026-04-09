@@ -24,6 +24,8 @@ const (
 	GitHubReposScreen
 	GitHubIssuesScreen
 	GitHubPullRequestsScreen
+	MapScreen
+	MapInputScreen
 )
 
 // GitHubScreenState tracks GitHub screen state
@@ -34,6 +36,17 @@ type GitHubScreenState struct {
 	CurrentRepo  string
 	IssueState   string // "open" or "closed"
 	PRState      string // "open" or "closed"
+}
+
+// MapState tracks map screen state
+type MapState struct {
+	CurrentMap       *api.MapData
+	PlayerX          int
+	PlayerY          int
+	InputBuffer      string // For GitHub link or map ID input
+	TargetRepoURL    string // GitHub repository URL
+	SelectedMapIndex int
+	AllMaps          []api.MapData
 }
 
 // App 是主应用模型
@@ -51,6 +64,7 @@ type App struct {
 	CurrentUser    *github.User
 	UserProfile    *user.UserProfile
 	GitHubState    *GitHubScreenState
+	MapState       *MapState
 	PreviousScreen Screen
 }
 
@@ -63,6 +77,10 @@ func NewApp(client *api.Client, userDir string) *App {
 		SelectedIndex: 0,
 		Loading:       false,
 		GitHubState:   &GitHubScreenState{},
+		MapState: &MapState{
+			PlayerX: 0,
+			PlayerY: 0,
+		},
 	}
 }
 
@@ -75,6 +93,18 @@ func (a *App) Init() tea.Cmd {
 func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
+		// Handle map input screen separately
+		if a.CurrentScreen == MapInputScreen {
+			return a.HandleMapInputScreenInput(msg)
+		}
+
+		// Handle map screen navigation
+		if a.CurrentScreen == MapScreen {
+			cmd := a.HandleMapInput(msg)
+			return a, cmd
+		}
+
+		// Regular menu navigation
 		switch msg.String() {
 		case "ctrl+c", "q":
 			return a, tea.Quit
@@ -136,6 +166,10 @@ func (a *App) View() string {
 		content = a.renderGitHubIssuesScreen()
 	case GitHubPullRequestsScreen:
 		content = a.renderGitHubPullRequestsScreen()
+	case MapInputScreen:
+		content = a.renderMapInputScreen()
+	case MapScreen:
+		content = a.renderMapScreen()
 	}
 
 	// 添加加载状态
@@ -157,7 +191,7 @@ func (a *App) View() string {
 func (a *App) getMaxMenuIndex() int {
 	switch a.CurrentScreen {
 	case MainMenuScreen:
-		return 6 // 7个菜单项 (0-6)
+		return 7 // 8个菜单项 (0-7)
 	case BattleScreen:
 		return 3 // 4个选项
 	case DefenseScreen:
@@ -246,10 +280,15 @@ func (a *App) handleMenuSelect() (*App, tea.Cmd) {
 		case 3:
 			a.CurrentScreen = WildPokemonScreen
 		case 4:
-			a.CurrentScreen = GitHubScreen
+			// 开始进入地图模式
+			a.MapState.InputBuffer = ""
+			a.CurrentScreen = MapInputScreen
+			a.SelectedIndex = 0
 		case 5:
-			a.CurrentScreen = ProfileScreen
+			a.CurrentScreen = GitHubScreen
 		case 6:
+			a.CurrentScreen = ProfileScreen
+		case 7:
 			return a, tea.Quit
 		}
 
@@ -437,6 +476,7 @@ func (a *App) mainMenuView() string {
 		"⚔️  发起战斗",
 		"🏰 防守基地",
 		"🌍 捕获精灵",
+		"🗺️  探索地图",
 		"💻 GitHub 集成",
 		"👤 个人资料",
 		"❌ 退出游戏",

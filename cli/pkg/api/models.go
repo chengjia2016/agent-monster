@@ -58,3 +58,52 @@ type Base struct {
 	Losses       int    `json:"losses"`
 	PokemonCount int    `json:"pokemon_count"`
 }
+
+// MapElement represents an element on the map (Pokemon, food, obstacle)
+type MapElement struct {
+	ID   string                 `json:"id"`
+	Type string                 `json:"type"` // wild_pokemon, food, obstacle
+	X    int                    `json:"x"`
+	Y    int                    `json:"y"`
+	Data map[string]interface{} `json:"data"`
+}
+
+// MapConnections represents connections to adjacent maps
+type MapConnections struct {
+	North *string `json:"north"`
+	South *string `json:"south"`
+	East  *string `json:"east"`
+	West  *string `json:"west"`
+}
+
+// MapStatistics represents map statistics
+type MapStatistics struct {
+	TotalWildPokemon int    `json:"total_wild_pokemon"`
+	TotalFood        int    `json:"total_food"`
+	TotalObstacles   int    `json:"total_obstacles"`
+	VisitedCount     int    `json:"visited_count"`
+	LastVisited      string `json:"last_visited"`
+}
+
+// MapData represents a game map
+type MapData struct {
+	Version     string         `json:"version"`
+	MapID       string         `json:"map_id"`
+	OwnerID     int            `json:"owner_id"`
+	OwnerName   string         `json:"owner_username"`
+	CreatedAt   string         `json:"created_at"`
+	UpdatedAt   string         `json:"updated_at"`
+	Width       int            `json:"width"`
+	Height      int            `json:"height"`
+	Terrain     [][]int        `json:"terrain"` // 0: grass, 1: forest, 2: water, 3: mountain
+	Elements    []MapElement   `json:"elements"`
+	Connections MapConnections `json:"connections"`
+	Statistics  MapStatistics  `json:"statistics"`
+}
+
+// PlayerPosition represents the player's position on a map
+type PlayerPosition struct {
+	MapID string
+	X     int
+	Y     int
+}
