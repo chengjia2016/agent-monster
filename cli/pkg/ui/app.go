@@ -26,6 +26,7 @@ const (
 	GitHubPullRequestsScreen
 	MapScreen
 	MapInputScreen
+	OnboardingScreen
 )
 
 // GitHubScreenState tracks GitHub screen state
@@ -51,21 +52,22 @@ type MapState struct {
 
 // App 是主应用模型
 type App struct {
-	Client         *api.Client
-	GitHub         *github.GitHubClient
-	UserManager    *user.Manager
-	CurrentScreen  Screen
-	Width          int
-	Height         int
-	SelectedIndex  int
-	Loading        bool
-	Error          string
-	Message        string
-	CurrentUser    *github.User
-	UserProfile    *user.UserProfile
-	GitHubState    *GitHubScreenState
-	MapState       *MapState
-	PreviousScreen Screen
+	Client          *api.Client
+	GitHub          *github.GitHubClient
+	UserManager     *user.Manager
+	CurrentScreen   Screen
+	Width           int
+	Height          int
+	SelectedIndex   int
+	Loading         bool
+	Error           string
+	Message         string
+	CurrentUser     *github.User
+	UserProfile     *user.UserProfile
+	GitHubState     *GitHubScreenState
+	MapState        *MapState
+	PreviousScreen  Screen
+	OnboardingState *OnboardingState
 }
 
 // NewApp 创建新应用实例
@@ -80,6 +82,12 @@ func NewApp(client *api.Client, userDir string) *App {
 		MapState: &MapState{
 			PlayerX: 0,
 			PlayerY: 0,
+		},
+		OnboardingState: &OnboardingState{
+			CurrentStep:      0,
+			SelectedTemplate: 0,
+			SelectedNPCs:     make([]bool, 0),
+			InputBuffer:      "",
 		},
 	}
 }
@@ -102,6 +110,11 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if a.CurrentScreen == MapScreen {
 			cmd := a.HandleMapInput(msg)
 			return a, cmd
+		}
+
+		// Handle onboarding screen
+		if a.CurrentScreen == OnboardingScreen {
+			return a.handleOnboarding(msg)
 		}
 
 		// Regular menu navigation
@@ -170,6 +183,8 @@ func (a *App) View() string {
 		content = a.renderMapInputScreen()
 	case MapScreen:
 		content = a.renderMapScreen()
+	case OnboardingScreen:
+		content = a.renderOnboarding()
 	}
 
 	// 添加加载状态
@@ -191,7 +206,7 @@ func (a *App) View() string {
 func (a *App) getMaxMenuIndex() int {
 	switch a.CurrentScreen {
 	case MainMenuScreen:
-		return 7 // 8个菜单项 (0-7)
+		return 8 // 9个菜单项 (0-8)
 	case BattleScreen:
 		return 3 // 4个选项
 	case DefenseScreen:
@@ -272,23 +287,31 @@ func (a *App) handleMenuSelect() (*App, tea.Cmd) {
 	case MainMenuScreen:
 		switch a.SelectedIndex {
 		case 0:
-			a.CurrentScreen = PokemonListScreen
+			// 开始新手引导
+			a.CurrentScreen = OnboardingScreen
+			a.OnboardingState.CurrentStep = 0
+			a.OnboardingState.RepoForked = false
+			a.OnboardingState.BaseCreated = false
+			a.OnboardingState.SelectedTemplate = 0
+			a.OnboardingState.SelectedNPCs = make([]bool, 0)
 		case 1:
-			a.CurrentScreen = BattleScreen
+			a.CurrentScreen = PokemonListScreen
 		case 2:
-			a.CurrentScreen = DefenseScreen
+			a.CurrentScreen = BattleScreen
 		case 3:
-			a.CurrentScreen = WildPokemonScreen
+			a.CurrentScreen = DefenseScreen
 		case 4:
+			a.CurrentScreen = WildPokemonScreen
+		case 5:
 			// 开始进入地图模式
 			a.MapState.InputBuffer = ""
 			a.CurrentScreen = MapInputScreen
 			a.SelectedIndex = 0
-		case 5:
-			a.CurrentScreen = GitHubScreen
 		case 6:
-			a.CurrentScreen = ProfileScreen
+			a.CurrentScreen = GitHubScreen
 		case 7:
+			a.CurrentScreen = ProfileScreen
+		case 8:
 			return a, tea.Quit
 		}
 
@@ -472,6 +495,7 @@ func (a *App) LoadGitHubPullRequests() error {
 
 func (a *App) mainMenuView() string {
 	menuItems := []string{
+		"🎓 新手引导 (Onboarding)",
 		"🐾 我的宠物",
 		"⚔️  发起战斗",
 		"🏰 防守基地",
