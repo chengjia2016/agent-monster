@@ -532,6 +532,16 @@ func (a *App) ClaimStarterPokemons() error {
 
 // renderOnboarding renders the current step of onboarding
 func (a *App) renderOnboarding() string {
+	// If loading, show loading screen instead of current step
+	if a.OnboardingState.Loading {
+		return StyleTitle.
+			Foreground(ColorWarning).
+			Render("╔════════════════════════════════════════╗\n║        正在生成你的地图...             ║\n╚════════════════════════════════════════╝") +
+			"\n\n" +
+			StyleDim.Render("⏳ 正在处理中，请稍候...\n\n过程通常需要 2-10 秒\n\n") +
+			StyleDim.Render("如果长时间没有响应（超过 30 秒），请按 Ctrl+C 取消")
+	}
+
 	step := a.OnboardingState.CurrentStep
 
 	switch step {
