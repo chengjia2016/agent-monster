@@ -5,6 +5,7 @@ import (
 	"fmt"
 	tea "github.com/charmbracelet/bubbletea"
 	"strings"
+	"time"
 )
 
 // OnboardingOperationMsg is sent when an onboarding operation completes
@@ -21,6 +22,7 @@ type OnboardingState struct {
 	Username           string       // GitHub username
 	RepoForked         bool         // Whether repo was forked
 	BaseCreated        bool         // Whether base was created
+	PokemonsClaimed    bool         // Whether starter pokemons were claimed
 	SelectedTemplate   int          // Selected map template (0-4)
 	SelectedNPCs       []bool       // Which NPCs were selected (bitmask)
 	GeneratedMap       *api.MapData // Generated map
@@ -52,6 +54,7 @@ const (
 	OnboardingTemplateScreen
 	OnboardingNPCScreen
 	OnboardingMapPreviewScreen
+	OnboardingClaimingScreen
 	OnboardingCompleteScreen
 )
 
@@ -254,13 +257,47 @@ func (a *App) RenderOnboardingPreview() string {
 	return title + "\n" + content.String() + confirm
 }
 
+// RenderOnboardingClaiming renders the claiming screen
+func (a *App) RenderOnboardingClaiming() string {
+	title := StyleTitle.
+		Foreground(ColorWarning).
+		Render("╔════════════════════════════════════════╗\n║        🎁 领取初始宝可梦               ║\n╚════════════════════════════════════════╝")
+
+	content := StyleSuccess.Render(`
+⏳ 正在为你领取初始宝可梦...
+
+你将获得:
+  🟡 1 只 小黄鸭 (Psyduck)
+     • 等级: 1
+     • 属性: 超能力/水系
+     • 特性: 迟钝 / 防尘
+
+  🥚 2 只 宝可梦蛋
+     • 等级: 1
+     • 需要孵化后获得真实宝可梦
+     • 在你的防守基地中放置即可自动孵化
+
+💡 小贴士:
+  • 小黄鸭是新手必备的起始宝可梦
+  • 蛋可以通过照顾来加速孵化
+  • 孵化完成后会获得更强大的宝可梦
+`)
+
+	footer := StyleDim.Render(`
+请稍候...
+`)
+
+	return title + "\n" + content + "\n" + footer
+}
+
 // RenderOnboardingComplete renders the completion screen
 func (a *App) RenderOnboardingComplete() string {
 	title := StyleTitle.
 		Foreground(ColorWarning).
 		Render("╔════════════════════════════════════════╗\n║        🎉 恭喜！冒险开始了！         ║\n╚════════════════════════════════════════╝")
 
-	content := StyleSuccess.Render(`
+	content := fmt.Sprintf(`%s
+
 ✅ 你已成功完成新手引导！
 
 你现在拥有:
@@ -269,6 +306,8 @@ func (a *App) RenderOnboardingComplete() string {
   • 🗺️  精心设计的个人地图
   • 🤖 NPC 伙伴在你的世界中
   • 🎮 完全的游戏体验
+  • 🟡 初始宝可梦
+     └─ 1 只小黄鸭 + 2 只宝可梦蛋
 
 接下来你可以:
 
@@ -291,7 +330,7 @@ func (a *App) RenderOnboardingComplete() string {
    • 分享你的成就
    • 查看排行榜
    • 参与社区活动
-`)
+`, StyleSuccess.Render(""))
 
 	footer := StyleDim.Render(`
 按 Enter 返回主菜单开始探索你的世界！
@@ -413,6 +452,10 @@ func (a *App) HandleOnboardingInput(msg tea.KeyMsg, currentStep OnboardingStep) 
 			a.CurrentScreen = MainMenuScreen
 		}
 
+	case OnboardingClaimingScreen:
+		// On claiming screen, just wait for automatic completion
+		// No user input needed
+
 	case OnboardingCompleteScreen:
 		switch msg.String() {
 		case "enter":
@@ -503,6 +546,8 @@ func (a *App) renderOnboarding() string {
 		return a.RenderOnboardingNPC()
 	case int(OnboardingMapPreviewScreen):
 		return a.RenderOnboardingPreview()
+	case int(OnboardingClaimingScreen):
+		return a.RenderOnboardingClaiming()
 	case int(OnboardingCompleteScreen):
 		return a.RenderOnboardingComplete()
 	default:
@@ -572,15 +617,36 @@ func generateMapCmd(a *App) tea.Cmd {
 			}
 		}
 
-		// After generating map successfully, claim starter pokemons
+		// After generating map successfully, move to claiming screen
+		// The actual claiming will happen in claimStarterPokemonsCmd
+		return OnboardingOperationMsg{
+			Operation: "generatemap",
+			Success:   true,
+			Error:     "",
+		}
+	}
+}
+
+// claimStarterPokemonsCmd creates a Bubble Tea command for claiming starter pokemons
+func claimStarterPokemonsCmd(a *App) tea.Cmd {
+	return func() tea.Msg {
+		// Show claiming screen for 2 seconds
+		time.Sleep(2 * time.Second)
+
+		// Then actually claim the pokemons
 		if err := a.ClaimStarterPokemons(); err != nil {
 			// Log the error but don't fail the onboarding completion
-			// User successfully completed onboarding, just couldn't claim pokemons
 			fmt.Printf("Warning: Failed to claim starter pokemons: %v\n", err)
 		}
 
+		// Mark as claimed
+		a.OnboardingState.PokemonsClaimed = true
+
+		// Move to complete screen
+		a.OnboardingState.CurrentStep = int(OnboardingCompleteScreen)
+
 		return OnboardingOperationMsg{
-			Operation: "generatemap",
+			Operation: "claiming",
 			Success:   true,
 			Error:     "",
 		}

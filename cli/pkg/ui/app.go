@@ -136,7 +136,9 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			a.OnboardingState.Message = "✅ 基地创建成功！"
 			a.OnboardingState.CurrentStep = int(OnboardingTemplateScreen)
 		case "generatemap":
-			a.OnboardingState.CurrentStep = int(OnboardingCompleteScreen)
+			a.OnboardingState.CurrentStep = int(OnboardingClaimingScreen)
+			// Trigger the claiming operation in a command
+			return a, claimStarterPokemonsCmd(a)
 		}
 		return a, nil
 
