@@ -26,9 +26,9 @@ Once you are happy with the design, move it to your repository using `monster_su
 
 This will move the file to `/designs/monsters/cyber_dragon.soul`.
 
-### 3. Git Push / 提交到 GitHub
-Commit and push the design to your own GitHub repository.
-将设计文件提交并推送到您自己的 GitHub 仓库。
+### 3. Git Push to Your Fork / 提交到您的 Fork
+Commit and push the design to **your own** GitHub fork (e.g., `https://github.com/YourName/agent-monster`).
+将设计文件提交并推送到**您自己**的 GitHub Fork 仓库。
 
 ```bash
 git add designs/monsters/cyber_dragon.soul
@@ -36,10 +36,28 @@ git commit -m "feat: design new monster Cyber Dragon"
 git push origin main
 ```
 
-### 4. Voting & Integration / 投票与集成
-- **Discovery**: The Judge Server periodically scans all forked repositories for new `.soul` files in the `designs/monsters/` folder.
-- **Voting**: Players can visit your repo and "Vote" (e.g., via Stars or a dedicated voting issue).
-- **Global Pool**: Once a design receives enough votes, it is added to the Judge Server's global registry. New eggs will then have a chance to hatch into your designed monster!
+### 4. Open a Pull Request / 发起合并请求 (PR)
+To get your monster into the global pool, you must submit it to the main repository:
+为了让您的怪兽进入全球孵化池，您需要将其提交给主仓库：
+
+1. Go to your fork on GitHub.
+2. Click **"Pull Request"** -> **"New Pull Request"**.
+3. Target the base repository: `chengjia2016/agent-monster`.
+
+### 5. Community Voting / 社区投票
+Once your PR is open, the community can vote!
+PR 开启后，社区成员即可开始投票！
+
+- **How to vote**: Use the **Emoji Reactions** (e.g., 👍, ❤️) on the Pull Request.
+- **投票方式**: 在 Pull Request 页面使用 **Emoji 回应** 进行投票。
+- **Threshold**: Designs that receive enough positive reactions (e.g., > 10 👍) will be reviewed and merged.
+- **阈值**: 获得足够正向回应的设计将被审核并合并。
+
+### 6. Global Synchronization / 全局同步
+- **Merge**: Once the PR is merged into `chengjia2016/agent-monster`, it officially enters the game's source code.
+- **Judge Server**: The Judge Server automatically updates its registry from the main repository.
+- **Hatching**: Your monster will now start appearing in eggs hatched by players all over the world!
+- **同步**: 一旦 PR 被合并，设计将进入主仓库。裁判服务器会自动同步更新，您的怪兽将开始出现在全世界玩家孵化的蛋中！
 
 ---
 
