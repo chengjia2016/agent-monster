@@ -68,6 +68,13 @@ Feeling lost? The `monster_guide` tool analyzes your balance, inventory, and pet
 
 ## 🔧 Installation & Setup / 安装与配置
 
+### 0. Prerequisites / 必要前提
+Since Agent Monster is built on the GitHub ecosystem, the **GitHub CLI (gh)** is required for authentication and repository interactions.
+由于代码怪兽基于 GitHub 生态构建，**GitHub CLI (gh)** 是身份验证和仓库交互的必要工具。
+
+1. **Install GitHub CLI**: [Follow official guide](https://cli.github.com/) / **安装 gh**: [参考官方指南](https://cli.github.com/)。
+2. **Login**: Run `gh auth login` in your terminal / **登录**: 在终端运行 `gh auth login`。
+
 ### 1. Install Dependencies
 ```bash
 pip install -r requirements.txt
