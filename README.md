@@ -73,7 +73,9 @@ Feeling lost? The `monster_guide` tool analyzes your balance, inventory, and pet
 pip install -r requirements.txt
 ```
 
-### 2. Configure MCP (for Claude Code/OpenCode)
+### 2. Configure MCP & Skills
+
+#### For Claude Code / OpenCode
 Add this to your `~/.claude/settings.json`:
 ```json
 {
@@ -86,6 +88,18 @@ Add this to your `~/.claude/settings.json`:
   }
 }
 ```
+
+#### For Gemini CLI (Recommended)
+Gemini CLI provides the deepest integration via specialized **Skills**. 
+Gemini CLI 通过专门的 **Skills** 提供最深度的集成。
+
+1. **Automatic Skill Loading**: Gemini CLI will automatically detect `GEMINI.md` and `MONSTER_SKILL.md` in the workspace.
+2. **Setup Command**: Just tell Gemini:
+   > *"I want to play Agent Monster, setup the project for me."*
+   > *"我想玩代码怪兽，帮我配置项目。"*
+
+Gemini will automatically configure the MCP server, initialize your soul data, and prepare your digital pet environment.
+Gemini 会自动配置 MCP 服务、初始化灵魂数据，并准备好数字宠物环境。
 
 ### 3. Start the Adventure
 Just type `monster_welcome` or talk to the AI to begin!
