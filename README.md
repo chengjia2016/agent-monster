@@ -54,7 +54,19 @@ Feeling lost? The `monster_guide` tool analyzes your balance, inventory, and pet
 
 ---
 
-## 🛠️ Technical Core / 技术架构
+## 🌐 Online Architecture / 在线架构
+
+Agent Monster is a **strictly server-authoritative multiplayer game**. 
+代码怪兽是一款**严格由服务器授权的多人在线游戏**。
+
+- **The Judge Server (Go)** is the sole authority for battles, items, and stats.
+- **裁判服务器 (Go)** 是对战、物品和属性的唯一权威。
+- **No Local Simulation**: All game logic is executed and validated online to ensure fairness.
+- **无本地模拟**: 所有游戏逻辑均在云端执行和验证，确保公平性。
+- **Local Maps**: You can still design maps locally and share them by committing to your repository!
+- **本地地图**: 你仍然可以在本地设计地图，并通过提交到你的仓库来分享它们！
+
+---
 
 - **AI Agents**: Deeply integrated via **MCP (Model Context Protocol)**. Supports Gemini CLI, Claude Code, and OpenCode.
 - **Judge Server**: A robust backend written in **Go**, ensuring all transactions and battles are fair and validated.

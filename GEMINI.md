@@ -1,5 +1,11 @@
 # Gemini Mandates for Agent Monster
 
+## Core Principle: Server-Authoritative Gameplay
+Agent Monster is a **Multiplayer Online Game**. 
+- **NO LOCAL CALCULATIONS**: Never attempt to simulate battles or generate game items (eggs, monsters) locally.
+- **SERVER IS TRUTH**: Always rely on the **Judge Server** (Go-based) for game state, outcomes, and validations.
+- **LOCAL IS FOR CREATIVITY**: Local operations are strictly for UI rendering and creative tasks like map design.
+
 ## Strategic Mandates
 
 1. **Natural Language First**: Always prioritize natural language interaction. If a user asks "what can I do?" or "I'm lost," immediately call `monster_guide`.
