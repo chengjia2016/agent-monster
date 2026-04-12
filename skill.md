@@ -27,7 +27,18 @@ If this is the first time, call:
 ```bash
 python3 mcp_server.py welcome
 ```
-(Or use the `monster_welcome` tool if available).
+(Or use the `monster_welcome` tool). This will guide the player through language selection and registration.
+
+---
+
+## 🛠️ Onboarding Workflow (Step-by-Step)
+
+For a perfect new player experience (e.g., "I just forked this repo"), follow this sequence:
+
+1.  **Welcome & Register**: Use `monster_welcome` and then `user_register` (or `monster_welcome` which guides them).
+2.  **Establish Base**: Use `monster_fork_setup`. This generates the initial repository map (the "Base") where the monster lives.
+3.  **Get an Egg**: Use `monster_init`. This connects to the Judge Server to claim the player's first digital egg.
+4.  **Wait for Hatching**: The egg status can be checked via `monster_status`.
 
 ---
 
@@ -85,10 +96,12 @@ The ultimate goal is for the player to play using **Natural Language**. As an AI
 | :--- | :--- | :--- |
 | **"Who am I?" / "Stats"** | `GET /api/cookies/scan?player_id=<gh_login>` | `monster_status` |
 | **"I'm new, help!"** | `N/A` | `monster_guide` |
+| **"Setup my base"** | `N/A` | `monster_fork_setup` |
 | **"I want a pet"** | `POST /api/eggs/create` | `monster_init` |
 | **"Battle someone!"** | `POST /api/battles/start` | `monster_duel` |
 | **"Go to shop"** | `GET /api/shop/items` | `shop_list` |
 | **"Design a pet"** | `N/A` | `monster_design` |
+
 
 ---
 
