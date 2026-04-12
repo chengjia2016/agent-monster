@@ -136,11 +136,14 @@ def cmd_init(github_username=""):
         judge_result = call_judge_server("/api/eggs/create", egg_request)
         
         if judge_result.get("success", False):
+            # We still keep a small local cache for 'current state' quick access, 
+            # but the server is the source of truth.
             save_json(MONSTER_DIR / "egg.json", {
                 "id": egg_id,
                 "owner": github_username,
                 "status": "incubating",
-                "server_verified": True
+                "server_verified": True,
+                "synced_at": datetime.utcnow().isoformat()
             })
             
             return f"""🥚 获得新蛋（已通过服务器验证）!

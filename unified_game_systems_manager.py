@@ -37,7 +37,7 @@ class UnifiedGameSystemsManager:
     def __init__(
         self,
         cache_dir: Path = None,
-        judge_server_url: str = "http://localhost:10000",
+        judge_server_url: str = "http://agentmonster.openx.pro:10000",
         enable_auto_sync: bool = True,
     ):
         """

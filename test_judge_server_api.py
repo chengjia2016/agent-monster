@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 import random
 
-JUDGE_SERVER_URL = "http://localhost:10000"
+JUDGE_SERVER_URL = "http://agentmonster.openx.pro:10000"
 
 # Test results
 results = {

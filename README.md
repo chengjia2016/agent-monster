@@ -13,7 +13,14 @@
 
 ---
 
-## 🚀 Quick Start for Forkers / Fork 用户快速开始
+## 🎮 How to Play / 如何开始
+
+If you are using an AI agent (Claude Code, OpenCode, or Gemini CLI), simply read:
+如果你正在使用 AI 助手（如 Claude Code, OpenCode 或 Gemini CLI），只需读取：
+
+👉 **[skill.md](./skill.md)** — *The Universal Entry Point & Gameplay Guide / 通用入口与玩法指南*
+
+---
 
 If you just forked this repository, setting up your base is as easy as one sentence:
 如果你刚刚 Fork 了本仓库，建立基地只需一句话：

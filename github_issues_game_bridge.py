@@ -49,7 +49,7 @@ class GitHubIssuesGameBridge:
         owner: str,
         repo: str,
         cache_dir: Path = None,
-        judge_server_url: str = "http://localhost:10000",
+        judge_server_url: str = "http://agentmonster.openx.pro:10000",
     ):
         """
         Initialize the GitHub Issues Game Bridge.
